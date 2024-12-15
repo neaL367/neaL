@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
-  .stroke-only {
+  .stroke-text {
     -webkit-text-stroke: 2px #171717;
     paint-order: stroke fill;
     /* color: #fff; */
