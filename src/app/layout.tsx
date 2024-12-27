@@ -3,12 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 
-
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"]
-})
-
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Atichat",
@@ -25,11 +23,9 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased md:mx-auto px-2 sm:px-4 max-w-5xl w-full`}
       >
-        <div className="flex justify-center items-center">
-          <div className="">
-            <Navbar />
-            {children}
-          </div>
+        <div className="">
+          <Navbar />
+          {children}
         </div>
       </body>
     </html>

@@ -1,8 +1,8 @@
-import Hero from "@/components/home/hero";
+import Hero from "@/components/hero";
 
 export default function Home() {
   return (
-    <main className="h-full max-w-5xl">
+    <main className="max-w-5xl">
       <Hero />
     </main>
   );

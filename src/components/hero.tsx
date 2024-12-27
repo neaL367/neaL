@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <div className="mt-20 flex flex-col justify-center">
+    <div className="h-full min-h-[82dvh] flex flex-col justify-center">
       <h3 className="mb-6 tracking-tight sm:text-lg md:text-2xl font-light text-center">
         <span className="md:text-4xl">👋</span>, my name is Atichat and I am a
         Student
