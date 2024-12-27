@@ -14,7 +14,7 @@ export default function Navbar() {
     pathname !== "/";
     
   return (
-    <div className="sticky top-0 h-24 w-full flex items-center justify-center space-x-6 text-base md:text-xl text-background/80 font-light ">
+    <div className="sticky top-0 h-24 w-full bg-foreground/90 backdrop-blur-lg flex items-center justify-center space-x-6 text-base md:text-2xl text-background/80 font-light ">
       {showHome && (
         <Link
           href="/"

@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from 'react';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import { highlight } from 'sugar-high';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
@@ -103,4 +103,3 @@ declare global {
 export function useMDXComponents(): MDXProvidedComponents {
   return components;
 }
-
