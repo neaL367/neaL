@@ -8,9 +8,8 @@ export default function Hero() {
       <div className="group font-extrabold text-[2em] md:text-[5em] lg:text-[12em] text-center md:tracking-tighter leading-[1.1]">
         <h1
           className="inline-block 
-          stroke-text 
-          text-foreground 
-          group-hover:text-[--background] 
+          stroke-text
+          group-hover:text-background 
           ransition-all duration-500 ease-out"
         >
           Webdeveloper
@@ -19,7 +18,7 @@ export default function Hero() {
           className="block 
           stroke-text 
           text-background 
-          group-hover:text-[--foreround] 
+          group-hover:text-foreground
           ransition-all duration-500 ease-out"
         >
           & Gamer
