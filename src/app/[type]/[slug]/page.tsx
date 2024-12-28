@@ -9,13 +9,14 @@ import {
 } from "@/lib/mdx";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     type: ContentType;
     slug: string;
-  };
+  }>;
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const { type, slug } = params;
 
   if (!getValidContentTypes().includes(type)) {
