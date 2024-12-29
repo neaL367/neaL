@@ -9,17 +9,20 @@ const nextConfig: NextConfig =  {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'media-rockstargames-com.akamaized.net',
+        hostname: 'github.com',
         port: '',
         pathname: '/**',
       },
     ],
   },
-
+  experimental: {
+    mdxRs: true
+  }
 }
 
-const withMDX = createMDX({});
-
-
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+})
+ 
+// Merge MDX config with Next.js config
 export default withMDX(nextConfig)
-

@@ -1,34 +1,21 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import { getAllPosts } from "@/lib/mdx"
+import Link from 'next/link'
+import { getContentList } from '@/lib/content'
 
-export default function BlogPage() {
-  const posts = getAllPosts('b')
+export default async function BlogPage() {
+  const posts = getContentList('blog')
 
   return (
-    <div className="container py-6 lg:py-12">
-      <h1 className="text-3xl font-bold mb-6">Blog</h1>
-      <div className="max-w-2xl space-y-4">
-        {posts.map((post) => (
-          <Card key={post}>
-            <CardHeader>
-              <CardTitle>
-                <Link 
-                  href={`/b/${post}`} 
-                  className="hover:underline"
-                >
-                  {post.replace(/-/g, ' ')}
-                </Link>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Read full post
-              </p>
-            </CardContent>
-          </Card>
+    <div className="py-8">
+      <h1 className="text-3xl font-bold mb-6">Blog Posts</h1>
+      <ul className="space-y-4">
+        {(await posts).map((post) => (
+          <li key={post.slug}>
+            <Link href={`/b/${post.slug}`} className="text-blue-600 hover:underline">
+              {post.title}
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )
 }
