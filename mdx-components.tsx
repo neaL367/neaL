@@ -13,7 +13,6 @@ const colorClasses = {
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    // Headings
     h1: ({ children }) => (
       <h1 className="text-4xl font-bold mb-6 text-gradient-to-r from-pink-500 to-yellow-500 font-sans">
         {children}
@@ -44,10 +43,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h6>
     ),
-
-    // Text Elements
+    ul: ({ children }) => (
+      <ul className="list-disc pl-6 mb-6 space-y-2 text-black dark:text-white font-sans">
+        {children}
+      </ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="list-decimal pl-6 mb-6 space-y-2 text-black dark:text-white font-sans">
+        {children}
+      </ol>
+    ),
+    li: ({ children }) => (
+      <li className="pl-2 marker:text-gray-600 dark:marker:text-gray-400">
+        {children}
+      </li>
+    ),
     p: ({ children }) => (
-      <p className="mb-6 text-gray-800 dark:text-gray-200 leading-relaxed font-sans">
+      <p className="mb-6 text-black dark:text-white leading-relaxed font-sans">
         {children}
       </p>
     ),
@@ -60,8 +72,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     del: ({ children }) => (
       <del className="line-through text-red-500 dark:text-red-400">{children}</del>
     ),
-
-    // Links
     a: ({ href, children }) => (
       <Link
         href={href}
@@ -70,59 +80,47 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </Link>
     ),
-
-    // Lists
-    ul: ({ children }) => (
-      <ul className="list-disc list-inside mb-6 text-gray-800 dark:text-gray-200 font-sans">
-        {children}
-      </ul>
-    ),
-    ol: ({ children }) => (
-      <ol className="list-decimal list-inside mb-6 text-gray-800 dark:text-gray-200 font-sans">
-        {children}
-      </ol>
-    ),
-    li: ({ children }) => <li className="mb-2">{children}</li>,
-
-    // Blockquote
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-purple-500 pl-4 italic mb-6 text-gray-700 dark:text-gray-300 font-sans">
+      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-6 text-gray-700 dark:text-gray-300 font-sans">
         {children}
       </blockquote>
     ),
-
-    // Inline Code & Preformatted Code
     code: ({ children }) => (
-      <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-pink-600 dark:text-pink-400">
+      <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-black dark:text-white">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-6 overflow-x-auto font-mono">
+      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-6 overflow-x-auto font-mono text-black dark:text-white border border-gray-200 dark:border-gray-700">
         {children}
       </pre>
     ),
-
-    // Tables
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-6">
+      <div className="overflow-x-auto mb-6 rounded-lg shadow">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 font-sans">
           {children}
         </table>
       </div>
     ),
+    thead: ({ children }) => (
+      <thead className="bg-gray-50 dark:bg-gray-900">{children}</thead>
+    ),
+    tbody: ({ children }) => (
+      <tbody className="bg-white divide-y divide-gray-100 dark:bg-black dark:divide-gray-800">
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }) => <tr>{children}</tr>,
     th: ({ children }) => (
-      <th className="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white">
         {children}
       </td>
     ),
-
-    // Images
     img: (props) => (
       <Image
         {...props}
@@ -132,19 +130,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         alt={props.alt || "MDX content image"}
       />
     ),
-
-    // Horizontal Rule
     hr: () => <hr className="border-t border-gray-300 dark:border-gray-700 my-8" />,
-
-    // Custom Text Color Components
     Primary: ({ children }) => <span className={colorClasses.primary}>{children}</span>,
     Secondary: ({ children }) => <span className={colorClasses.secondary}>{children}</span>,
     Success: ({ children }) => <span className={colorClasses.success}>{children}</span>,
     Danger: ({ children }) => <span className={colorClasses.danger}>{children}</span>,
     Warning: ({ children }) => <span className={colorClasses.warning}>{children}</span>,
     Info: ({ children }) => <span className={colorClasses.info}>{children}</span>,
-
-    // Add custom support for any additional elements as needed
     ...components,
   };
 }
+

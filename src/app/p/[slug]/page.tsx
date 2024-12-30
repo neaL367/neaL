@@ -2,11 +2,15 @@ import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 import { getContentList } from "@/lib/content";
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function ProjectPage(props: PageProps) {
+  const params = await props.params;
+  
   const ProjectComponent = dynamic(
     () => import(`@/content/projects/${params.slug}.mdx`),
     {

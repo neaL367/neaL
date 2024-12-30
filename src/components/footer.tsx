@@ -8,7 +8,6 @@ export default function Footer() {
               © {new Date().getFullYear()} Atichat. All rights reserved.
             </p>
           </div>
-          
         </div>
       </div>
     </footer>

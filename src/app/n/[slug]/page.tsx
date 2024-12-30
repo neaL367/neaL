@@ -2,11 +2,15 @@ import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 import { getContentList } from "@/lib/content";
 
-export default async function NotePage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function NotePage(props: PageProps) {
+  const params = await props.params;
+  
   const NoteComponent = dynamic(
     () => import(`@/content/notes/${params.slug}.mdx`),
     {

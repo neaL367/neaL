@@ -2,11 +2,15 @@ import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 import { getContentList } from "@/lib/content";
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+interface PageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default async function BlogPostPage(props: PageProps) {
+  const params = await props.params;
+  
   const BlogPostComponent = dynamic(
     () => import(`@/content/blog/${params.slug}.mdx`),
     { loading: () => <p>Loading...</p> }

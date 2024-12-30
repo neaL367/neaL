@@ -1,5 +1,5 @@
+import { Link } from "next-view-transitions";
 import { getContentList } from '@/lib/content'
-import Link from 'next/link'
 
 export default async function ProjectsPage() {
   const projects = getContentList('projects')
