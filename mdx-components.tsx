@@ -1,5 +1,4 @@
 import type { MDXComponents } from "mdx/types";
-import Image from "next/image";
 import { Link } from "next-view-transitions";
 
 const colorClasses = {
@@ -120,15 +119,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <td className="px-6 py-4 whitespace-nowrap text-sm text-black dark:text-white">
         {children}
       </td>
-    ),
-    img: (props) => (
-      <Image
-        {...props}
-        width={600}
-        height={400}
-        className="rounded-lg shadow-md mb-6"
-        alt={props.alt || "MDX content image"}
-      />
     ),
     hr: () => <hr className="border-t border-gray-300 dark:border-gray-700 my-8" />,
     Primary: ({ children }) => <span className={colorClasses.primary}>{children}</span>,

@@ -1,3 +1,6 @@
+import Image from 'next/image';
+import placeholder from './placeholder.jpg';
+
 # MDX Style Test
 
 This is a sample .mdx file to test various Markdown and MDX elements.
@@ -33,9 +36,12 @@ This is **bold text**, and this is *italic text*. You can also use __underscores
 
 ## Links and Images
 
-[Visit OpenAI](https://www.openai.com)
+[Visit RockstarGames](https://www.rockstargames.com)
 
-![Alt text for image](/placeholder.svg?height=200&width=300)
+<div className="border border-gray-200 rounded-md shadow-md mb-6">
+  <Image className="w-full h-full rounded-md " src={placeholder} alt="placeholder" placeholder="blur" />
+</div>
+
 
 ## Blockquotes
 
@@ -83,7 +89,7 @@ Here's a sentence with a footnote. [^1]
 
 import { Button } from '@/components/ui/button'
 
-<Button>This is a React Component</Button>
+<Button className="mb-3">This is a React Component</Button>
 
 export const MyComponent = () => (
   <div style={{ padding: '20px', backgroundColor: 'lightgray', borderRadius: '5px' }}>
