@@ -13,42 +13,42 @@ const colorClasses = {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-4xl font-bold mb-6 text-gradient-to-r from-pink-500 to-yellow-500 font-sans">
+      <h1 className="text-4xl font-bold mb-6 font-inter">
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-3xl font-semibold mb-5 text-gradient-to-r from-purple-500 to-blue-500 font-sans">
+      <h2 className="text-3xl font-semibold mb-5 font-inter">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-2xl font-medium mb-4 text-gradient-to-r from-green-500 to-cyan-500 font-sans">
+      <h3 className="text-2xl font-medium mb-4 font-inter">
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-xl font-medium mb-3 text-orange-600 dark:text-orange-400 font-sans">
+      <h4 className="text-xl font-medium mb-3 font-inter">
         {children}
       </h4>
     ),
     h5: ({ children }) => (
-      <h5 className="text-lg font-medium mb-2 text-indigo-600 dark:text-indigo-400 font-sans">
+      <h5 className="text-lg font-semibold mb-2 font-inter">
         {children}
       </h5>
     ),
     h6: ({ children }) => (
-      <h6 className="text-base font-medium mb-2 text-teal-600 dark:text-teal-400 font-sans">
+      <h6 className="text-base font-medium mb-2 font-inter">
         {children}
       </h6>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc pl-6 mb-6 space-y-2 text-black dark:text-white font-sans">
+      <ul className="list-disc pl-6 mb-6 space-y-2 text-black dark:text-white font-inter">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal pl-6 mb-6 space-y-2 text-black dark:text-white font-sans">
+      <ol className="list-decimal pl-6 mb-6 space-y-2 text-black dark:text-white font-inter">
         {children}
       </ol>
     ),
@@ -58,12 +58,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </li>
     ),
     p: ({ children }) => (
-      <p className="mb-6 text-black dark:text-white leading-relaxed font-sans">
+      <p className="mb-6 text-black dark:text-white leading-relaxed font-inter">
         {children}
       </p>
     ),
     strong: ({ children }) => (
-      <strong className="font-bold text-gray-900 dark:text-gray-100">{children}</strong>
+      <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>
     ),
     em: ({ children }) => (
       <em className="italic text-gray-700 dark:text-gray-300">{children}</em>
@@ -74,13 +74,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     a: ({ href, children }) => (
       <Link
         href={href}
-        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 underline font-sans"
+        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 underline font-inter"
       >
         {children}
       </Link>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-6 text-gray-700 dark:text-gray-300 font-sans">
+      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-6 text-gray-700 dark:text-gray-300 font-inter">
         {children}
       </blockquote>
     ),
@@ -96,7 +96,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     table: ({ children }) => (
       <div className="overflow-x-auto mb-6 rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 font-sans">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 font-inter">
           {children}
         </table>
       </div>
