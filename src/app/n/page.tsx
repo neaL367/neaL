@@ -7,9 +7,9 @@ export default async function NotesPage() {
   return (
     <div className="py-8">
       <h1 className="text-3xl font-bold mb-6">notes</h1>
-      <ul className="space-y-4">
-        {notes.length > 0 ? (
-          notes.map((note) => (
+      {notes.length > 0 ? (
+        <ul className="space-y-4">
+          {notes.map((note) => (
             <li key={note.slug}>
               <Link
                 href={`/n/${note.slug}`}
@@ -18,11 +18,11 @@ export default async function NotesPage() {
                 {note.title}
               </Link>
             </li>
-          ))
-        ) : (
-          <p>Stay turned.</p>
-        )}
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <p>Stay turned.</p>
+      )}
     </div>
   );
 }

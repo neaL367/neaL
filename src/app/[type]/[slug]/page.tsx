@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
-import { getContentList } from "@/lib/content";
+import { ContentType, getContentList } from "@/lib/content";
 
-type ContentType = "projects" | "notes" | "blog";
 
 interface PageProps {
   params: Promise<{
