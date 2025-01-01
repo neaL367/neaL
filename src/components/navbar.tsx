@@ -9,25 +9,25 @@ export default function Navbar() {
             href="/"
             className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
           >
-            H
+            h
           </Link>
           <Link
             href="/p"
             className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
           >
-            P
+            p
           </Link>
           <Link
             href="/n"
             className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
           >
-            N
+            n
           </Link>
           <Link
             href="/b"
             className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
           >
-            B
+            b
           </Link>
         </div>
       </nav>

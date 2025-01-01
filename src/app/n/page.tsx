@@ -6,14 +6,14 @@ export default async function NotesPage() {
 
   return (
     <div className="py-8">
-      <h1 className="text-3xl font-bold mb-6">Notes</h1>
+      <h1 className="text-3xl font-bold mb-6">notes</h1>
       <ul className="space-y-4">
         {notes.length > 0 ? (
           notes.map((note) => (
             <li key={note.slug}>
               <Link
                 href={`/n/${note.slug}`}
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 duration-500"
               >
                 {note.title}
               </Link>

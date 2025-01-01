@@ -6,14 +6,14 @@ export default async function BlogPage() {
 
   return (
     <div className="py-8">
-      <h1 className="text-3xl font-bold mb-6">Blog</h1>
+      <h1 className="text-3xl font-bold mb-6">blog</h1>
       <ul className="space-y-4">
         {posts.length > 0 ? (
           posts.map((post) => (
             <li key={post.slug}>
               <Link
                 href={`/b/${post.slug}`}
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 duration-500"
               >
                 {post.title}
               </Link>

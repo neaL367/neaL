@@ -1,0 +1,242 @@
+import DirectoryTree from "./directory-tree";
+
+# Building a Dynamic Content-Driven Blog with Next.js 15 and next/mdx
+
+Next.js 15 introduces exciting capabilities for building modern web applications. When combined with `next/mdx`, you can create a dynamic content-driven blog supporting rich markdown features. This guide will help you build a blog platform with dynamic page rendering for different content types: **projects**, **notes**, and **blog posts**.
+
+---
+
+Ensure you have `Nextjs 15` installed and add the necessary dependencies for MDX support:
+
+- `@next/mdx`
+- `@mdx-js/loader`
+- `@types/mdx`
+- `remark`
+- `remark-gfm`
+- `remark-math`
+- `rehype-stringify`
+
+<details className="mb-1 [&[open]]:mb-4 [&[open]]:border-b [&[open]]:border-gray-100">
+  <summary className="text-gray-600 text-[15px] mb-2">Install them using the following command:</summary>
+
+  ```bash
+  npm install next@15 @next/mdx @mdx-js/loader @types/mdx remark remark-gfm remark-math rehype-stringify
+  ```
+</details>
+
+---
+
+Set up MDX processing with custom plugins by using the following configuration with `next/mdx`:
+
+```javascript
+// next.config.mjs
+
+import createMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
+
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [remarkParse, remarkGfm, remarkMath, remarkRehype],
+    rehypePlugins: [rehypeStringify],
+  },
+});
+
+export default withMDX({
+  pageExtensions: ["mdx", "ts", "tsx"],
+});
+```
+
+This configuration enables seamless MDX integration with support for:
+
+- GitHub Flavored Markdown (GFM)
+- Math expressions
+- Advanced markdown processing
+
+---
+
+Here's the directory structure for managing dynamic content:
+
+<DirectoryTree
+tree={{
+  name: "src/",
+  children: [
+    {
+      name: "app/",
+      children: [
+        {
+          name: "[type]/",
+          children: [
+            { name: "[slug]/", children: [{ name: "page.tsx --> Content page" }] },
+          ],
+        },
+        {
+          name: "n/",
+          children: [{ name: "page.tsx --> List title page" }],
+        },
+      ],
+    },
+    {
+      name: "content/",
+      children: [
+        {
+          name: "projects/",
+          children: [{ name: "example-project/", children: [{ name: "page.mdx" }] }],
+        },
+        {
+          name: "notes/",
+          children: [{ name: "example-note/", children: [{ name: "page.mdx" }] }],
+        },
+        {
+          name: "blog/",
+          children: [{ name: "example-blog/", children: [{ name: "page.mdx" }] }],
+        },
+      ],
+    },
+  ],
+}}/>
+
+---
+
+- Dynamic content loading `ContentPage` component:
+
+```typescript
+export default async function ContentPage(props: PageProps) {
+  const params = await props.params;
+  const type = prefixToType[params.type];
+
+  if (!type) {
+    notFound();
+  }
+
+  const { default: Component } = await import(
+    `@/content/${type}/${params.slug}/page.mdx`
+  );
+
+  return <Component />;
+}
+```
+
+This component dynamically imports and renders the appropriate MDX file based on URL parameters.
+
+---
+
+- Metadata Generation 
+use the `generateMetadata` function for SEO-friendly page titles and descriptions:
+
+```typescript
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
+  const type = prefixToType[params.type];
+
+  if (!type) {
+    notFound();
+  }
+
+  return {
+    title: `${params.slug.replace(/-/g, " ")} | My ${typeToTitle[type]}`,
+    description: `Detailed notes about ${params.slug.replace(/-/g, " ")}`,
+  };
+}
+```
+
+---
+
+- Static Params Generation
+pre-fetch slugs for all content types with `generateStaticParams`:
+
+```typescript
+export async function generateStaticParams() {
+  const types: ContentType[] = ["projects", "notes", "blog"];
+  const params = [];
+
+  for (const type of types) {
+    const items = await getContentList(type);
+    const prefix = Object.keys(prefixToType).find(
+      (key) => prefixToType[key] === type
+    );
+
+    if (prefix) {
+      params.push(
+        ...items.map((item) => ({
+          type: prefix,
+          slug: item.slug,
+        }))
+      );
+    }
+  }
+
+  return params;
+}
+```
+
+---
+
+- Content Listing `getContentList` function
+fetch all content under a specific type using the following:
+
+```typescript
+import { promises as fs } from "fs";
+import path from "path";
+
+export async function getContentList(type: "projects" | "notes" | "blog") {
+  const contentDir = path.join(process.cwd(), "src", "content", type);
+  const folders = await fs.readdir(contentDir);
+
+  const contentList = await Promise.all(
+    folders.map(async (folder) => {
+      const folderPath = path.join(contentDir, folder);
+      const stat = await fs.stat(folderPath);
+
+      if (stat.isDirectory()) {
+        const files = await fs.readdir(folderPath);
+        if (files.includes("page.mdx")) {
+          return {
+            slug: folder,
+            title: folder.split("-").join(" "),
+          };
+        }
+      }
+      return null;
+    })
+  );
+
+  return contentList.filter((item): item is { slug: string; title: string } => item !== null);
+}
+```
+
+---
+
+- Styling with `useMDXComponents`
+customize markdown rendering for a consistent design:
+
+```typescript
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+  return {
+    h1: ({ children }) => (
+      <h1 className="text-4xl font-bold mb-6 font-inter">{children}</h1>
+    ),
+    p: ({ children }) => (
+      <p className="mb-6 text-black dark:text-white leading-relaxed font-inter">
+        {children}
+      </p>
+    ),
+    a: ({ href, children }) => (
+      <Link
+        href={href}
+        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
+      >
+        {children}
+      </Link>
+    ),
+    ...components,
+  };
+}
+```
+
+---
+
+- Conclusion with **Next.js 15** and **next/mdx**, you can create a dynamic, content-driven blog platform. By following these principles, you'll build an engaging and scalable blog supporting diverse content types and modern features.

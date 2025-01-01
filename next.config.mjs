@@ -1,9 +1,9 @@
 import createMDX from "@next/mdx";
-import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

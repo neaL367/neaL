@@ -63,18 +63,18 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </p>
     ),
     strong: ({ children }) => (
-      <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>
+      <strong className="font-medium text-gray-900 dark:text-gray-100">{children}</strong>
     ),
     em: ({ children }) => (
       <em className="italic text-gray-700 dark:text-gray-300">{children}</em>
     ),
     del: ({ children }) => (
-      <del className="line-through text-red-500 dark:text-red-400">{children}</del>
+      <del className="line-through text-black dark:text-white">{children}</del>
     ),
     a: ({ href, children }) => (
       <Link
         href={href}
-        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 underline font-inter"
+        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
       >
         {children}
       </Link>
