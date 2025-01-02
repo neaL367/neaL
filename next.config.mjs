@@ -4,6 +4,8 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import rehypePrettyCode from 'rehype-pretty-code'
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -21,11 +23,16 @@ const nextConfig = {
   },
 };
 
+const options = {
+  theme: "github-light",
+};
+
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
+  extension: /\.mdx?$/,
   options: {
     remarkPlugins: [remarkParse, remarkGfm, remarkMath, remarkRehype],
-    rehypePlugins: [rehypeStringify],
+    rehypePlugins: [rehypeStringify, [rehypePrettyCode, options]],
   },
 });
 
