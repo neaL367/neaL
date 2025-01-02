@@ -1,76 +1,93 @@
 import { notFound } from "next/navigation";
-import { Metadata } from "next/types";
-import { ContentType, getContentList } from "@/lib/content";
+import { Metadata } from "next";
+import { promises as fs } from 'fs';
+import path from 'path';
 
+type ContentType = 'projects' | 'notes' | 'blog';
 
 interface PageProps {
-  params: Promise<{
+  params: {
     type: string;
     slug: string;
-  }>;
+  };
 }
 
-const prefixToType: Record<string, ContentType> = {
+const TYPE_MAP: Record<string, ContentType> = {
   p: "projects",
   n: "notes",
   b: "blog",
 };
 
-const typeToTitle: Record<ContentType, string> = {
+const TYPE_TITLES: Record<ContentType, string> = {
   projects: "Projects",
   notes: "Notes",
   blog: "Blog",
 };
 
-export default async function ContentPage(props: PageProps) {
-  const params = await props.params;
-  const type = prefixToType[params.type];
+export default async function ContentPage({ params }: PageProps) {
+  const type = TYPE_MAP[params.type];
+  if (!type) notFound();
 
-  if (!type) {
+  try {
+    const { default: Component } = await import(`@/content/${type}/${params.slug}/page.mdx`);
+    return <Component />;
+  } catch (error) {
+    console.error(`Error loading content for ${type}/${params.slug}:`, error);
     notFound();
   }
-  const { default: Component } = await import(
-    `@/content/${type}/${params.slug}/page.mdx`
-  );
-
-  return <Component />;
 }
 
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const params = await props.params;
-  const type = prefixToType[params.type];
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const type = TYPE_MAP[params.type];
+  if (!type) notFound();
 
-  if (!type) {
-    notFound();
-  }
-
+  const title = params.slug.replace(/-/g, " ");
   return {
-    title: `${params.slug.replace(/-/g, " ")} | My ${typeToTitle[type]}`,
-    description: `Detailed notes about ${params.slug.replace(/-/g, " ")}`,
+    title: `${title} | My ${TYPE_TITLES[type]}`,
+    description: `Detailed information about ${title}`,
   };
 }
 
-export async function generateStaticParams() {
-  const types: ContentType[] = ["projects", "notes", "blog"];
-  const params = [];
+async function getContentList(type: ContentType): Promise<{ slug: string; title: string }[]> {
+  const contentDir = path.join(process.cwd(), 'src', 'content', type);
+  
+  try {
+    const folders = await fs.readdir(contentDir);
+    
+    const contentPromises = folders.map(async (folder) => {
+      const folderPath = path.join(contentDir, folder);
+      const stat = await fs.stat(folderPath);
 
-  for (const type of types) {
-    const items = await getContentList(type);
-    const prefix = Object.keys(prefixToType).find(
-      (key) => prefixToType[key] === type
-    );
+      if (stat.isDirectory()) {
+        const files = await fs.readdir(folderPath);
+        if (files.includes('page.mdx')) {
+          return {
+            slug: folder,
+            title: folder.split('-').join(' ')
+          };
+        }
+      }
+      return null;
+    });
 
-    if (prefix) {
-      params.push(
-        ...items.map((item) => ({
-          type: prefix,
-          slug: item.slug,
-        }))
-      );
-    }
+    const contentList = await Promise.all(contentPromises);
+    return contentList.filter((item): item is { slug: string; title: string } => item !== null);
+  } catch (error) {
+    console.error(`Error reading ${type} directory:`, error);
+    return [];
   }
+}
 
-  return params;
+export async function generateStaticParams() {
+  const types = Object.entries(TYPE_MAP);
+  const paramsPromises = types.map(async ([prefix, type]) => {
+    const items = await getContentList(type);
+    return items.map(item => ({ type: prefix, slug: item.slug }));
+  });
+
+  const params = await Promise.all(paramsPromises);
+  return params.flat();
 }
 
 export const dynamicParams = false;
+
