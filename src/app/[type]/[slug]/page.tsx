@@ -6,10 +6,10 @@ import path from 'path';
 type ContentType = 'projects' | 'notes' | 'blog';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     type: string;
     slug: string;
-  };
+  }>;
 }
 
 const TYPE_MAP: Record<string, ContentType> = {
@@ -24,7 +24,8 @@ const TYPE_TITLES: Record<ContentType, string> = {
   blog: "Blog",
 };
 
-export default async function ContentPage({ params }: PageProps) {
+export default async function ContentPage(props: PageProps) {
+  const params = await props.params;
   const type = TYPE_MAP[params.type];
   if (!type) notFound();
 
@@ -37,7 +38,8 @@ export default async function ContentPage({ params }: PageProps) {
   }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const type = TYPE_MAP[params.type];
   if (!type) notFound();
 
