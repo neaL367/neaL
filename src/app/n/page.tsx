@@ -1,28 +1,7 @@
-import { Link } from "next-view-transitions";
 import { getContentList } from "@/lib/content";
+import ContentList from "@/components/content-list";
 
 export default async function NotesPage() {
   const notes = await getContentList("notes");
-
-  return (
-    <div className="py-8">
-      <h1 className="text-3xl font-bold mb-6">notes</h1>
-      {notes.length > 0 ? (
-        <ul className="space-y-4">
-          {notes.map((note) => (
-            <li key={note.slug}>
-              <Link
-                href={`/n/${note.slug}`}
-                className="text-blue-600 duration-500"
-              >
-                {note.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Stay turned.</p>
-      )}
-    </div>
-  );
+  return <ContentList title="Notes" items={notes} baseUrl="/n" />;
 }

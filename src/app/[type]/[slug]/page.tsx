@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { promises as fs } from 'fs';
 import path from 'path';
 
-type ContentType = 'projects' | 'notes' | 'blog';
+type ContentType = 'projects' | 'notes';
 
 interface PageProps {
   params: Promise<{
@@ -15,13 +15,11 @@ interface PageProps {
 const TYPE_MAP: Record<string, ContentType> = {
   p: "projects",
   n: "notes",
-  b: "blog",
 };
 
 const TYPE_TITLES: Record<ContentType, string> = {
   projects: "Projects",
   notes: "Notes",
-  blog: "Blog",
 };
 
 export default async function ContentPage(props: PageProps) {

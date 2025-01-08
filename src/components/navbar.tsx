@@ -2,33 +2,22 @@ import { Link } from "next-view-transitions";
 
 export default function Navbar() {
   return (
-    <header className="bg-background">
-      <nav className="py-4">
-        <div className="flex space-x-6 text-lg">
-          <Link
-            href="/"
-            className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
-          >
-            h
-          </Link>
-          <Link
-            href="/p"
-            className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
-          >
-            p
-          </Link>
-          <Link
-            href="/n"
-            className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
-          >
-            n
-          </Link>
-          <Link
-            href="/b"
-            className="text-foreground hover:text-primary transition-all ease-in-out duration-500 hover:underline hover:font-medium "
-          >
-            b
-          </Link>
+    <header className="mb-12">
+      <nav>
+        <div className="flex space-x-8 text-lg justify-start">
+          {[
+            { href: "/", label: "H<sub>ome</sub>" },
+            { href: "/p", label: "P<sub>rojects</sub>" },
+            { href: "/n", label: "N<sub>otes</sub>" },
+          ].map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className="text-gray-600 hover:text-gray-900 transition-colors duration-500 "
+            >
+              <span dangerouslySetInnerHTML={{ __html: label }} />
+            </Link>
+          ))}
         </div>
       </nav>
     </header>
