@@ -12,11 +12,11 @@ I'm currently most productive in the following areas:
 
 ## 1. Frameworks (Next.js, Angular, Astro)
 
-### Next.js (Primary)
-Next.js is my primary framework for building performant web applications. I always start with TypeScript for type safety and better maintainability. I leverage React's Server Components and server-side data fetching patterns for optimal performance.
+### [Next.js](https://nextjs.org/)🗽
+My primary framework for building performant web applications. I always start with TypeScript for type safety and better maintainability. I leverage React's Server Components and server-side data fetching patterns for optimal performance.
 
 #### Example: Server Components for Data Fetching
-```jsx
+```tsx
 export default async function Page() {
   const response = await fetch('https://api.example.com/data');
   const items = await response.json();
@@ -39,7 +39,7 @@ For projects requiring multilingual support, I've implemented internationalizati
 - [My Old Portfolio Website](https://atichat-old.vercel.app/)
 </details>
 
-### Angular (Supplementary)
+### [Angular](https://angular.dev/)
 Angular is my choice for enterprise-level projects or scenarios where its structure and ecosystem provide significant advantages. It's especially useful for creating scalable and maintainable applications.
 
 <details className="mb-1 -mt-2">
@@ -71,25 +71,77 @@ The Hopeisapp project is a social volunteer initiative aimed at providing hope t
 ---
 </details>
 
-### Astro (Static Sites)
-Astro excels in building static sites with high performance. I've utilized it to create fast-loading web pages for projects where simplicity and speed are priorities.
+### [Astro](https://astro.build/) 💫
+Astro excels in building static sites with high performance. I've utilized it to create fast-loading web pages for projects where simplicity and speed are priorities. I also like content collections, which provide a powerful way to manage and organize structured data in Astro projects.
+
+<details className="mb-1 -mt-2">
+<summary className="text-gray-600 text-[15px] mb-2">Content Collections ❤️</summary>
+
+Content Collections allow you to define a set of data that is structurally similar, whether it’s a directory of blog posts, a JSON file of product items, or any data representing multiple items with a consistent format. Collections can store entries in Markdown, MDX, Markdoc, YAML, or JSON files directly within your project.  
+
+For example:  
+
+```
+Directory: src/
+Directory: newsletter/
+  - week-1.md (a collection entry)
+  - week-2.md (a collection entry)
+  - week-3.md (a collection entry)
+Directory: authors/
+  - authors.json (a single file containing all collection entries)
+```
+
+You can define these collections in Astro using `defineCollection` from `astro:content` and ensure their structure is validated with a schema. Here's an example:
+
+```typescript
+import { defineCollection, z } from 'astro:content';
+import { glob, file } from 'astro/loaders'; // Not available with legacy API
+
+const blog = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/data/blog" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+  }),
+});
+
+const dogs = defineCollection({
+  loader: file("src/data/dogs.json"),
+  schema: z.object({
+    id: z.string(),
+    breed: z.string(),
+    temperament: z.array(z.string()),
+  }),
+});
+
+export const collections = { blog, dogs };
+```
+
+In this example:
+- The `blog` collection gathers Markdown files using a glob loader and enforces a schema with fields like `title` and `pubDate`.
+- The `dogs` collection loads data from a JSON file and validates it with fields such as `id`, `breed`, and `temperament`.
+
+This approach makes it simple to manage content-rich static sites with flexibility and speed.
+</details>
 
 ---
 
-## 2. Styling (Tailwind CSS, framer-motion, shadcn/ui)
+## 2. Styling (Tailwind CSS, motion, shadcn/ui)
 
-### Tailwind CSS
-Tailwind CSS is my preferred utility-first CSS framework. Its design system allows for rapid prototyping and consistent styling. It integrates well with modern frameworks and helps keep styles organized and maintainable.
+### [Tailwind CSS](https://tailwindcss.com/) 🌪️
+My preferred utility-first CSS framework. Its design system allows for rapid prototyping and consistent styling. It integrates well with modern frameworks and helps keep styles organized and maintainable.
 
 #### Benefits of Tailwind
 - **Efficiency**: Utility classes colocate styles with markup, reducing context switching.
 - **Performance**: Tree-shaking ensures small CSS bundles.
 - **Flexibility**: Can be used alongside traditional CSS or other styling approaches.
 
-### shadcn/ui
+### [shadcn/ui](https://ui.shadcn.com/) 🗿
 To streamline UI development, I use shadcn/ui, which offers accessible, customizable primitives for components like buttons, inputs, and themes. It pairs seamlessly with Tailwind CSS.
 
-### framer-motion
+### [motion](https://motion.dev/)
 For animations, framer-motion provides a declarative API to create smooth, interactive transitions that enhance user experiences.
 
 ---
@@ -101,9 +153,9 @@ I use Vercel for its seamless integration with Next.js and its ability to handle
 
 ### AWS
 For hosting static websites, I've used:
-- **CloudFront**: Ensures fast and reliable content delivery.
-- **S3**: Offers scalable object storage.
-- **EC2**: Provides flexible compute capacity for dynamic applications.
+- **[CloudFront](https://aws.amazon.com/cloudfront/)**: Ensures fast and reliable content delivery.
+- **[S3](https://aws.amazon.com/s3/)**: Offers scalable object storage.
+- **[EC2](https://aws.amazon.com/ec2/)**: Provides flexible compute capacity for dynamic applications.
 
 ### Plesk and WordPress
 I created and managed the website for [dseelin.co.th](https://dseelin.co.th) using Plesk hosting and WordPress, gaining experience in traditional web hosting and content management systems.
