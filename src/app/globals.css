@@ -17,11 +17,6 @@
   }
 } */
 
-body {
-  font-family: var(--font-inter);
-  scroll-behavior: smooth;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -80,9 +75,30 @@ body {
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border scroll-smooth ;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #cccccc;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
 }

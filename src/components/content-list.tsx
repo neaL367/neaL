@@ -14,11 +14,11 @@ export default function ContentList({
 }: ContentListProps) {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{title}</h1>
+      <h1 className="text-lg">{title}</h1>
       {items.length > 0 ? (
         <ul className="space-y-4">
           {items.map((item) => (
-            <li key={item.slug}>
+            <li key={item.slug} className="list-item list-disc list-inside">
               <Link
                 href={`${baseUrl}/${item.slug}`}
                 className="text-blue-600 hover:text-blue-800 transition-colors duration-300"

@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 import typographyPlugin from "@tailwindcss/typography"
 import animatetwPlugin from "tailwindcss-animate"
-import scrollbarPlugin from "tailwind-scrollbar"
 
 const config: Config = {
 	darkMode: ["class"],
@@ -60,10 +59,10 @@ const config: Config = {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
-			}
+			},
 		},
 		content: {}
 	},
-	plugins: [typographyPlugin, animatetwPlugin, scrollbarPlugin],
+	plugins: [typographyPlugin, animatetwPlugin],
 };
 export default config;
