@@ -1,7 +1,8 @@
-import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Snow from "@/components/snow"
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Snow from "@/components/snow";
+import { GithubIcon, TwitterIcon } from "lucide-react";
 
 <div className="relative w-full h-full my-8 pt-6 overflow-hidden rounded-xl border shadow-md">
   <Image
@@ -11,7 +12,7 @@ import Snow from "@/components/snow"
     alt="atichat"
     quality={90}
     priority
-    className="duration-500 object-contain"
+    className="duration-500 object-contain w-auto h-auto"
   />
   <Snow />
 </div>
@@ -24,22 +25,28 @@ One of my dreams is to make my own video games, and I'm really interested in the
 
 I'm always excited to engage in thoughtful discussions and collaborations. Feel free to reach out!
 
-<div className="mt-8 space-x-4">
-  <Button size="lg" variant="outline" asChild>
-    <a href="mailto:atichatbusiness@gmail.com" className="flex items-center space-x-2">
-      <span>Email Me</span>
+<div className="flex flex-wrap gap-4">
+    <a
+      href="https://github.com/me22mer"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center text-sm gap-2 px-4 py-2 border rounded-lg hover:bg-gray-100"
+    >
+      <GithubIcon size={16} />
+      <span>@me22mer</span>
     </a>
-  </Button>
-  <Button size="lg" variant="outline" asChild>
-    <a href="https://twitter.com/lm_A2a" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
-      <span>Twitter</span>
+    <a
+      href="https://x.com/lm_A2a"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="X"
+      className="flex items-center text-sm gap-2 px-4 py-2 border rounded-lg hover:bg-gray-100"
+    >
+      <TwitterIcon size={16} />
+      <span>@Im_A2a</span>
     </a>
-  </Button>
-  <Button size="lg" variant="outline" asChild>
-    <a href="https://github.com/me22mer" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
-      <span>GitHub</span>
-    </a>
-  </Button>
 </div>
+
+
 
 &nbsp;
