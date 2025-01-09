@@ -1,17 +1,19 @@
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import Snow from "@/components/snow"
 
-<div className="w-full h-full my-8 pt-6 overflow-hidden rounded-xl border shadow-md">
+<div className="relative w-full h-full my-8 pt-6 overflow-hidden rounded-xl border shadow-md">
   <Image
     src="https://avatars.githubusercontent.com/u/73696671?v=4"
-    width={800}
-    height={220}
-    alt=""
-    quality={80}
+    width={222}
+    height={0}
+    alt="atichat"
+    quality={90}
     priority
-    className="duration-500 object-contain object-top w-fit h-[220px]"
+    className="duration-500 object-contain"
   />
+  <Snow />
 </div>
 
 My name is **Atichat<sup><strong>(art)</strong></sup>**, and I’m a 21-year-old student at **Sripatum University in Thailand**, where I’m studying **Information and Communication Technology**. My passion lies in **front-end web development**, but I’m always excited to take on new challenges.
@@ -24,10 +26,19 @@ I'm always excited to engage in thoughtful discussions and collaborations. Feel 
 
 <div className="mt-8 space-x-4">
   <Button size="lg" variant="outline" asChild>
-    <a href="mailto:atichatbusiness@gmail.com">Email Me</a>
+    <a href="mailto:atichatbusiness@gmail.com" className="flex items-center space-x-2">
+      <span>Email Me</span>
+    </a>
   </Button>
   <Button size="lg" variant="outline" asChild>
-    <a href="https://twitter.com/lm_A2a" target="_blank" rel="noopener noreferrer">Twitter</a>
+    <a href="https://twitter.com/lm_A2a" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+      <span>Twitter</span>
+    </a>
+  </Button>
+  <Button size="lg" variant="outline" asChild>
+    <a href="https://github.com/me22mer" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+      <span>GitHub</span>
+    </a>
   </Button>
 </div>
 

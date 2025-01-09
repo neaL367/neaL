@@ -3,5 +3,6 @@ import ContentList from "@/components/content-list";
 
 export default async function NotesPage() {
   const notes = await getContentList("notes");
-  return <ContentList title="Notes" items={notes} baseUrl="/n" />;
+  const publishedNotes = notes.filter((note) => note.isPublished);
+  return <ContentList title="Notes" items={publishedNotes} baseUrl="/n" />;
 }

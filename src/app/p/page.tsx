@@ -3,5 +3,6 @@ import ContentList from "@/components/content-list";
 
 export default async function ProjectsPage() {
   const projects = await getContentList("projects");
-  return <ContentList title="Projects" items={projects} baseUrl="/p" />;
+  const publishedProjects = projects.filter((note) => note.isPublished);
+  return <ContentList title="Projects" items={publishedProjects} baseUrl="/p" />;
 }

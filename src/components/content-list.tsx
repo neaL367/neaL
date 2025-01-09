@@ -1,9 +1,5 @@
 import { Link } from "next-view-transitions";
-
-interface ContentItem {
-  slug: string;
-  title: string;
-}
+import { ContentItem } from "@/lib/content";
 
 interface ContentListProps {
   title: string;
@@ -11,7 +7,11 @@ interface ContentListProps {
   baseUrl: string;
 }
 
-export default function ContentList({ title, items, baseUrl }: ContentListProps) {
+export default function ContentList({
+  title,
+  items,
+  baseUrl,
+}: ContentListProps) {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{title}</h1>

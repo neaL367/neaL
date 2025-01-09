@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import typographyPlugin from "@tailwindcss/typography"
 import animatetwPlugin from "tailwindcss-animate"
+import scrollbarPlugin from "tailwind-scrollbar"
 
 const config: Config = {
 	darkMode: ["class"],
@@ -62,6 +63,6 @@ const config: Config = {
 			}
 		}
 	},
-	plugins: [typographyPlugin, animatetwPlugin],
+	plugins: [typographyPlugin, animatetwPlugin, scrollbarPlugin],
 };
 export default config;
