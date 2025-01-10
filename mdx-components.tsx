@@ -85,7 +85,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </blockquote>
     ),
     code: ({ children }) => (
-      <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-black dark:text-white">
+      <code className="bg-gray-100 dark:bg-gray-800 rounded px-1 text-sm font-mono text-black dark:text-white">
         {children}
       </code>
     ),

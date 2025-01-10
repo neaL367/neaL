@@ -4,8 +4,7 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
-import rehypePrettyCode from 'rehype-pretty-code'
-
+import rehypePrettyCode from "rehype-pretty-code";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -21,9 +20,14 @@ const nextConfig = {
       },
     ],
   },
+  // experimental: {
+  //   mdxRs: true,
+  // },
 };
 
+/** @type {import('rehype-pretty-code').Options} */
 const options = {
+  keepBackground: false,
   theme: "github-light",
 };
 
