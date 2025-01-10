@@ -1,6 +1,8 @@
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ContentType, getContentList } from "@/lib/content";
+import { getContentList } from "@/lib/content";
+import { ContentType } from "@/types";
 
 interface PageProps {
   params: Promise<{
@@ -25,11 +27,19 @@ export default async function ContentPage(props: PageProps) {
   if (!type) notFound();
 
   try {
-    const { default: Component, metadata } = await import(`@/content/${type}/${params.slug}/page.mdx`);
+    const contentList = await getContentList(type);
+    const content = contentList.find((item) => item.slug === params.slug);
 
-    if (metadata.isPublished === false) {
-      notFound()
+    if (!content || content.published === false) {
+      notFound();
     }
+
+    const Component = dynamic(
+      () => import(`@/content/${type}/${params.slug}/page.mdx`),
+      {
+        loading: () => <p>Loading...</p>,
+      }
+    );
 
     return <Component />;
   } catch (error) {
@@ -44,38 +54,45 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   if (!type) notFound();
 
   try {
-    const { metadata } = await import(`@/content/${type}/${params.slug}/page.mdx`)
+    const contentList = await getContentList(type);
+    const metadata = contentList.find((item) => item.slug === params.slug);
+
+    if (!metadata) {
+      notFound();
+    }
 
     return {
       title: `${metadata.title} | ${TYPE_TITLES[type]}`,
-      description: metadata.description || `Detailed information about ${metadata.title}`,
+      description:
+        metadata.description || `Detailed information about ${metadata.title}`,
       openGraph: {
-        images: metadata.thumbnailImage ? [metadata.thumbnailImage] : [],
+        images: metadata.thumbnail ? [metadata.thumbnail] : [],
       },
-    }
+    };
   } catch (error) {
-    console.error(`Error generating metadata for ${type}/${params.slug}:`, error)
-    notFound()
+    console.error(
+      `Error generating metadata for ${type}/${params.slug}:`,
+      error
+    );
+    notFound();
   }
 }
 
-
 export async function generateStaticParams() {
-  const types = Object.entries(TYPE_MAP)
+  const types = Object.entries(TYPE_MAP);
   const paramsPromises = types.map(async ([prefix, type]) => {
-    const contentList = await getContentList(type)
-    
-    return contentList
-      .filter(item => item.isPublished)
-      .map(item => ({
-        type: prefix,
-        slug: item.slug
-      }))
-  })
+    const contentList = await getContentList(type);
 
-  const params = await Promise.all(paramsPromises)
-  return params.flat()
+    return contentList
+      .filter((item) => item.published)
+      .map((item) => ({
+        type: prefix,
+        slug: item.slug,
+      }));
+  });
+
+  const params = await Promise.all(paramsPromises);
+  return params.flat();
 }
 
 export const dynamicParams = false;
-

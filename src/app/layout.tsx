@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/nav";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -33,6 +33,10 @@ export const metadata: Metadata = {
   twitter: {
     title: "Atichat",
     card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

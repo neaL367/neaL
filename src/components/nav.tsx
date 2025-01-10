@@ -2,8 +2,7 @@ import { Link } from "next-view-transitions";
 
 export default function Navbar() {
   return (
-    <header className="mb-12">
-      <nav>
+      <nav className="mb-12">
         <div className="flex space-x-8 text-lg justify-start">
           {[
             { href: "/", label: "H<sub>ome</sub>" },
@@ -20,6 +19,5 @@ export default function Navbar() {
           ))}
         </div>
       </nav>
-    </header>
   );
 }

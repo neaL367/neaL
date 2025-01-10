@@ -1,10 +1,10 @@
-import { Link } from "next-view-transitions";
-import { ContentItem } from "@/lib/content";
+import { ContentItem } from '@/types'
+import Link from 'next/link'
 
 interface ContentListProps {
-  title: string;
-  items: ContentItem[];
-  baseUrl: string;
+  title: string
+  items: ContentItem[]
+  baseUrl: string
 }
 
 export default function ContentList({
@@ -12,18 +12,23 @@ export default function ContentList({
   items,
   baseUrl,
 }: ContentListProps) {
+  const publishedItems = items.filter(item => item.published !== false)
+
   return (
     <div className="space-y-6">
-      <h1 className="text-lg">{title}</h1>
-      {items.length > 0 ? (
-        <ul className="space-y-4">
-          {items.map((item) => (
-            <li key={item.slug} className="list-item list-disc list-inside">
+      <h2 className="text-lg">{title}</h2>
+      {publishedItems.length > 0 ? (
+        <ul className="space-y-4 list-disc list-inside">
+          {publishedItems.map((item) => (
+            <li key={item.slug}>
               <Link
                 href={`${baseUrl}/${item.slug}`}
                 className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
               >
-                {item.title}
+                <span className="mr-2">{item.title}</span>
+                {item.date && (
+                  <span className="text-sm text-gray-500">({item.date})</span>
+                )}
               </Link>
             </li>
           ))}
@@ -32,5 +37,6 @@ export default function ContentList({
         <p className="text-gray-600">Stay tuned for updates.</p>
       )}
     </div>
-  );
+  )
 }
+

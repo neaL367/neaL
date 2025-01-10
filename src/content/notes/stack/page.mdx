@@ -1,8 +1,9 @@
 export const metadata = {
-    title: 'My Stack',
-    thumbnailImage: "",
-    isPublished: true,
-    description: ""
+  title: "My Stack",
+  description: "my tech stack, projects, and community impact.",
+  thumbnail: "",
+  published: true,
+  date: "2025-01-10"
 };
 
 
@@ -93,7 +94,7 @@ Directory: authors/
 
 You can define these collections in Astro using `defineCollection` from `astro:content` and ensure their structure is validated with a schema. Here's an example:
 
-```typescript
+```ts
 import { defineCollection, z } from 'astro:content';
 import { glob, file } from 'astro/loaders'; // Not available with legacy API
 
