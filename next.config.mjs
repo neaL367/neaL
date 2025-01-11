@@ -9,17 +9,6 @@ import rehypePrettyCode from "rehype-pretty-code";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["mdx", "ts", "tsx"],
-
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
-  },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false
   }
