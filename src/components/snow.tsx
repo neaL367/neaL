@@ -108,6 +108,7 @@ export default function Snow() {
         id="tsparticles"
         particlesLoaded={particlesLoaded}
         options={options}
+        className="w-full h-full"
       />
       </div>
     );
