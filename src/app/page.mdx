@@ -1,18 +1,17 @@
 import Image from "next/image";
 import { ArrowRight, GithubIcon, TwitterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Profile from "../../public/images/666666.png"
 import Snow from "@/components/snow";
 
 <div className="relative w-full h-full my-8 pt-6 overflow-hidden rounded-xl border shadow-md">
   <Image
-    src={Profile}
-    width={222}
-    height={0}
+    src="https://avatars.githubusercontent.com/u/73696671?v=4"
+    width={220}
+    height={220}
     alt="atichat"
-    quality={100}
-    className="duration-500 object-contain w-auto h-auto"
-    placeholder="blur"
+    loading="lazy"
+    quality={90}
+    className="duration-500 object-contain"
   />
   <Snow />
 </div>
