@@ -23,7 +23,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className=" mb-3 font-inter">
+      <h3 className="font-medium mb-3 font-inter">
         {children}
       </h3>
     ),

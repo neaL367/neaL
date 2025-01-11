@@ -53,7 +53,7 @@ This application requires Node.js v18+.
 git clone https://github.com/me22mer/atichat.git
 cd atichat
 bun install
-bun run dev
+bun dev
 ```
 
 ## Credits
