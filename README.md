@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Atichat
 
-## Getting Started
+A Next.js application with interactive snow particle effects and mobile compatibility.
 
-First, run the development server:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fme22mer%2Fatichat)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Overview
+
+- **Framework**: [Next.js](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com)
+- **Components**: [MDX](https://mdxjs.com/)
+- **Deployment**: [Vercel](https://vercel.com)
+
+## Project Structure
+
+```plaintext
+atichat/
+├── public/
+├── src/
+│   ├── app/
+│   │   └── page.mdx            # Main page with snow effect
+│   └── components/
+├── components.json
+├── eslint.config.mjs
+├── mdx-components.tsx
+├── next.config.mjs
+├── package.json
+├── postcss.config.mjs
+└── tailwind.config.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Recent Updates
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Fixed snow particle effects for mobile compatibility
+- Enhanced particles initialization and configuration
+- Added markdown plugins and metadata support
+- Improved scrollbar styling and bullet point visibility
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- ❄️ Interactive snow particle effects
+- 📱 Mobile-responsive design
+- 🎨 Customizable UI with Tailwind CSS
+- 🌓 Smooth animations and transitions
+- 📝 MDX support for rich content
 
-To learn more about Next.js, take a look at the following resources:
+## Running Locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This application requires Node.js v18+.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+git clone https://github.com/me22mer/atichat.git
+cd atichat
+bun install
+bun run dev
+```
 
-## Deploy on Vercel
+## Credits
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is inspired by [Lee Robinson's personal website](https://github.com/leerob/site). We'd like to express our gratitude to Lee Robinson (leerob) for the inspiration and insights his work has provided in the development of this project.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+1. You are free to use this code as inspiration.
+2. Please do not copy it directly.
+3. Crediting the author is appreciated.
