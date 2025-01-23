@@ -39,7 +39,7 @@ atichat/
 
 ## Features
 
-- ❄️ Interactive snow particle effects
+- ❄️ Snow particle effects
 - 📱 Mobile-responsive design
 - 🎨 Customizable UI with Tailwind CSS
 - 🌓 Smooth animations and transitions
