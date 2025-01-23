@@ -1,0 +1,202 @@
+import Image from 'next/image';
+import Placeholder from "./images/placeholder.webp"
+import Thumbnail from "./images/thumnail.png"
+
+export const metadata = {
+ title: "Camera Controller",
+  description: "",
+  thumbnail: "",
+  published: true,
+  date: ""
+};
+
+
+# Isometric 3D Camera Controller
+
+This article breaks down a Unity camera controller that offers following, panning, rotation, and zooming functionalities. We'll explore each feature in detail.
+
+<div className="border border-gray-200 rounded-md mb-3.5">
+  <Image src={Thumbnail} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+</div>
+
+## Overview
+
+The `CameraController` class is a MonoBehaviour that provides a versatile camera control system for Unity projects. It includes the following main features:
+
+1. Smooth following of a target transform
+2. Camera panning with optional axis limits
+3. Camera rotation with snapping to 45-degree angles
+4. Smooth zooming with min/max limits
+
+Let's dive into each component of this controller.
+
+## Class Structure
+
+  ```csharp
+  public class CameraController : MonoBehaviour
+  {
+      // ... (fields and properties)
+  }
+  ```
+
+## Initialization
+
+  ```csharp
+  void Awake()
+  {
+      _camera = GetComponentInChildren<Camera>();
+      _transform = transform;
+      _currentZoom = minZoom;
+      _targetPosition = _transform.position;
+  }
+  ```
+
+The `Awake()` method initializes the controller by caching necessary components and setting initial values.
+
+## Update Loop
+
+
+  ```csharp
+  void Update()
+  {
+      HandleFollowing();
+      HandlePanning();
+      HandleZooming();
+      HandleRotation();
+  }
+  ```
+
+The `Update()` method calls individual handling methods for each feature, maintaining a clean and modular structure.
+
+## Camera Following
+
+<div className="border border-gray-200 rounded-md mb-3.5">
+  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+</div>
+
+<details className="mb-1 -mt-2">
+  <summary className="text-gray-600 text-[15px] mb-2">View Camera Following Code</summary>
+
+  ```csharp
+  private void HandleFollowing()
+  {
+      if (followAt != null)
+      {
+          _targetPosition = followAt.position;
+      }
+
+      _transform.position = Vector3.Lerp(_transform.position, _targetPosition, FollowSmoothness * Time.deltaTime);
+  }
+  ```
+
+</details>
+
+The `HandleFollowing()` method smoothly moves the camera towards a target position. If a `followAt` transform is set, the camera will follow it. The `FollowSmoothness` property controls how quickly the camera catches up to the target.
+
+## Camera Panning
+
+<div className="border border-gray-200 rounded-md mb-3.5">
+  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+</div>
+
+<details className="mb-1 -mt-2">
+  <summary className="text-gray-600 text-[15px] mb-2">View Camera Panning Code</summary>
+
+  ```csharp
+  private void HandlePanning()
+  {
+      if (followAt != null) return;
+
+      Vector3 move = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+      _targetPosition += move * (PanSpeed * Time.deltaTime);
+
+      if (enablePanLimitX)
+          _targetPosition.x = Mathf.Clamp(_targetPosition.x, panLimitX.x, panLimitX.y);
+      if (enablePanLimitZ)
+          _targetPosition.z = Mathf.Clamp(_targetPosition.z, panLimitZ.x, panLimitZ.y);
+  }
+  ```
+
+</details>
+
+The `HandlePanning()` method allows camera movement when not following a target. It uses input axes for movement and applies optional limits on the X and Z axes. The panning speed is controlled by the `PanSpeed` property.
+
+## Camera Zooming
+
+<div className="border border-gray-200 rounded-md mb-3.5">
+  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+</div>
+
+<details className="mb-1 -mt-2">
+  <summary className="text-gray-600 text-[15px] mb-2">View Camera Zooming Code</summary>
+
+  ```csharp
+  private void HandleZooming()
+  {
+      _currentZoom = Mathf.Clamp(_currentZoom - Input.mouseScrollDelta.y * ZoomSpeed * Time.deltaTime, minZoom, maxZoom);
+      _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _currentZoom, ZoomSmoothness * Time.deltaTime);
+  }
+  ```
+
+</details>
+
+The `HandleZooming()` method adjusts the camera's orthographic size based on mouse scroll input. The zoom is smoothly interpolated and clamped between `minZoom` and `maxZoom` values. The `ZoomSpeed` and `ZoomSmoothness` properties control the zooming behavior.
+
+## Camera Rotation
+
+<div className="border border-gray-200 rounded-md mb-3.5">
+  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+</div>
+
+<details className="mb-1 -mt-2">
+  <summary className="text-gray-600 text-[15px] mb-2">View Camera Rotation Code</summary>
+
+  ```csharp
+  private void HandleRotation()
+  {
+      if (Input.GetMouseButton(1))
+      {
+          _targetYaw += Input.GetAxis("Mouse X") * RotationSpeed;
+      }
+      else if (Input.GetMouseButtonUp(1))
+      {
+          _targetYaw = Mathf.Round(_targetYaw / 45f) * 45f;
+      }
+
+      _transform.rotation = Quaternion.Slerp(_transform.rotation, Quaternion.Euler(0f, _targetYaw, 0f), RotationSpeed * Time.deltaTime);
+  }
+  ```
+
+</details>
+
+The `HandleRotation()` method rotates the camera when the right mouse button is held. When released, it snaps to the nearest 45-degree angle. The rotation is smoothly interpolated using `Quaternion.Slerp` for fluid motion. The `RotationSpeed` property controls the rotation speed.
+
+## Properties
+
+  ```csharp
+  public float FollowSmoothness
+  {
+      get => _followSmoothness;
+      set => _followSmoothness = Mathf.Clamp(value, 0.1f, 10f);
+  }
+
+  // Similar properties for PanSpeed, RotationSpeed, ZoomSpeed, and ZoomSmoothness
+  ```
+
+These properties provide getter and setter methods with built-in validation. This ensures that the values always remain within their specified ranges.
+
+## Conclusion
+
+The `CameraController` provides a flexible solution for camera control in Unity projects. Its structured approach allows for easy extension and customization as needed.
+
+👋 Here full code if you confuse: [repository](https://github.com/me22mer/Isomatic-3D-camera-controller)
+
+## Credits ❤️
+
+This camera controller was inspired by and made with the help of the following creators:
+
+- [@bitcuttertaylor](https://www.youtube.com/@bitcuttertaylor)
+- [@t3ssel8r](https://www.youtube.com/watch?v=ij555s4mAuI)
+
+
+

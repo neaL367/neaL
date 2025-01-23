@@ -2,22 +2,22 @@ import { Link } from "next-view-transitions";
 
 export default function Navbar() {
   return (
-      <nav className="mb-12">
-        <div className="flex space-x-8 text-lg justify-start">
-          {[
-            { href: "/", label: "H<sub>ome</sub>" },
-            { href: "/p", label: "P<sub>rojects</sub>" },
-            { href: "/n", label: "N<sub>otes</sub>" },
-          ].map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="text-gray-600 hover:text-gray-900 transition-colors duration-500 "
-            >
-              <span dangerouslySetInnerHTML={{ __html: label }} />
-            </Link>
-          ))}
-        </div>
-      </nav>
+    <nav className="mb-12">
+      <div className="flex space-x-6 text-md justify-start">
+        {[
+          { href: "/", label: "Home" },
+          { href: "/p", label: "Projects" },
+          { href: "/n", label: "Notes" },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            className="text-gray-600 hover:text-gray-900 transition-colors duration-500 "
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 }
