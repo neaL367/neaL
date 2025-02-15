@@ -1,61 +1,49 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { ContentItem, ContentType, Metadata } from '@/types';
+import { promises as fs } from "node:fs"
+import path from "node:path"
+import type { ContentItem, ContentType } from "@/types"
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: '2-digit',
-});
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+})
 
 export async function getContentList(type: ContentType): Promise<ContentItem[]> {
-  const contentDir = path.join(process.cwd(), 'src', 'content', type);
+  const contentDir = path.join(process.cwd(), "src", "content", type)
 
   try {
-    const folders = await fs.readdir(contentDir);
+    const folders = await fs.readdir(contentDir)
 
-    const contentPromises = folders.map(async (folder): Promise<ContentItem | null> => {
-      const folderPath = path.join(contentDir, folder);
+    const contentPromises = folders.map(async (folder) => {
+      const folderPath = path.join(contentDir, folder)
+      const folderStat = await fs.stat(folderPath)
+
+      if (!folderStat.isDirectory()) return null
+
+      const files = await fs.readdir(folderPath)
+      if (!files.includes("page.mdx")) return null
+
       try {
-        const folderStat = await fs.stat(folderPath);
-        if (folderStat.isDirectory()) {
-          const files = await fs.readdir(folderPath);
-          if (files.includes('page.mdx')) {
-            try {
-              const { metadata } = (await import(`@/content/${type}/${folder}/page.mdx`)) as { metadata: Metadata };
+        const { metadata } = await import(`@/content/${type}/${folder}/page.mdx`)
 
-              const title = metadata?.title || folder.replace(/-/g, ' ');
-              const description = metadata?.description || '';
-              const thumbnail = metadata?.thumbnail || '';
-              const published = metadata?.published ?? true;
-              const date = metadata?.date ? new Date(metadata.date) : new Date();
-              const formattedDate = dateFormatter.format(date);
-
-              return {
-                slug: folder,
-                title,
-                description,
-                thumbnail,
-                published,
-                date: formattedDate,
-              };
-            } catch (error) {
-              console.error(`Error importing metadata for folder ${folder}:`, error);
-              return null;
-            }
-          }
+        return {
+          slug: folder,
+          title: metadata?.title || folder.replace(/-/g, " "),
+          description: metadata?.description || "",
+          thumbnail: metadata?.thumbnail || "",
+          published: metadata?.published ?? true,
+          date: metadata?.date ? dateFormatter.format(new Date(metadata.date)) : dateFormatter.format(new Date()),
         }
       } catch (error) {
-        console.error(`Error reading folder ${folder}:`, error);
-        return null;
+        console.error(`Error importing metadata for folder ${folder}:`, error)
+        return null
       }
-      return null;
-    });
+    })
 
-    const contentList = await Promise.all(contentPromises);
-    return contentList.filter((item): item is ContentItem => item !== null);
+    return (await Promise.all(contentPromises)).filter((item): item is ContentItem => item !== null)
   } catch (error) {
-    console.error(`Error reading ${type} directory:`, error);
-    return [];
+    console.error(`Error reading ${type} directory:`, error)
+    return []
   }
 }
+

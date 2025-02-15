@@ -1,15 +1,19 @@
-export type ContentType = 'projects' | 'notes'
-
 export interface Metadata {
-  title: string
+  title?: string
   description?: string
   thumbnail?: string
-  published: boolean
-  date: string
+  published?: boolean
+  date?: string
 }
 
-export interface ContentItem extends Omit<Metadata, 'date'> {
+export type ContentType = "projects" | "notes"
+
+export interface ContentItem {
   slug: string
+  title: string
+  description: string
+  thumbnail: string
+  published: boolean
   date: string
 }
 

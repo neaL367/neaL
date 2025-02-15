@@ -28,45 +28,7 @@ The `CameraController` class is a MonoBehaviour that provides a versatile camera
 3. Camera rotation with snapping to 45-degree angles
 4. Smooth zooming with min/max limits
 
-Let's dive into each component of this controller.
-
-## Class Structure
-
-  ```csharp
-  public class CameraController : MonoBehaviour
-  {
-      // ... (fields and properties)
-  }
-  ```
-
-## Initialization
-
-  ```csharp
-  void Awake()
-  {
-      _camera = GetComponentInChildren<Camera>();
-      _transform = transform;
-      _currentZoom = minZoom;
-      _targetPosition = _transform.position;
-  }
-  ```
-
-The `Awake()` method initializes the controller by caching necessary components and setting initial values.
-
-## Update Loop
-
-
-  ```csharp
-  void Update()
-  {
-      HandleFollowing();
-      HandlePanning();
-      HandleZooming();
-      HandleRotation();
-  }
-  ```
-
-The `Update()` method calls individual handling methods for each feature, maintaining a clean and modular structure.
+---
 
 ## Camera Following
 
@@ -189,7 +151,7 @@ These properties provide getter and setter methods with built-in validation. Thi
 
 The `CameraController` provides a flexible solution for camera control in Unity projects. Its structured approach allows for easy extension and customization as needed.
 
-👋 Here full code if you confuse: [repository](https://github.com/me22mer/Isomatic-3D-camera-controller)
+👋 If you're confused, here's the whole code: [repository](https://github.com/me22mer/Isomatic-3D-camera-controller)
 
 ## Credits ❤️
 
