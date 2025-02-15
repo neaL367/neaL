@@ -12,25 +12,25 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Atichat",
+  title: "neaL",
   description: "Developer & Gamer",
   openGraph: {
-    title: "Atichat",
+    title: "neaL",
     description: "Developer & Gamer",
-    url: "https://atichat.vercel.app/",
-    siteName: "Atichat",
+    url: "https://neal367.vercel.app/",
+    siteName: "neaL",
     locale: "en_US, th_TH",
     type: "website",
     images: [
       {
-        url: "https://atichat.vercel.app/og.png",
+        url: "https://neal367.vercel.app/og.png",
         width: 1200,
         height: 630,
       },
     ],
   },
   twitter: {
-    title: "Atichat",
+    title: "neaL",
     card: "summary_large_image",
   },
   robots: {
@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" className={cn(`${inter.className}`)}>
-        <body className="flex flex-col min-h-screen bg-background text-foreground ">
+        <body className="flex flex-col min-h-screen bg-background text-foreground antialiased">
           <SpeedInsights />
           <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ">
             {children}

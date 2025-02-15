@@ -1,11 +1,10 @@
 import Image from 'next/image';
-import Placeholder from "./images/placeholder.webp"
 import Thumbnail from "./images/thumnail.png"
 
 export const metadata = {
- title: "Camera Controller",
+  title: "Camera Controller",
   description: "",
-  thumbnail: "",
+  thumbnail: {Thumbnail},
   published: true,
   date: "2025-02-14"
 };
@@ -31,7 +30,10 @@ This article explains a versatile Unity camera controller that offers smooth fol
 The `HandleFollowing()` method ensures that the camera smoothly tracks a target transform. When a target (`followAt`) is assigned, the camera’s position interpolates toward it based on a specified smoothness factor.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Thumbnail} alt="Camera Following" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
+<video muted playsInline preload="auto" autoPlay loop className="rounded-md" style={{ maxWidth: '100%', height: 'auto' }}>
+  <source src="/videos/follow-target.mp4" type="video/mp4" />
+  Your browser does not support the video.
+</video>
 </div>
 
 <details className="mb-1 -mt-2">
@@ -66,7 +68,10 @@ The `HandleFollowing()` method ensures that the camera smoothly tracks a target 
 When not following a target, the controller enables panning. It uses the horizontal and vertical input axes to move the camera while respecting optional X and Z boundaries.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="Camera Panning" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
+<video muted playsInline preload="auto" autoPlay loop className="rounded-md" style={{ maxWidth: '100%', height: 'auto' }}>
+  <source src="/videos/panning.mp4" type="video/mp4" />
+  Your browser does not support the video.
+</video>
 </div>
 
 <details className="mb-1 -mt-2">
@@ -105,7 +110,10 @@ When not following a target, the controller enables panning. It uses the horizon
 The zoom functionality adjusts the camera’s orthographic size based on mouse scroll input. The zoom level is smoothly interpolated and clamped between predefined limits.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="Camera Zooming" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
+<video muted playsInline preload="auto" autoPlay loop className="rounded-md" style={{ maxWidth: '100%', height: 'auto' }}>
+  <source src="/videos/zooming.mp4" type="video/mp4" />
+  Your browser does not support the video.
+</video>
 </div>
 
 <details className="mb-1 -mt-2">
@@ -135,7 +143,10 @@ The zoom functionality adjusts the camera’s orthographic size based on mouse s
 The controller enables camera rotation by tracking mouse input. While the right mouse button is held, the camera rotates continuously; when released, it snaps to the nearest 45-degree increment.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="Camera Rotation" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
+<video muted playsInline preload="auto" autoPlay loop className="rounded-md" style={{ maxWidth: '100%', height: 'auto' }}>
+  <source src="/videos/rotating.mp4" type="video/mp4" />
+  Your browser does not support the video.
+</video>
 </div>
 
 <details className="mb-1 -mt-2">

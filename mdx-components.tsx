@@ -43,12 +43,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h6>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc pl-6 mb-6 space-y-2 text-black dark:text-white font-inter">
+      <ul className="list-disc pl-6 mb-4 space-y-2 text-black dark:text-white font-inter">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal pl-6 mb-6 space-y-2 text-black dark:text-white font-inter">
+      <ol className="list-decimal pl-6 mb-4 space-y-2 text-black dark:text-white font-inter">
         {children}
       </ol>
     ),
@@ -58,7 +58,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </li>
     ),
     p: ({ children }) => (
-      <p className="mb-6 text-black dark:text-white leading-relaxed font-inter">
+      <p className="mb-4 text-black dark:text-white font-inter">
         {children}
       </p>
     ),
@@ -80,7 +80,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </Link>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-6 text-gray-700 dark:text-gray-300 font-inter">
+      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-4 text-gray-700 dark:text-gray-300 font-inter">
         {children}
       </blockquote>
     ),
@@ -90,12 +90,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-6 overflow-x-auto font-mono text-black dark:text-white border border-gray-200 dark:border-gray-700">
+      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-4 overflow-x-auto font-mono text-black dark:text-white border border-gray-200 dark:border-gray-700">
         {children}
       </pre>
     ),
     table: ({ children }) => (
-      <div className="overflow-x-auto mb-6 rounded-lg shadow">
+      <div className="overflow-x-auto mb-4 rounded-lg shadow">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 font-inter">
           {children}
         </table>
