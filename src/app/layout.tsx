@@ -16,17 +16,17 @@ export const metadata: Metadata = {
   description: "Developer & Gamer",
   openGraph: {
     title: "Atichat",
-    description: "Developer & Gamerr",
+    description: "Developer & Gamer",
     url: "https://atichat.vercel.app/",
     siteName: "Atichat",
     locale: "en_US, th_TH",
     type: "website",
     images: [
-      // {
-      //   url: "https://atichat.vercel.app/og",
-      //   width: 1200,
-      //   height: 630,
-      // },
+      {
+        url: "https://atichat.vercel.app/og.png",
+        width: 1200,
+        height: 630,
+      },
     ],
   },
   twitter: {
