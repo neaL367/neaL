@@ -7,33 +7,31 @@ export const metadata = {
   description: "",
   thumbnail: "",
   published: true,
-  date: ""
+  date: "2025-02-14"
 };
 
+# Isometric 3D Camera Controller for Unity
 
-# Isometric 3D Camera Controller
-
-This article breaks down a Unity camera controller that offers following, panning, rotation, and zooming functionalities. We'll explore each feature in detail.
-
-<div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Thumbnail} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
-</div>
-
-## Overview
-
-The `CameraController` class is a MonoBehaviour that provides a versatile camera control system for Unity projects. It includes the following main features:
-
-1. Smooth following of a target transform
-2. Camera panning with optional axis limits
-3. Camera rotation with snapping to 45-degree angles
-4. Smooth zooming with min/max limits
+This article explains a versatile Unity camera controller that offers smooth following, panning, rotation, and zooming. Whether you’re building a strategy game or an isometric adventure, this controller gives you flexible and intuitive camera control.
 
 ---
 
-## Camera Following
+## Key Features
+
+- **Smooth Target Following:** Gradually move the camera toward a designated target.
+- **Camera Panning:** Use input axes for lateral and forward/backward movement with optional boundary limits.
+- **Intuitive Zooming:** Adjust the orthographic size with smooth interpolation and clamped boundaries.
+- **Fluid Rotation:** Rotate the camera with snapping to 45-degree increments for precise orientation.
+- **Validated Properties:** Use built-in getter/setter validations to ensure optimal camera behavior.
+
+---
+
+### 1. Camera Following
+
+The `HandleFollowing()` method ensures that the camera smoothly tracks a target transform. When a target (`followAt`) is assigned, the camera’s position interpolates toward it based on a specified smoothness factor.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+  <Image src={Thumbnail} alt="Camera Following" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
 </div>
 
 <details className="mb-1 -mt-2">
@@ -46,19 +44,29 @@ The `CameraController` class is a MonoBehaviour that provides a versatile camera
       {
           _targetPosition = followAt.position;
       }
-
+  
       _transform.position = Vector3.Lerp(_transform.position, _targetPosition, FollowSmoothness * Time.deltaTime);
   }
   ```
-
+  
 </details>
 
-The `HandleFollowing()` method smoothly moves the camera towards a target position. If a `followAt` transform is set, the camera will follow it. The `FollowSmoothness` property controls how quickly the camera catches up to the target.
 
-## Camera Panning
+- **Target Assignment:** If `followAt` exists, the camera uses its position.
+- **Smooth Transition:** The `Vector3.Lerp` function uses linear interpolation:
+  
+  > Lerp(a, b, t) = (1 - t) * a + t * b
+  
+  Here, `t` (in this case, `FollowSmoothness * Time.deltaTime`) controls the interpolation factor.
+
+---
+
+### 2. Camera Panning
+
+When not following a target, the controller enables panning. It uses the horizontal and vertical input axes to move the camera while respecting optional X and Z boundaries.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+  <Image src={Placeholder} alt="Camera Panning" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
 </div>
 
 <details className="mb-1 -mt-2">
@@ -68,25 +76,36 @@ The `HandleFollowing()` method smoothly moves the camera towards a target positi
   private void HandlePanning()
   {
       if (followAt != null) return;
-
-      Vector3 move = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+  
+      Vector3 move = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) 
+                     * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
       _targetPosition += move * (PanSpeed * Time.deltaTime);
-
+  
       if (enablePanLimitX)
           _targetPosition.x = Mathf.Clamp(_targetPosition.x, panLimitX.x, panLimitX.y);
       if (enablePanLimitZ)
           _targetPosition.z = Mathf.Clamp(_targetPosition.z, panLimitZ.x, panLimitZ.y);
   }
   ```
-
+  
 </details>
 
-The `HandlePanning()` method allows camera movement when not following a target. It uses input axes for movement and applies optional limits on the X and Z axes. The panning speed is controlled by the `PanSpeed` property.
 
-## Camera Zooming
+- **Input Translation:** The input vector is rotated by the camera’s current Y-angle using a rotation matrix (via `Quaternion.Euler`). This mathematically transforms the movement direction to align with the camera’s view.
+- **Movement Calculation:** The change in position is computed as:
+  
+  > Δposition = Input Vector × PanSpeed × Time.deltaTime
+  
+- **Boundary Constraints:** `Mathf.Clamp` restricts the camera’s X and Z positions to within specified limits.
+
+---
+
+### 3. Camera Zooming
+
+The zoom functionality adjusts the camera’s orthographic size based on mouse scroll input. The zoom level is smoothly interpolated and clamped between predefined limits.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+  <Image src={Placeholder} alt="Camera Zooming" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
 </div>
 
 <details className="mb-1 -mt-2">
@@ -99,15 +118,24 @@ The `HandlePanning()` method allows camera movement when not following a target.
       _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _currentZoom, ZoomSmoothness * Time.deltaTime);
   }
   ```
-
+  
 </details>
 
-The `HandleZooming()` method adjusts the camera's orthographic size based on mouse scroll input. The zoom is smoothly interpolated and clamped between `minZoom` and `maxZoom` values. The `ZoomSpeed` and `ZoomSmoothness` properties control the zooming behavior.
 
-## Camera Rotation
+- **Zoom Calculation:** The zoom level is updated by subtracting a scaled mouse scroll delta.  
+- **Clamping:** `Mathf.Clamp` ensures that `_currentZoom` remains between `minZoom` and `maxZoom`.
+- **Smooth Transition:** Similar to following, the zoom uses linear interpolation:
+  
+  > Lerp(currentSize, targetZoom, ZoomSmoothness × Time.deltaTime)
+
+---
+
+### 4. Camera Rotation
+
+The controller enables camera rotation by tracking mouse input. While the right mouse button is held, the camera rotates continuously; when released, it snaps to the nearest 45-degree increment.
 
 <div className="border border-gray-200 rounded-md mb-3.5">
-  <Image src={Placeholder} alt="" className='rounded-lg' loading='lazy' placeholder='blur' quality={90} />
+  <Image src={Placeholder} alt="Camera Rotation" className="rounded-lg" loading="lazy" placeholder="blur" quality={90} />
 </div>
 
 <details className="mb-1 -mt-2">
@@ -124,41 +152,53 @@ The `HandleZooming()` method adjusts the camera's orthographic size based on mou
       {
           _targetYaw = Mathf.Round(_targetYaw / 45f) * 45f;
       }
-
+  
       _transform.rotation = Quaternion.Slerp(_transform.rotation, Quaternion.Euler(0f, _targetYaw, 0f), RotationSpeed * Time.deltaTime);
   }
   ```
-
+  
 </details>
 
-The `HandleRotation()` method rotates the camera when the right mouse button is held. When released, it snaps to the nearest 45-degree angle. The rotation is smoothly interpolated using `Quaternion.Slerp` for fluid motion. The `RotationSpeed` property controls the rotation speed.
 
-## Properties
+- **Continuous Rotation:** While the right mouse button is held, the yaw increases proportionally to mouse movement.
+- **Snapping Behavior:** When the mouse button is released, the yaw value is rounded mathematically to the nearest 45 degrees:
+  
+  > Rounded Yaw = Round(_targetYaw / 45) × 45
+- **Smooth Rotation:** `Quaternion.Slerp` performs spherical linear interpolation (Slerp) between the current rotation and the target rotation, ensuring a fluid transition.
 
-  ```csharp
-  public float FollowSmoothness
-  {
-      get => _followSmoothness;
-      set => _followSmoothness = Mathf.Clamp(value, 0.1f, 10f);
-  }
+---
 
-  // Similar properties for PanSpeed, RotationSpeed, ZoomSpeed, and ZoomSmoothness
-  ```
+### 5. Property Validations
 
-These properties provide getter and setter methods with built-in validation. This ensures that the values always remain within their specified ranges.
+The camera controller uses property getters and setters to enforce value ranges for parameters like `FollowSmoothness`, `PanSpeed`, `RotationSpeed`, `ZoomSpeed`, and `ZoomSmoothness`.
+
+```csharp
+public float FollowSmoothness
+{
+    get => _followSmoothness;
+    set => _followSmoothness = Mathf.Clamp(value, 0.1f, 10f);
+}
+
+// Similar properties are implemented for PanSpeed, RotationSpeed, ZoomSpeed, and ZoomSmoothness.
+```
+
+
+- **Built-In Validation:** The `Mathf.Clamp` function ensures that properties remain within a defined range, preventing unexpected behavior during runtime.
+
+---
 
 ## Conclusion
 
-The `CameraController` provides a flexible solution for camera control in Unity projects. Its structured approach allows for easy extension and customization as needed.
+The **Isometric 3D Camera Controller** not only provides flexible and intuitive controls for Unity projects but also demonstrates clear mathematical principles behind its smooth transitions and input handling. By leveraging linear interpolation, clamping, quaternion mathematics, and precise rounding techniques, the controller ensures both robust functionality and a fluid user experience.
 
-👋 If you're confused, here's the whole code: [repository](https://github.com/me22mer/Isomatic-3D-camera-controller)
+For a complete view of the code, check out the [repository](https://github.com/neaL367/Isomatic-3D-camera-controller).
 
-## Credits ❤️
+---
 
-This camera controller was inspired by and made with the help of the following creators:
+### Credits
 
+This controller was inspired by the work of:
 - [@bitcuttertaylor](https://www.youtube.com/@bitcuttertaylor)
 - [@t3ssel8r](https://www.youtube.com/watch?v=ij555s4mAuI)
-
 
 
