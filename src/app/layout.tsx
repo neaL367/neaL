@@ -12,13 +12,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "neaL",
+  title: "neaL367",
   description: "Developer & Gamer",
   openGraph: {
-    title: "neaL",
+    title: "neaL367",
     description: "Developer & Gamer",
     url: "https://neal367.vercel.app/",
-    siteName: "neaL",
+    siteName: "neaL367",
     locale: "en_US, th_TH",
     type: "website",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    title: "neaL",
+    title: "neaL367",
     card: "summary_large_image",
   },
   robots: {
@@ -46,7 +46,7 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" className={cn(`${inter.className}`)}>
+      <html lang="en" className={cn(`${inter.variable}`)}>
         <body className="flex flex-col min-h-screen bg-background text-foreground antialiased">
           <SpeedInsights />
           <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ">
