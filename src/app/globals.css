@@ -181,14 +181,14 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground selection:text-background selection:bg-zinc-600 selection:rounded-full;
   }
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 7.5px;
-  height: 7.5px;
+  width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -198,11 +198,11 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #000000;
+  background: #52525c;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #000000;
+  background: #52525c;
 }
