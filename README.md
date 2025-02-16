@@ -1,4 +1,4 @@
-# neaL367
+# neaL
 
 A Next.js application with interactive snow particle effects and mobile compatibility.
 
