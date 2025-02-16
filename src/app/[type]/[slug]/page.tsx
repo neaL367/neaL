@@ -35,7 +35,7 @@ export default async function ContentPage(props: PageProps) {
     }
 
     const Component = dynamic(
-      () => import(`@/content/${type}/${params.slug}/page.mdx`),
+      () => import(`@/contents/${type}/${params.slug}/page.mdx`),
       {
         loading: () => <p>Loading...</p>,
       }

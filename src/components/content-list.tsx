@@ -1,5 +1,5 @@
 import { ContentItem } from '@/types'
-import Link from 'next/link'
+import { Link } from 'next-view-transitions'
 
 interface ContentListProps {
   title: string

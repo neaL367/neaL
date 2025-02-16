@@ -9,7 +9,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 })
 
 export async function getContentList(type: ContentType): Promise<ContentItem[]> {
-  const contentDir = path.join(process.cwd(), "src", "content", type)
+  const contentDir = path.join(process.cwd(), "src", "contents", type)
 
   try {
     const folders = await fs.readdir(contentDir)
@@ -24,7 +24,7 @@ export async function getContentList(type: ContentType): Promise<ContentItem[]> 
       if (!files.includes("page.mdx")) return null
 
       try {
-        const { metadata } = await import(`@/content/${type}/${folder}/page.mdx`)
+        const { metadata } = await import(`@/contents/${type}/${folder}/page.mdx`)
 
         return {
           slug: folder,

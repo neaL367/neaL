@@ -13,35 +13,15 @@ const colorClasses = {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-lg font-medium mb-5 font-inter">
-        {children}
-      </h1>
+      <h1 className="text-lg font-medium mb-5 font-inter">{children}</h1>
     ),
     h2: ({ children }) => (
-      <h2 className="font-medium mb-4 font-inter">
-        {children}
-      </h2>
+      <h2 className="font-medium mb-4 font-inter">{children}</h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="font-medium mb-3 font-inter">
-        {children}
-      </h3>
-    ),
-    h4: ({ children }) => (
-      <h4 className="font-medium mb-2 font-inter">
-        {children}
-      </h4>
-    ),
-    h5: ({ children }) => (
-      <h5 className="font-medium mb-2 font-inter">
-        {children}
-      </h5>
-    ),
-    h6: ({ children }) => (
-      <h6 className="font-medium mb-2 font-inter">
-        {children}
-      </h6>
-    ),
+    h3: ({ children }) => <h3 className="mb-3 font-inter">{children}</h3>,
+    h4: ({ children }) => <h4 className="mb-2 font-inter">{children}</h4>,
+    h5: ({ children }) => <h5 className="mb-2 font-inter">{children}</h5>,
+    h6: ({ children }) => <h6 className="mb-2 font-inter">{children}</h6>,
     ul: ({ children }) => (
       <ul className="list-disc pl-6 mb-4 space-y-2 text-black dark:text-white font-inter">
         {children}
@@ -58,12 +38,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </li>
     ),
     p: ({ children }) => (
-      <p className="mb-4 text-black dark:text-white font-inter">
-        {children}
-      </p>
+      <p className="mb-4 text-black dark:text-white font-inter">{children}</p>
     ),
     strong: ({ children }) => (
-      <strong className="font-medium text-gray-900 dark:text-gray-100">{children}</strong>
+      <strong className="font-medium text-gray-900 dark:text-gray-100">
+        {children}
+      </strong>
     ),
     em: ({ children }) => (
       <em className="italic text-gray-700 dark:text-gray-300">{children}</em>
@@ -71,14 +51,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     del: ({ children }) => (
       <del className="line-through text-black dark:text-white">{children}</del>
     ),
-    a: ({ href, children }) => (
-      <Link
-        href={href}
-        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-medium font-inter"
-      >
-        {children}
-      </Link>
-    ),
+    a: ({ href, children, ...props }) => {
+      const isExternal = href && (href.startsWith("http") || href.startsWith("https"))
+
+      return (
+        <Link
+          href={href}
+          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          {...props}
+        >
+          {children}
+        </Link>
+      )
+    },
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-4 text-gray-700 dark:text-gray-300 font-inter">
         {children}
@@ -120,14 +106,27 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </td>
     ),
-    hr: () => <hr className="border-t border-gray-300 dark:border-gray-700 my-8" />,
-    Primary: ({ children }) => <span className={colorClasses.primary}>{children}</span>,
-    Secondary: ({ children }) => <span className={colorClasses.secondary}>{children}</span>,
-    Success: ({ children }) => <span className={colorClasses.success}>{children}</span>,
-    Danger: ({ children }) => <span className={colorClasses.danger}>{children}</span>,
-    Warning: ({ children }) => <span className={colorClasses.warning}>{children}</span>,
-    Info: ({ children }) => <span className={colorClasses.info}>{children}</span>,
+    hr: () => (
+      <hr className="border-t border-gray-300 dark:border-gray-700 my-8" />
+    ),
+    Primary: ({ children }) => (
+      <span className={colorClasses.primary}>{children}</span>
+    ),
+    Secondary: ({ children }) => (
+      <span className={colorClasses.secondary}>{children}</span>
+    ),
+    Success: ({ children }) => (
+      <span className={colorClasses.success}>{children}</span>
+    ),
+    Danger: ({ children }) => (
+      <span className={colorClasses.danger}>{children}</span>
+    ),
+    Warning: ({ children }) => (
+      <span className={colorClasses.warning}>{children}</span>
+    ),
+    Info: ({ children }) => (
+      <span className={colorClasses.info}>{children}</span>
+    ),
     ...components,
   };
 }
-
