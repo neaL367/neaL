@@ -1,6 +1,6 @@
 import Navigatior from "@/components/navigaitor";
 
-export default function LayoutContentPage({
+export default function LayoutPage({
   children,
 }: Readonly<{
   children: React.ReactNode;

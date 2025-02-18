@@ -13,12 +13,12 @@ const colorClasses = {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-lg font-medium mb-5 font-inter">{children}</h1>
+      <h1 className="text-lg font-medium mb-2 font-inter">{children}</h1>
     ),
     h2: ({ children }) => (
-      <h2 className="font-medium mb-4 font-inter">{children}</h2>
+      <h2 className="font-medium mb-8 font-inter">{children}</h2>
     ),
-    h3: ({ children }) => <h3 className="mb-3 font-inter">{children}</h3>,
+    h3: ({ children }) => <h3 className="mt-2 mb-3 font-medium font-inter">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 font-inter">{children}</h4>,
     h5: ({ children }) => <h5 className="mb-2 font-inter">{children}</h5>,
     h6: ({ children }) => <h6 className="mb-2 font-inter">{children}</h6>,
@@ -33,7 +33,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </ol>
     ),
     li: ({ children }) => (
-      <li className="pl-2 marker:text-black dark:marker:text-gray-400">
+      <li className="pl-2 mb-1.5 marker:text-black dark:marker:text-gray-400">
         {children}
       </li>
     ),
@@ -52,18 +52,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <del className="line-through text-black dark:text-white">{children}</del>
     ),
     a: ({ href, children, ...props }) => {
-      const isExternal = href && (href.startsWith("http") || href.startsWith("https"))
+      const isExternal = href && (href.startsWith("http") || href.startsWith("https"));
 
-      return (
-        <Link
-          href={href}
-          className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
-          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-          {...props}
-        >
-          {children}
-        </Link>
-      )
+      // Ensure that nested links are not created
+      if (typeof children === "string") {
+        return (
+          <Link
+            href={href}
+            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
+            {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            {...props}
+          >
+            {children}
+          </Link>
+        );
+      }
+
+      return children;
     },
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-4 text-gray-700 dark:text-gray-300 font-inter">
