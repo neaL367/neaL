@@ -10,7 +10,7 @@ export default function Navigatior() {
       <div className="flex text-md font-medium justify-start">
         <button
           onClick={() => router.back()}
-          className="text-gray-600 hover:text-gray-900 transition-colors duration-500"
+          className="text-gray-600 hover:text-gray-900 transition-colors duration-500 hover:cursor-pointer"
         >
           Back
         </button>
