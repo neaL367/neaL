@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useTransitionRouter } from "next-view-transitions";
 
@@ -9,7 +9,10 @@ export default function Navigatior() {
     <nav className="mb-6">
       <div className="flex text-md font-medium justify-start">
         <button
-          onClick={() => router.back()}
+          onClick={(e) => {
+            e.preventDefault();
+            router.back();
+          }}
           className="text-gray-600 hover:text-gray-900 transition-colors duration-500 hover:cursor-pointer"
         >
           Back
