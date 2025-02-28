@@ -18,7 +18,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h2: ({ children }) => (
       <h2 className="font-medium mb-8 font-inter">{children}</h2>
     ),
-    h3: ({ children }) => <h3 className="mt-2 mb-3 font-medium font-inter">{children}</h3>,
+    h3: ({ children }) => <h3 className="mt-2 mb-4 font-medium font-inter">{children}</h3>,
     h4: ({ children }) => <h4 className="mb-2 font-inter">{children}</h4>,
     h5: ({ children }) => <h5 className="mb-2 font-inter">{children}</h5>,
     h6: ({ children }) => <h6 className="mb-2 font-inter">{children}</h6>,

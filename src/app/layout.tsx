@@ -12,44 +12,42 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
+export const metadata: Metadata = {
+  title: {
+    default: "neaL367",
+    template: "%s | neaL367",
+  },
+  description: "Developer & Gamer",
+  openGraph: {
     title: {
       default: "neaL367",
       template: "%s | neaL367",
     },
     description: "Developer & Gamer",
-    openGraph: {
-      title: {
-        default: "neaL367",
-        template: "%s | neaL367",
+    url: "https://neal367.vercel.app/",
+    siteName: "neaL367",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://neal367.vercel.app/og.png",
+        width: 1200,
+        height: 630,
       },
-      description: "Developer & Gamer",
-      url: "https://neal367.vercel.app/",
-      siteName: "neaL367",
-      locale: "en_US",
-      type: "website",
-      images: [
-        {
-          url: "https://neal367.vercel.app/og.png",
-          width: 1200,
-          height: 630,
-        },
-      ],
+    ],
+  },
+  twitter: {
+    title: {
+      default: "neaL367",
+      template: "%s | neaL367",
     },
-    twitter: {
-      title: {
-        default: "neaL367",
-        template: "%s | neaL367",
-      },
-      card: "summary_large_image",
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  };
-}
+    card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function RootLayout({
   children,

@@ -2,7 +2,6 @@
 import Image from "next/image";
 import dynamic from 'next/dynamic'
 
-import ConnectContent from "@/contents/connect.mdx";
 import IntroContent from "@/contents/introduce.mdx";
 
 const Snow = dynamic(() => import("@/components/snow"), { ssr: false })
@@ -23,7 +22,6 @@ export default function Page() {
         <Snow />
       </div>
       <IntroContent />
-      <ConnectContent />
     </>
   );
 }
