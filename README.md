@@ -19,7 +19,7 @@ atichat/
 ├── public/
 ├── src/
 │   ├── app/
-│   │   └── page.mdx            # Main page with snow effect
+│   │   └── page.tsx
 │   └── components/
 ├── components.json
 ├── eslint.config.mjs
