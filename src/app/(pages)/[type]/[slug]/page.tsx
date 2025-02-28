@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getContentList } from "@/lib/content";
@@ -34,14 +33,9 @@ export default async function ContentPage(props: PageProps) {
       notFound();
     }
 
-    const Component = dynamic(
-      () => import(`@/contents/${type}/${params.slug}/page.mdx`),
-      {
-        loading: () => <p>Loading...</p>,
-      }
-    );
+    const { default: Content } = await import(`@/contents/${type}/${params.slug}/page.mdx`)
 
-    return <Component />;
+    return <Content />;
   } catch (error) {
     console.error(`Error loading content for ${type}/${params.slug}:`, error);
     notFound();
