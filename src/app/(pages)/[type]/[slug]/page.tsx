@@ -73,11 +73,11 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     return {
       title: `${metadata.title} | ${TYPE_TITLES[type]}`,
       description:
-        metadata.description || `Detailed information about ${metadata.title}`,
+        `${metadata.description}` || `Detailed information about ${metadata.title}`,
       openGraph: {
         images: [
           {
-            url: metadata.thumbnail || "https://neal367.vercel.app/og.png",
+            url: `${metadata.thumbnail}` || "https://neal367.vercel.app/og.png",
             width: 1200,
             height: 630,
           },

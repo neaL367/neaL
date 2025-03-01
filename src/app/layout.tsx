@@ -13,21 +13,19 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://neal267.vercel.app'),
   title: {
     default: "neaL367",
     template: "%s | neaL367",
   },
   description: "Developer & Gamer",
-  openGraph: {
-    title: {
-      default: "neaL367",
-      template: "%s | neaL367",
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
     },
-    description: "Developer & Gamer",
-    url: "https://neal367.vercel.app/",
-    siteName: "neaL367",
-    locale: "en_US",
-    type: "website",
+  },
+  openGraph: {
     images: [
       {
         url: "https://neal367.vercel.app/og.png",
@@ -37,15 +35,7 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    title: {
-      default: "neaL367",
-      template: "%s | neaL367",
-    },
     card: "summary_large_image",
-  },
-  robots: {
-    index: true,
-    follow: true,
   },
 };
 

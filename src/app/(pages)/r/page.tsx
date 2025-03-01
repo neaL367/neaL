@@ -6,10 +6,6 @@ export const metadata: Metadata = {
   description:
     "Atichat Thongnak - Web Developer with expertise in React, Next.js, and modern web technologies",
   openGraph: {
-    title: "Resume",
-    description:
-      "Atichat Thongnak - Web Developer with expertise in React, Next.js, and modern web technologies",
-    type: "article",
     images: [
       {
         url: "https://neal367.vercel.app/og.png",

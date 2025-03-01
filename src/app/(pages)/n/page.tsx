@@ -6,9 +6,6 @@ export const metadata: Metadata = {
   title: "Notes",
   description: "Technical notes, tutorials, and web development insights",
   openGraph: {
-    title: "Notes",
-    description: "Technical notes, tutorials, and web development insights",
-    type: "website",
     images: [
       {
         url: "https://neal367.vercel.app/og.png",
