@@ -23,9 +23,6 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false
   },
-  experimental: {
-    mdxRs: true,
-  },
 };
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -35,13 +32,14 @@ const options = {
 };
 
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [remarkParse, remarkGfm, remarkMath, remarkRehype],
     rehypePlugins: [rehypeStringify, [rehypePrettyCode, options]],
   },
+  experimental: {
+    mdxRs: true,
+  },
 });
 
-// Merge MDX config with Next.js config
 export default withMDX(nextConfig);
