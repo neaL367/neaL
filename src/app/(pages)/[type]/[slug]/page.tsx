@@ -75,7 +75,17 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
       description:
         metadata.description || `Detailed information about ${metadata.title}`,
       openGraph: {
-        images: metadata.thumbnail ? [metadata.thumbnail] : [],
+        images: [
+          {
+            url: metadata.thumbnail || "https://neal367.vercel.app/og.png",
+            width: 1200,
+            height: 630,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${metadata.title} | ${TYPE_TITLES[type]}`,
       },
     };
   } catch (error) {

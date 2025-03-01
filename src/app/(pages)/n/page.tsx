@@ -6,13 +6,20 @@ export const metadata: Metadata = {
   title: "Notes",
   description: "Technical notes, tutorials, and web development insights",
   openGraph: {
-    title: "Notes | neaL367",
+    title: "Notes",
     description: "Technical notes, tutorials, and web development insights",
     type: "website",
+    images: [
+      {
+        url: "https://neal367.vercel.app/og.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Notes | neaL367",
+    title: "Notes",
     description: "Technical notes, tutorials, and web development insights",
   },
 }
