@@ -23,9 +23,9 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false
   },
-  // experimental: {
-  //   mdxRs: true,
-  // },
+  experimental: {
+    mdxRs: true,
+  },
 };
 
 /** @type {import('rehype-pretty-code').Options} */

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 import { getContentList } from "@/lib/content"
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://atichat.vercel.app"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const projects = await getContentList("projects")

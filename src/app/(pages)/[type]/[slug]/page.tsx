@@ -1,7 +1,9 @@
-import { Metadata } from "next";
+import { cache } from "react";
+import type { Metadata } from "next";
+import type { ContentType } from "@/types";
+
 import { notFound } from "next/navigation";
 import { getContentList } from "@/lib/content";
-import { ContentType } from "@/types";
 
 interface PageProps {
   params: Promise<{
@@ -20,6 +22,18 @@ const TYPE_TITLES: Record<ContentType, string> = {
   notes: "Notes",
 };
 
+const getMdxContent = cache(async (type: ContentType, slug: string) => {
+  try {
+    const { default: Content } = await import(
+      `@/contents/${type}/${slug}/page.mdx`
+    );
+    return Content;
+  } catch (error) {
+    console.error(`Error loading MDX content for ${type}/${slug}:`, error);
+    return null;
+  }
+});
+
 export default async function ContentPage(props: PageProps) {
   const params = await props.params;
   const type = TYPE_MAP[params.type];
@@ -33,7 +47,8 @@ export default async function ContentPage(props: PageProps) {
       notFound();
     }
 
-    const { default: Content } = await import(`@/contents/${type}/${params.slug}/page.mdx`)
+    const Content = await getMdxContent(type, params.slug);
+    if (!Content) notFound();
 
     return <Content />;
   } catch (error) {
