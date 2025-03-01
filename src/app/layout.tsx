@@ -21,9 +21,6 @@ export const metadata: Metadata = {
   description: "Developer & Gamer",
   alternates: {
     canonical: '/',
-    languages: {
-      'en-US': '/en-US',
-    },
   },
   openGraph: {
     images: [

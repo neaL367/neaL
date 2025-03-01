@@ -1,7 +1,6 @@
 export interface Metadata {
   title?: string
   description?: string
-  thumbnail?: string
   published?: boolean
   date?: string
 }
@@ -12,7 +11,6 @@ export interface ContentItem {
   slug: string
   title: string
   description: string
-  thumbnail: string
   published: boolean
   date: string
 }

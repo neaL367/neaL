@@ -77,7 +77,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
       openGraph: {
         images: [
           {
-            url: `${metadata.thumbnail}` || "https://neal367.vercel.app/og.png",
+            url: "https://neal367.vercel.app/og.png",
             width: 1200,
             height: 630,
           },
