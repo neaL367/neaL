@@ -6,7 +6,7 @@ export default function LayoutPage({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
+    <main className="h-full">
       <Navigatior />
       {children}
     </main>

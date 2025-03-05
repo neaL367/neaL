@@ -1,26 +1,25 @@
-import type React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import { ReactLenis } from "lenis/react";
 
 import { cn } from "@/lib/utils";
 
-const inter = Inter({
-  variable: "--font-inter",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://neal267.vercel.app'),
+  metadataBase: new URL("https://neal267.vercel.app"),
   title: {
     default: "neaL367",
     template: "%s | neaL367",
   },
   description: "Developer & Gamer",
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   openGraph: {
     images: [
@@ -44,7 +43,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <ReactLenis root>
-        <html lang="en" className={cn(`${inter.variable}`)}>
+        <html lang="en" className={cn(`${geist.variable}`)}>
           <body className="flex flex-col min-h-screen bg-background text-foreground antialiased scroll-smooth">
             <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ">
               {children}

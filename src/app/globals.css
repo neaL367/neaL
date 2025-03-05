@@ -100,7 +100,7 @@
 
 @layer utilities {
   html {
-    font-family: var(--font-inter);
+    font-family: var(--font-geist);
   }
 }
 
@@ -182,6 +182,45 @@
   }
   body {
     @apply bg-background text-foreground selection:text-background selection:bg-zinc-600 selection:rounded-full;
+  }
+
+  @keyframes slide-in-from-right {
+    from {
+      transform: translateX(5%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out-to-left {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-5%);
+      opacity: 0;
+    }
+  }
+
+  /* Apply the animations to view transitions */
+  ::view-transition-old(root) {
+    animation: 300ms slide-out-to-left;
+  }
+
+  ::view-transition-new(root) {
+    animation: 300ms slide-in-from-right;
+  }
+  ::view-transition-group(root) {
+    z-index: auto;
+  }
+  ::view-transition-image-pair(root) {
+    isolation: isolate;
+    will-change: transform, opacity, clip-path;
+    z-index: 1;
   }
 }
 

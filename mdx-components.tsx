@@ -13,22 +13,22 @@ const colorClasses = {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-lg font-medium mb-2 font-inter">{children}</h1>
+      <h1 className="text-lg font-medium mb-2">{children}</h1>
     ),
     h2: ({ children }) => (
-      <h2 className="font-medium mb-8 font-inter">{children}</h2>
+      <h2 className="font-medium mb-8">{children}</h2>
     ),
-    h3: ({ children }) => <h3 className="mt-2 mb-4 font-medium font-inter">{children}</h3>,
-    h4: ({ children }) => <h4 className="mb-2 font-inter">{children}</h4>,
-    h5: ({ children }) => <h5 className="mb-2 font-inter">{children}</h5>,
-    h6: ({ children }) => <h6 className="mb-2 font-inter">{children}</h6>,
+    h3: ({ children }) => <h3 className="mt-2 mb-4 font-medium">{children}</h3>,
+    h4: ({ children }) => <h4 className="mb-2">{children}</h4>,
+    h5: ({ children }) => <h5 className="mb-2">{children}</h5>,
+    h6: ({ children }) => <h6 className="mb-2">{children}</h6>,
     ul: ({ children }) => (
-      <ul className="list-disc pl-6 mb-4 space-y-2 text-black dark:text-white font-inter">
+      <ul className="list-disc pl-6 mb-4 space-y-2 text-black dark:text-white">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal pl-6 mb-4 space-y-2 text-black dark:text-white font-inter">
+      <ol className="list-decimal pl-6 mb-4 space-y-2 text-black dark:text-white">
         {children}
       </ol>
     ),
@@ -38,7 +38,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </li>
     ),
     p: ({ children }) => (
-      <p className="mb-4 text-black dark:text-white font-inter">{children}</p>
+      <p className="mb-4 text-black dark:text-white">{children}</p>
     ),
     strong: ({ children }) => (
       <strong className="font-medium text-gray-900 dark:text-gray-100">
@@ -59,7 +59,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         return (
           <Link
             href={href}
-            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 font-inter"
+            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
             {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             {...props}
           >
@@ -71,23 +71,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return children;
     },
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-4 text-gray-700 dark:text-gray-300 font-inter">
+      <blockquote className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic mb-4 text-gray-700 dark:text-gray-300">
         {children}
       </blockquote>
     ),
     code: ({ children }) => (
-      <code className="bg-gray-100 dark:bg-gray-800 rounded text-sm font-mono text-black dark:text-white">
+      <code className="bg-gray-100 dark:bg-gray-800 rounded text-sm text-black dark:text-white">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-4 overflow-x-auto font-mono text-black dark:text-white border border-gray-200 dark:border-gray-700">
+      <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-4 overflow-x-auto text-black dark:text-white border border-gray-200 dark:border-gray-700">
         {children}
       </pre>
     ),
     table: ({ children }) => (
       <div className="overflow-x-auto mb-4 rounded-lg shadow">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 font-inter">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           {children}
         </table>
       </div>

@@ -30,7 +30,6 @@ export async function getContentList(type: ContentType): Promise<ContentItem[]> 
           slug: folder,
           title: metadata?.title || folder.replace(/-/g, " "),
           description: metadata?.description || "",
-          thumbnail: metadata?.thumbnail || "",
           published: metadata?.published ?? true,
           date: metadata?.date ? dateFormatter.format(new Date(metadata.date)) : dateFormatter.format(new Date()),
         }
