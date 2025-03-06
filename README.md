@@ -1,6 +1,6 @@
 # neaL376
 
-A Next.js application with interactive snow particle effects and mobile compatibility.
+My personal website by Next.js application.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fme22mer%2Fatichat)
 
