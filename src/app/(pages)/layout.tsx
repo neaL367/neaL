@@ -6,7 +6,7 @@ export default function LayoutPage({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="h-full">
+    <main className="min-h-[90dvh] max-h-full">
       <Navigatior />
       {children}
     </main>

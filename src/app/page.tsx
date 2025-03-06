@@ -1,27 +1,53 @@
-"use client"
 import Image from "next/image";
-import dynamic from 'next/dynamic'
 
 import IntroContent from "@/contents/introduce.mdx";
-
-const Snow = dynamic(() => import("@/components/snow"), { ssr: false })
+import Avatar from "../../public/images/avatar.png";
 
 export default function Page() {
   return (
-    <>
-      <div className="relative w-full h-full my-8 pt-6 overflow-hidden rounded-lg border-0 shadow-sm">
+    <section>
+      <div className="w-full h-full mt-8 mb-12 flex items-center gap-6">
         <Image
-          src="https://avatars.githubusercontent.com/u/73696671?v=4"
-          width={220}
-          height={220}
-          alt="atichat"
+          src={Avatar}
+          width={100}
+          height={100}
+          alt="neaL367"
           loading="lazy"
-          quality={90}
-          className="object-contain"
+          quality={100}
+          placeholder="blur"
+          className="rounded-full border"
         />
-        <Snow />
+        <p className="text-xl font-medium">
+          <span
+            aria-hidden="true"
+            className="block overflow-hidden group relative font-inter"
+          >
+            <span className="inline-block transition-all duration-300 ease-in-out group-hover:-translate-y-full whitespace-nowrap">
+              {"Hi there!".split("").map((letter, index) => (
+                <span
+                  key={index}
+                  className="inline-block"
+                  style={{ transitionDelay: `${index * 25}ms` }}
+                >
+                  {letter === " " ? "\u00A0" : letter} 
+                </span>
+              ))} 👋
+            </span>
+            <span className="inline-block absolute left-0 top-0 transition-all duration-300 ease-in-out translate-y-full group-hover:translate-y-0">
+              {"สวัสดี!".split("").map((letter, index) => (
+                <span
+                  key={index}
+                  className="inline-block"
+                  style={{ transitionDelay: `${index * 25}ms` }}
+                >
+                  {letter}
+                </span>
+              ))} 👋
+            </span>
+          </span>
+        </p>
       </div>
       <IntroContent />
-    </>
+    </section>
   );
 }

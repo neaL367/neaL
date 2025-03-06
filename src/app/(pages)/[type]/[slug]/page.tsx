@@ -1,4 +1,4 @@
-import { cache } from "react";
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import type { ContentType } from "@/types";
 
@@ -22,17 +22,20 @@ const TYPE_TITLES: Record<ContentType, string> = {
   notes: "Notes",
 };
 
-const getMdxContent = cache(async (type: ContentType, slug: string) => {
+const getMdxContent = async (type: ContentType, slug: string) => {
   try {
-    const { default: Content } = await import(
-      `@/contents/${type}/${slug}/page.mdx`
+    const Content = dynamic(
+      () => import(`@/contents/${type}/${slug}/page.mdx`),
+      {
+        loading: () => <p>Loading...</p>,
+      }
     );
     return Content;
   } catch (error) {
     console.error(`Error loading MDX content for ${type}/${slug}:`, error);
     return null;
   }
-});
+};
 
 export default async function ContentPage(props: PageProps) {
   const params = await props.params;
@@ -73,7 +76,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     return {
       title: `${metadata.title} | ${TYPE_TITLES[type]}`,
       description:
-        `${metadata.description}` || `Detailed information about ${metadata.title}`,
+        `${metadata.description}` ||
+        `Detailed information about ${metadata.title}`,
       openGraph: {
         images: [
           {

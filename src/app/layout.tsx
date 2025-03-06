@@ -1,6 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Inter } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import { ReactLenis } from "lenis/react";
 
@@ -8,6 +8,11 @@ import { cn } from "@/lib/utils";
 
 const geist = Geist({
   variable: "--font-geist",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -43,7 +48,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <ReactLenis root>
-        <html lang="en" className={cn(`${geist.variable}`)}>
+        <html lang="en" className={cn(`${geist.variable} ${inter.variable}`)}>
           <body className="flex flex-col min-h-screen bg-background text-foreground antialiased scroll-smooth">
             <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 ">
               {children}
