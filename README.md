@@ -30,16 +30,8 @@ atichat/
 └── tailwind.config.ts
 ```
 
-## Recent Updates
-
-- Fixed snow particle effects for mobile compatibility
-- Enhanced particles initialization and configuration
-- Added markdown plugins and metadata support
-- Improved scrollbar styling and bullet point visibility
-
 ## Features
 
-- ❄️ Snow particle effects
 - 📱 Mobile-responsive design
 - 🎨 Customizable UI with Tailwind CSS
 - 🌓 Smooth animations and transitions
