@@ -1,6 +1,6 @@
 # neaL376
 
-A Next.js application with interactive snow particle effects and mobile compatibility.
+My personal website by Next.js application.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fme22mer%2Fatichat)
 
@@ -30,16 +30,8 @@ atichat/
 └── tailwind.config.ts
 ```
 
-## Recent Updates
-
-- Fixed snow particle effects for mobile compatibility
-- Enhanced particles initialization and configuration
-- Added markdown plugins and metadata support
-- Improved scrollbar styling and bullet point visibility
-
 ## Features
 
-- ❄️ Snow particle effects
 - 📱 Mobile-responsive design
 - 🎨 Customizable UI with Tailwind CSS
 - 🌓 Smooth animations and transitions
