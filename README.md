@@ -32,10 +32,11 @@ atichat/
 
 ## Features
 
-- 📱 Mobile-responsive design
-- 🎨 Customizable UI with Tailwind CSS
-- 🌓 Smooth animations and transitions
-- 📝 MDX support for rich content
+- Mobile-responsive design
+- Customizable UI with Tailwind CSS
+- Smooth animations and transitions
+- MDX support for rich content
+- Instagram Feed Integration (Photos)
 
 ## Running Locally
 
