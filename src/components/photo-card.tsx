@@ -26,7 +26,7 @@ export function PhotoCard({ post, onClick }: PhotoCardProps) {
             alt={post.caption}
             fill
             className="object-cover "
-            priority
+            loading="lazy"
             quality={50}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
