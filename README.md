@@ -12,32 +12,6 @@ My personal website by Next.js application.
 - **Components**: [MDX](https://mdxjs.com/)
 - **Deployment**: [Vercel](https://vercel.com)
 
-## Project Structure
-
-```plaintext
-atichat/
-├── public/
-├── src/
-│   ├── app/
-│   │   └── page.tsx
-│   └── components/
-├── components.json
-├── eslint.config.mjs
-├── mdx-components.tsx
-├── next.config.mjs
-├── package.json
-├── postcss.config.mjs
-└── tailwind.config.ts
-```
-
-## Features
-
-- Mobile-responsive design
-- Customizable UI with Tailwind CSS
-- Smooth animations and transitions
-- MDX support for rich content
-- Instagram Feed Integration (Photos)
-
 ## Running Locally
 
 This application requires Node.js v18+.
