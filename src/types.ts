@@ -22,6 +22,7 @@ export interface InstagramMediaEdge {
     media_url: string
     timestamp: string
     caption?: string
+    like_count?: number
   }
 }
 
@@ -31,4 +32,6 @@ export interface InstagramPost {
   mediaUrl: string
   timestamp: Date
   caption: string
+  likeCount: number
 }
+

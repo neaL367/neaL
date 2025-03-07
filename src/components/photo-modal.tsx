@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { InstagramPost } from "@/types";
 
@@ -118,6 +118,14 @@ export function PhotoModal({
     // For portrait or square images
     return "max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl";
   };
+
+  const formatLikeCount = (count: number): string => {
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+    return count.toString();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 backdrop-blur-sm">
       <Button
@@ -151,14 +159,20 @@ export function PhotoModal({
               {formatTime(post.timestamp)}
             </p>
           </div>
-          <p className="text-sm text-muted-foreground">{post.caption}</p>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 text-sm">
+              <Heart className="h-4 w-4 text-rose-500 fill-rose-500" />
+              <span>{formatLikeCount(post.likeCount)}</span>
+            </div>
+            <p className="text-sm text-muted-foreground">{post.caption}</p>
+          </div>
         </div>
       </div>
-      <div className=" my-6 flex gap-6">
+      <div className="my-6 flex gap-6">
         <Button
           variant="ghost"
           size="icon"
-          className=" bg-zinc-100 hover:bg-zinc-200 z-10 p-5 rounded-full hover:cursor-pointer"
+          className="bg-zinc-100 hover:bg-zinc-200 z-10 p-5 rounded-full hover:cursor-pointer"
           onClick={onPrevious}
         >
           <ChevronLeft className="h-6 w-6" />
@@ -167,7 +181,7 @@ export function PhotoModal({
         <Button
           variant="ghost"
           size="icon"
-          className=" bg-zinc-100 hover:bg-zinc-200 z-10 p-5 rounded-full hover:cursor-pointer"
+          className="bg-zinc-100 hover:bg-zinc-200 z-10 p-5 rounded-full hover:cursor-pointer"
           onClick={onNext}
         >
           <ChevronRight className="h-6 w-6" />
