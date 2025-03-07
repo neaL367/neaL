@@ -23,9 +23,31 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.cdninstagram.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "scontent-*.cdninstagram.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "instagram.*.fbcdn.net",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.fbcdn.net",
+        port: "",
+        pathname: "/**",
+      },
     ],
-    minimumCacheTTL: 2678400, 
-    formats: ["image/webp", "image/avif"],
   },
 
   compiler: {
