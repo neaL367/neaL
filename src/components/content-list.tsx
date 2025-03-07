@@ -16,7 +16,7 @@ export default function ContentList({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg">{title}</h2>
+      <h2 className="text-2xl font-medium mb-4">{title}</h2>
       {publishedItems.length > 0 ? (
         <ul className="space-y-4 list-disc list-inside">
           {publishedItems.map((item) => (

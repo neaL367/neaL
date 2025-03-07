@@ -13,8 +13,8 @@ interface PageProps {
 }
 
 const TYPE_MAP: Record<string, ContentType> = {
-  p: "projects",
-  n: "notes",
+  pj: "projects",
+  nt: "notes",
 };
 
 const TYPE_TITLES: Record<ContentType, string> = {

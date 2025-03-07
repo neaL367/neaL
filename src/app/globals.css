@@ -184,43 +184,47 @@
     @apply bg-background text-foreground selection:text-background selection:bg-zinc-600 selection:rounded-full;
   }
 
-  @keyframes slide-in-from-right {
-    from {
-      transform: translateX(5%);
+  @keyframes slide-in-from-bottom {
+    0% {
+      transform: translateY(2.5%);
       opacity: 0;
+      filter: blur(5px) contrast(1.2);
     }
-    to {
-      transform: translateX(0);
+    50% {
+      filter: blur(2.5px) contrast(1.1);
+    }
+    100% {
+      transform: translateY(0);
       opacity: 1;
+      filter: none;
     }
   }
 
-  @keyframes slide-out-to-left {
-    from {
-      transform: translateX(0);
+  @keyframes slide-out-to-top {
+    0% {
+      transform: translateY(0);
       opacity: 1;
+      filter: none;
     }
-    to {
-      transform: translateX(-5%);
+    50% {
+      filter: blur(2.5px) contrast(1.1);
+    }
+    100% {
+      transform: translateY(-2.5%);
       opacity: 0;
+      filter: blur(5px) contrast(1);
     }
   }
 
-  /* Apply the animations to view transitions */
   ::view-transition-old(root) {
-    animation: 300ms slide-out-to-left;
+    animation: 300ms slide-out-to-top;
   }
 
   ::view-transition-new(root) {
-    animation: 300ms slide-in-from-right;
+    animation: 300ms slide-in-from-bottom;
   }
   ::view-transition-group(root) {
     z-index: auto;
-  }
-  ::view-transition-image-pair(root) {
-    isolation: isolate;
-    will-change: transform, opacity, clip-path;
-    z-index: 1;
   }
 }
 

@@ -24,6 +24,6 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const projects = await getContentList("projects")
   const publishedProjects = projects.filter((projects) => projects.published)
-  return <ContentList title="Projects" items={publishedProjects} baseUrl="/p" />
+  return <ContentList title="Projects" items={publishedProjects} baseUrl="/pj" />
 }
 
