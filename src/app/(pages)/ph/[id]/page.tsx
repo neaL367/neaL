@@ -11,6 +11,13 @@ interface PhotoPageProps {
   }>;
 }
 
+export async function generateStaticParams() {
+  const posts = await getInstagramPosts();
+  return posts.map((post) => ({
+    id: post.id,
+  }));
+}
+
 export async function generateMetadata(
   props: PhotoPageProps
 ): Promise<Metadata> {
@@ -38,6 +45,9 @@ export async function generateMetadata(
           alt: post.caption || "Instagram photo",
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
     },
   };
 }
@@ -101,3 +111,5 @@ export default async function PhotoPage(props: PhotoPageProps) {
     </div>
   );
 }
+
+export const dynamicParams = false;
