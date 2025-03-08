@@ -10,7 +10,6 @@ export async function getInstagramPosts(): Promise<InstagramPost[]> {
     try {
         const response = await fetch(
             `https://graph.instagram.com/me/media?fields=id,media_type,media_url,timestamp,caption,like_count&access_token=${accessToken}`,
-            { next: { revalidate: 3600 } }, // Cache for 1 hour
         )
 
         if (!response.ok) {
@@ -44,7 +43,6 @@ export async function getInstagramPostById(id: string): Promise<InstagramPost | 
     try {
         const response = await fetch(
             `https://graph.instagram.com/${id}?fields=id,media_type,media_url,timestamp,caption,like_count&access_token=${accessToken}`,
-            { next: { revalidate: 3600 } }, // Cache for 1 hour
         )
 
         if (!response.ok) {

@@ -11,6 +11,10 @@ interface PhotoPageProps {
   }>;
 }
 
+export const revalidate = 3600
+
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const posts = await getInstagramPosts();
   return posts.map((post) => ({
@@ -111,5 +115,3 @@ export default async function PhotoPage(props: PhotoPageProps) {
     </div>
   );
 }
-
-export const dynamicParams = false;

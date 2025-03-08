@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getInstagramPosts } from "@/lib/instagram";
 import { PhotoGrid } from "@/components/photo-grid";
 
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: "Photos",
   description: "Check out My latest photos and moments captured on Instagram",
