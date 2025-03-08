@@ -11,7 +11,11 @@ export default function Navigator() {
         <button
           onClick={(e) => {
             e.preventDefault();
-            router.back();
+            if (window.history.length > 1) {
+              router.back();
+            } else {
+              router.push("/");
+            }
           }}
           className="text-sm text-blue-600 hover:underline"
         >
