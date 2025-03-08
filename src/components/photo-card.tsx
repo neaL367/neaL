@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import type { InstagramPost } from "@/types";
-import { formatDate } from "@/lib/utils";
+// import { formatDate } from "@/lib/utils";
 import { Heart } from "lucide-react";
 
 interface PhotoCardProps {
@@ -68,9 +68,9 @@ export function PhotoCard({ post, onClick }: PhotoCardProps) {
           </div>
         </div>
       </Card>
-      <div className="pt-2">
+      {/* <div className="pt-2">
         <p className="text-xs text-zinc-500">{formatDate(post.timestamp)}</p>
-      </div>
+      </div> */}
     </div>
   );
 }
