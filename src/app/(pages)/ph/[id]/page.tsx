@@ -87,7 +87,7 @@ export default async function PhotoPage(props: PhotoPageProps) {
             {formatDate(post.timestamp)}
           </div>
           <div className="text-sm text-muted-foreground">
-            {formatTime(post.timestamp)}
+            {formatTime(post.timestamp)} (GMT+7)
           </div>
         </div>
 
