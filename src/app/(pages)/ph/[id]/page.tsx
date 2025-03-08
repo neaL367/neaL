@@ -73,7 +73,7 @@ export default async function PhotoPage(props: PhotoPageProps) {
           alt={post.caption || "Photo"}
           fill
           className="object-contain"
-          sizes="(max-width: 768px) 100vw, 70vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
           priority
           style={{
             viewTransitionName: `photo-${post.id}`,

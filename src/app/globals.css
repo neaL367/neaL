@@ -218,10 +218,12 @@
 
   ::view-transition-old(root) {
     animation: 300ms slide-out-to-top;
+    mix-blend-mode: normal;
   }
 
   ::view-transition-new(root) {
     animation: 300ms slide-in-from-bottom;
+    mix-blend-mode: normal;
   }
   ::view-transition-group(root) {
     z-index: auto;

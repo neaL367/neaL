@@ -49,7 +49,7 @@ export function PhotoCard({ post, onClick }: PhotoCardProps) {
             className={`object-cover transition-all duration-300 
               ${isLoading ? "opacity-0" : "opacity-100"}
               ${isHovered ? "" : ""}`}
-            loading="lazy"
+            priority
             quality={60}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
             onLoad={() => setIsLoading(false)}
