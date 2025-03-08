@@ -31,7 +31,6 @@ export interface InstagramPost {
   mediaType: string
   mediaUrl: string
   timestamp: Date
-  caption: string
+  caption?: string
   likeCount: number
 }
-

@@ -54,10 +54,6 @@ const nextConfig = {
     removeConsole:
       process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
   },
-
-  experimental: {
-    largePageDataBytes: 128 * 1000,
-  },
 };
 
 /** @type {import('rehype-pretty-code').Options} */

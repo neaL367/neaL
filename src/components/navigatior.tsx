@@ -2,20 +2,20 @@
 
 import { useTransitionRouter } from "next-view-transitions";
 
-export default function Navigatior() {
+export default function Navigator() {
   const router = useTransitionRouter();
 
   return (
-    <nav className="mb-6">
+    <nav className="mb-10">
       <div className="flex text-md font-medium justify-start">
         <button
           onClick={(e) => {
             e.preventDefault();
             router.back();
           }}
-          className="text-gray-600 hover:text-gray-900 transition-colors duration-500 hover:cursor-pointer"
+          className="text-sm text-blue-600 hover:underline"
         >
-          Back
+          ← Back
         </button>
       </div>
     </nav>

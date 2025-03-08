@@ -1,6 +1,6 @@
-import type { Metadata } from "next"
-import { getContentList } from "@/lib/content"
-import ContentList from "@/components/content-list"
+import type { Metadata } from "next";
+import { getContentList } from "@/lib/content";
+import ContentList from "@/components/content-list";
 
 export const metadata: Metadata = {
   title: "Notes",
@@ -19,11 +19,14 @@ export const metadata: Metadata = {
     title: "Notes",
     description: "Technical notes, tutorials, and web development insights",
   },
-}
+};
 
 export default async function NotesPage() {
-  const notes = await getContentList("notes")
-  const publishedNotes = notes.filter((note) => note.published)
-  return <ContentList title="Notes" items={publishedNotes} baseUrl="/nt" />
+  const notes = await getContentList("notes");
+  const publishedNotes = notes.filter((note) => note.published);
+  return (
+    <div className=" min-h-[calc(99dvh-10rem)]">
+      <ContentList title="Notes" items={publishedNotes} baseUrl="/nt" />
+    </div>
+  );
 }
-

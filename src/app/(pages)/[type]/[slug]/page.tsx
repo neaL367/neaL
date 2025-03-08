@@ -22,12 +22,18 @@ const TYPE_TITLES: Record<ContentType, string> = {
   notes: "Notes",
 };
 
+const LoadingContent = () => (
+  <div className="flex flex-col items-center justify-center min-h-[75dvh] p-4">
+    <span className="mt-4 text-gray-600">Loading content…</span>
+  </div>
+);
+
 const getMdxContent = async (type: ContentType, slug: string) => {
   try {
     const Content = dynamic(
       () => import(`@/contents/${type}/${slug}/page.mdx`),
       {
-        loading: () => <p>Loading...</p>,
+        loading: () => <LoadingContent />,
       }
     );
     return Content;

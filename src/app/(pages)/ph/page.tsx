@@ -22,13 +22,15 @@ export const metadata: Metadata = {
 };
 
 export default async function PhotosPage() {
-  const posts = await getInstagramPosts()
+  const posts = await getInstagramPosts();
 
   return (
-    <div className="">
+    <div className="min-h-[calc(100dvh-10rem)]">
       <h1 className="text-2xl font-medium mb-4">Photos</h1>
-      <p className="text-gray-600">Check out My latest photos and moments captured on Instagram.</p>
-      <PhotoGrid initialPosts={posts} />
+      <p className="text-gray-600">
+        Check out My latest photos and moments captured on Instagram.
+      </p>
+      <PhotoGrid posts={posts} />
     </div>
   );
 }

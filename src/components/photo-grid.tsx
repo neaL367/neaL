@@ -1,57 +1,47 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { PhotoCard } from "./photo-card"
-import { PhotoModal } from "./photo-modal"
-import type { InstagramPost } from "@/types"
+import type { InstagramPost } from "@/types";
+import { PhotoCard } from "./photo-card";
+import { useTransitionRouter } from "next-view-transitions";
 
 interface PhotoGridProps {
-  initialPosts: InstagramPost[]
+  posts: InstagramPost[];
+  columns?: number;
 }
 
-export function PhotoGrid({ initialPosts }: PhotoGridProps) {
-  const [posts] = useState<InstagramPost[]>(initialPosts)
-  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null)
+export function PhotoGrid({ posts, columns = 3 }: PhotoGridProps) {
+  const router = useTransitionRouter();
 
-  const openModal = (index: number) => {
-    setSelectedPhoto(index)
-  }
+  const handleNavigateToPost = (postId: string) => {
+    router.push(`/ph/${postId}`);
+  };
 
-  const closeModal = () => {
-    setSelectedPhoto(null)
-  }
-
-  const goToNextPhoto = () => {
-    setSelectedPhoto((prev) => {
-      if (prev === null) return null
-      return prev === posts.length - 1 ? 0 : prev + 1
-    })
-  }
-
-  const goToPreviousPhoto = () => {
-    setSelectedPhoto((prev) => {
-      if (prev === null) return null
-      return prev === 0 ? posts.length - 1 : prev - 1
-    })
-  }
+  const getGridColumns = () => {
+    if (columns) {
+      return `grid-cols-1 sm:grid-cols-2 md:grid-cols-${Math.min(
+        columns,
+        3
+      )} lg:grid-cols-${columns}`;
+    }
+    return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+  };
 
   return (
-    <div className="">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {posts.map((post, index) => (
-          <PhotoCard key={post.id} post={post} onClick={() => openModal(index)} />
+    <div>
+      <div
+        className={`grid gap-4 ${getGridColumns()}`}
+        role="grid"
+        aria-label="Photo gallery"
+      >
+        {posts.map((post) => (
+          <div key={post.id} role="gridcell">
+            <PhotoCard
+              post={post}
+              onClick={() => handleNavigateToPost(post.id)}
+            />
+          </div>
         ))}
       </div>
-
-      {selectedPhoto !== null && (
-        <PhotoModal
-          post={posts[selectedPhoto]}
-          onClose={closeModal}
-          onNext={goToNextPhoto}
-          onPrevious={goToPreviousPhoto}
-        />
-      )}
     </div>
-  )
+  );
 }
-
