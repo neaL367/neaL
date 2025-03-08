@@ -29,7 +29,7 @@ export function PhotoGrid({ posts, columns = 3 }: PhotoGridProps) {
   return (
     <div>
       <div
-        className={`grid gap-4 ${getGridColumns()}`}
+        className={`grid gap-2.5 mt-6 ${getGridColumns()}`}
         role="grid"
         aria-label="Photo gallery"
       >

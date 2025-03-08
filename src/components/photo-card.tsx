@@ -19,7 +19,7 @@ export function PhotoCard({ post, onClick }: PhotoCardProps) {
   return (
     <div className="group">
       <Card
-        className="overflow-hidden mt-6 pt-0 py-0 border-0 h-max flex flex-col hover:shadow-md transition-shadow duration-200"
+        className="overflow-hidden pt-0 py-0 border-0 h-max flex flex-col hover:shadow-md transition-shadow duration-200 rounded-sm"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
