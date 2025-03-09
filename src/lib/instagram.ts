@@ -1,15 +1,18 @@
+import { cache } from 'react'
 import type { InstagramMediaEdge, InstagramPost } from "@/types"
 
-export async function getInstagramPosts(): Promise<InstagramPost[]> {
+export const getInstagramPosts = cache(async (): Promise<InstagramPost[]> => {
     const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN
 
     if (!accessToken) {
-        throw new Error("Instagram access token is not set")
+        console.error("Instagram access token is not set")
+        return []
     }
 
     try {
         const response = await fetch(
             `https://graph.instagram.com/me/media?fields=id,media_type,media_url,timestamp,caption,like_count&access_token=${accessToken}`,
+            { next: { revalidate: 3600 } } // Cache for 1 hour
         )
 
         if (!response.ok) {
@@ -28,21 +31,29 @@ export async function getInstagramPosts(): Promise<InstagramPost[]> {
         }))
     } catch (error) {
         console.error("Error fetching Instagram posts:", error)
-        // Return empty array instead of throwing to prevent page crashes
         return []
     }
-}
+})
 
-export async function getInstagramPostById(id: string): Promise<InstagramPost | null> {
+export const getInstagramPostById = cache(async (id: string): Promise<InstagramPost | null> => {
+    const posts = await getInstagramPosts()
+    const post = posts.find(p => p.id === id)
+    
+    // If found in cache, return it
+    if (post) return post
+    
+    // Otherwise fetch individually
     const accessToken = process.env.INSTAGRAM_ACCESS_TOKEN
 
     if (!accessToken) {
-        throw new Error("Instagram access token is not set")
+        console.error("Instagram access token is not set")
+        return null
     }
 
     try {
         const response = await fetch(
             `https://graph.instagram.com/${id}?fields=id,media_type,media_url,timestamp,caption,like_count&access_token=${accessToken}`,
+            { next: { revalidate: 3600 } }
         )
 
         if (!response.ok) {
@@ -66,4 +77,4 @@ export async function getInstagramPostById(id: string): Promise<InstagramPost | 
         console.error(`Error fetching Instagram post ${id}:`, error)
         return null
     }
-}
+})

@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Heart } from "lucide-react";
+import { Heart, Calendar } from 'lucide-react';
 import { getInstagramPosts } from "@/lib/instagram";
 import { formatDate, formatTime } from "@/lib/utils";
 import type { Metadata } from "next";
+import { Link } from "next-view-transitions";
+import { Button } from "@/components/ui/button";
 
 interface PhotoPageProps {
   params: Promise<{
@@ -65,15 +67,21 @@ export default async function PhotoPage(props: PhotoPageProps) {
     notFound();
   }
 
+  // Find index of current post and get next/previous posts
+  const currentIndex = posts.findIndex(p => p.id === post.id);
+  const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+  const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+
   return (
-    <div className=" flex flex-col  min-h-[calc(100vh-11rem)] bg-black/20 backdrop-blur-lg rounded-md">
+    <div className="flex flex-col min-h-[calc(100vh-11rem)] bg-black/20 backdrop-blur-lg rounded-md">
+      
       <div className="relative flex-1 min-h-[50vh] md:min-h-full">
         <Image
           src={post.mediaUrl || ""}
           alt={post.caption || "Photo"}
           fill
-          className="object-contain"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-contain transition-all duration-300"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 70vw"
           priority
           style={{
             viewTransitionName: `photo-${post.id}`,
@@ -83,8 +91,11 @@ export default async function PhotoPage(props: PhotoPageProps) {
 
       <div className="bg-white dark:bg-gray-900 w-full p-6 flex flex-col border">
         <div className="flex items-center justify-between mb-4">
-          <div className="text-sm font-medium">
-            {formatDate(post.timestamp)}
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <div className="text-sm font-medium">
+              {formatDate(post.timestamp)}
+            </div>
           </div>
           <div className="text-sm text-muted-foreground">
             {formatTime(post.timestamp)} (GMT+7)
@@ -107,10 +118,19 @@ export default async function PhotoPage(props: PhotoPageProps) {
           </div>
         ) : null}
 
-        {/* <div className="mt-auto pt-4 border-t border-gray-200 dark:border-gray-800">
-          <div className="text-sm text-muted-foreground">Media Type: {post.mediaType}</div>
-          <div className="text-sm text-muted-foreground mt-1">Post ID: {post.id}</div>
-        </div> */}
+        <div className="mt-6 flex justify-between">
+          {prevPost ? (
+            <Link href={`/ph/${prevPost.id}`}>
+              <Button variant="outline" size="sm">Previous</Button>
+            </Link>
+          ) : <div />}
+          
+          {nextPost ? (
+            <Link href={`/ph/${nextPost.id}`}>
+              <Button variant="outline" size="sm">Next</Button>
+            </Link>
+          ) : <div />}
+        </div>
       </div>
     </div>
   );

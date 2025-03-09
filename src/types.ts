@@ -7,6 +7,8 @@ export interface Metadata {
 
 export type ContentType = "projects" | "notes"
 
+export type SortOption = "newest" | "oldest" | "most-likes" | "least-likes";
+
 export interface ContentItem {
   slug: string
   title: string

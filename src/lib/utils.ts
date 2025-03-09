@@ -22,4 +22,3 @@ export function formatTime(date: Date): string {
     timeZone: "Asia/Bangkok",
   }).format(date)
 }
-
