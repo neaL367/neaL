@@ -16,6 +16,7 @@ export default function LayoutPage({
           href="https://github.com/neaL367"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Github"
           className="flex items-center"
         >
           <GithubIcon size={16} />

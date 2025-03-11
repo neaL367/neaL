@@ -79,9 +79,9 @@ export function PhotoGrid({ posts, columns = 3, initialSortBy = "newest" }: Phot
         </Suspense>
       )}
 
-      <div className={`grid gap-2.5 ${getGridColumns()}`} role="grid" aria-label="Photo gallery">
+      <div className={`grid gap-2.5 ${getGridColumns()}`} aria-label="Photo gallery">
         {filteredPosts.map((post) => (
-          <div key={post.id} role="gridcell">
+          <div key={post.id}>
             <PhotoCard post={post} onClick={() => handleNavigateToPost(post.id)} />
           </div>
         ))}
