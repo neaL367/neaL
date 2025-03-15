@@ -25,7 +25,7 @@ export default function SortControls({ sortBy, setSortBy }: SortControlsProps) {
           value={sortBy}
           onValueChange={(value) => setSortBy(value as SortOption)}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] hover:cursor-pointer">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import type { InstagramPost } from "@/types";
 import { formatDate } from "@/lib/utils";
-import { Heart, Calendar } from 'lucide-react';
+import { Heart, Calendar } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface PhotoCardProps {
@@ -22,7 +22,7 @@ export function PhotoCard({ post, onClick, priority = false }: PhotoCardProps) {
 
   useEffect(() => {
     if (!cardRef.current) return;
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -32,9 +32,9 @@ export function PhotoCard({ post, onClick, priority = false }: PhotoCardProps) {
       },
       { threshold: 0.1 }
     );
-    
+
     observer.observe(cardRef.current);
-    
+
     return () => {
       observer.disconnect();
     };
@@ -92,7 +92,7 @@ export function PhotoCard({ post, onClick, priority = false }: PhotoCardProps) {
                 <Heart className="h-5 w-5 fill-white" />
                 <span className="font-medium">{post.likeCount}</span>
               </div>
-              
+
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="h-4 w-4" />
                 <span>{formatDate(post.timestamp)}</span>
