@@ -46,7 +46,7 @@ export default function Navigator() {
   return (
     <nav className="mb-10">
       <div className="flex text-md font-medium justify-start">
-        <button onClick={handleBack} className="text-sm text-blue-600 hover:underline">
+        <button onClick={handleBack} className="text-sm text-blue-600 hover:underline hover:cursor-pointer">
           ← Back
         </button>
       </div>
