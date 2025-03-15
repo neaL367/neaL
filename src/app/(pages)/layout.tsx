@@ -1,4 +1,4 @@
-import Navigatior from "@/components/navigatior";
+import Navigatior from "@/components/navigator";
 import { GithubIcon } from "lucide-react";
 
 export default function LayoutPage({
