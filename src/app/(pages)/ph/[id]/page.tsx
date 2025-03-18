@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Heart, Calendar } from 'lucide-react';
-import { getInstagramPosts } from "@/lib/instagram";
+import { Heart, Calendar } from "lucide-react";
+import { getInstagramPostById, getInstagramPosts } from "@/lib/instagram";
 import { formatDate, formatTime } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Link } from "next-view-transitions";
@@ -13,9 +13,14 @@ interface PhotoPageProps {
   }>;
 }
 
-export const revalidate = 3600
+// Next.js will invalidate the cache when a
+// request comes in, at most once every 60 seconds.
+export const revalidate = 3600;
 
-export const dynamicParams = false;
+// We'll prerender only the params from `generateStaticParams` at build time.
+// If a request comes in for a path that hasn't been generated,
+// Next.js will server-render the page on-demand.
+export const dynamicParams = true; // or false, to 404 on unknown paths
 
 export async function generateStaticParams() {
   const posts = await getInstagramPosts();
@@ -27,9 +32,9 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   props: PhotoPageProps
 ): Promise<Metadata> {
-  const posts = await getInstagramPosts();
   const params = await props.params;
-  const post = posts.find((p) => p.id === params.id);
+  // Use getInstagramPostById to fetch a single post instead of loading all posts
+  const post = await getInstagramPostById(params.id);
 
   if (!post) {
     return {
@@ -59,22 +64,24 @@ export async function generateMetadata(
 }
 
 export default async function PhotoPage(props: PhotoPageProps) {
-  const posts = await getInstagramPosts();
   const params = await props.params;
-  const post = posts.find((p) => p.id === params.id);
+  const post = await getInstagramPostById(params.id);
+
+  // Also get all posts for navigation
+  const posts = await getInstagramPosts();
 
   if (!post) {
     notFound();
   }
 
   // Find index of current post and get next/previous posts
-  const currentIndex = posts.findIndex(p => p.id === post.id);
+  const currentIndex = posts.findIndex((p) => p.id === post.id);
   const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
-  const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+  const nextPost =
+    currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-11rem)] bg-black/20 backdrop-blur-lg rounded-md">
-      
       <div className="relative flex-1 min-h-[50vh] md:min-h-full">
         <Image
           src={post.mediaUrl || ""}
@@ -102,34 +109,41 @@ export default async function PhotoPage(props: PhotoPageProps) {
           </div>
         </div>
 
+        {post.caption ? (
+          <div className="mb-3">
+            {/* <h1 className="text-xl font-semibold mb-2">Caption</h1> */}
+            <p className="text-gray-700 dark:text-gray-300 break-words">
+              &quot; {post.caption} &quot;
+            </p>
+          </div>
+        ) : null}
+
         <div className="flex items-center gap-4 mb-3">
           <div className="flex items-center gap-1.5">
             <Heart className="h-5 w-5 text-rose-500 fill-rose-500" />
             <span className="text-sm font-medium">{post.likeCount} likes</span>
           </div>
         </div>
-
-        {post.caption ? (
-          <div className="mb-3">
-            <h1 className="text-xl font-semibold mb-2">Caption</h1>
-            <p className="text-gray-700 dark:text-gray-300 break-words">
-              {post.caption}
-            </p>
-          </div>
-        ) : null}
-
         <div className="mt-6 flex justify-between">
           {prevPost ? (
             <Link href={`/ph/${prevPost.id}`}>
-              <Button variant="outline" size="sm">Previous</Button>
+              <Button variant="outline" size="sm">
+                Previous
+              </Button>
             </Link>
-          ) : <div />}
-          
+          ) : (
+            <div />
+          )}
+
           {nextPost ? (
             <Link href={`/ph/${nextPost.id}`}>
-              <Button variant="outline" size="sm">Next</Button>
+              <Button variant="outline" size="sm">
+                Next
+              </Button>
             </Link>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </div>
