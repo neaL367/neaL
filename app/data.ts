@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
     description:
       'A clone of the Tesla website, built with React and TypeScript.',
     link: 'https://tesla-clone-black-sigma.vercel.app/',
-    image: '/projects/ts-clone/cover.png',
+    video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744870325/vype1irqnhojmaimbxer.mp4",
     id: 'project2',
   },
 ]

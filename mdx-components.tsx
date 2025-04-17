@@ -1,5 +1,4 @@
 import type { MDXComponents } from 'mdx/types'
-import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
