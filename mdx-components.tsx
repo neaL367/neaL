@@ -74,7 +74,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     hr: () => <hr className="my-8 border-zinc-200 dark:border-zinc-800" />,
     strong: ({ children }) => (
-      <strong className="font-medium">{children}</strong>
+      <strong className="font-base">{children}</strong>
     ),
     Cover: ({
       src,
@@ -87,7 +87,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     }) => {
       return (
         <figure className="my-8">
-          <img src={src} alt={alt} className="rounded-xl" />
+          <img src={src} alt={alt} className="rounded-xl border" />
           <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
             {caption}
           </figcaption>

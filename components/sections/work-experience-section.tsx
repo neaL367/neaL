@@ -30,78 +30,97 @@ export function WorkExperienceSection() {
               Front-end developer, 2022 - Present
             </small>
           </div>
+
           {/* Detailed descriptions */}
           <p className="mb-4 text-zinc-600 dark:text-zinc-400">
-            I have been an active volunteer at GoodGeekClub, organizing various
-            IT events to promote skill development and create a positive impact
-            on society. My experience includes developing and deploying multiple
-            websites using a range of technologies.
+            As a dedicated front‑end developer and event organizer at
+            GoodGeekClub, I drive community‑focused IT initiatives that both
+            upskill participants and generate positive social impact.
           </p>
-          <p className="mb-4 text-zinc-600 dark:text-zinc-400">
-            I built{' '}
-            <a
-              href="https://qlhealthcarethailand.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-block text-zinc-900 dark:text-zinc-300"
-            >
-              QL Healthcare Thailand
-              <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-            </a>
-            , a healthcare-focused website on WordPress, providing an
-            informative digital presence for healthcare services. Additionally,
-            I contributed to{' '}
-            <a
-              href="https://hopeis.us/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-block text-zinc-900 dark:text-zinc-300"
-            >
-              Hopeisapp
-              <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-            </a>
-            , a community-driven social platform developed by volunteers in just
-            two months. This project features real-time character interactions,
-            engaging quizzes, and a customizable theme system, leveraging
-            daisyUI for an enhanced UI and local storage for saving progress.
-            The source code is available on{' '}
-            <a
-              href="https://github.com/goodgeekclub/hopeisapp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-block text-zinc-900 dark:text-zinc-300"
-            >
-              GitHub
-              <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-            </a>
-            .
-          </p>
-          <p className="text-zinc-600 dark:text-zinc-400">
-            Beyond these projects, I created a website with Plesk hosting and
-            WordPress for{' '}
-            <a
-              href="https://dseelin.co.th"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-block text-zinc-900 dark:text-zinc-300"
-            >
-              dseelin.co.th
-              <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-            </a>{' '}
-            and deployed a static web page using Next.js for{' '}
-            <a
-              href="https://youthplusthailand.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-block text-zinc-900 dark:text-zinc-300"
-            >
-              youthplusthailand.com
-              <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-            </a>
-            , implementing an internationalization feature with next-intl. I
-            also hosted static web pages on Amazon Web Services, utilizing
-            CloudFront, S3, and EC2 to ensure scalability and performance.
-          </p>
+
+          <ul className="mb-4 ml-6 list-disc text-zinc-600 dark:text-zinc-400">
+            <li>
+              <span className="font-semibold dark:text-zinc-300/90 text-zinc-600">
+                Led end‑to‑end web development
+              </span>{' '}
+              for{' '}
+              <a
+                href="https://qlhealthcarethailand.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-block text-zinc-900 dark:text-zinc-300"
+              >
+                QL Healthcare Thailand
+                <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+              </a>
+              , architecting and deploying a WordPress site that enhanced
+              visibility for healthcare providers and streamlined patient
+              outreach.
+            </li>
+            <li>
+              <span className="font-semibold dark:text-zinc-300/90 text-zinc-600">
+                Co‑created “HopeIsApp”
+              </span>{' '}
+              a community‑driven social platform delivered in just two months. I
+              implemented real‑time character interactions, dynamic quizzes, and
+              a fully customizable UI powered by <code>daisyUI</code>, with
+              client‑side progress persistence via local storage. (
+              <a
+                href="https://github.com/goodgeekclub/hopeisapp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-block text-zinc-900 dark:text-zinc-300"
+              >
+                GitHub
+                <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+              </a>
+              )
+            </li>
+            <li>
+              <span className="font-semibold dark:text-zinc-300/90 text-zinc-600">
+                Engineered and managed
+              </span>{' '}
+              the{' '}
+              <a
+                href="https://dseelin.co.th"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-block text-zinc-900 dark:text-zinc-300"
+              >
+                dseelin.co.th
+                <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+              </a>{' '}
+              WordPress site on Plesk—integrating custom plugins and SEO best
+              practices—and deployed a multilingual Next.js site for{' '}
+              <a
+                href="https://youthplusthailand.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-block text-zinc-900 dark:text-zinc-300"
+              >
+                youthplusthailand.com
+                <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+              </a>
+              , leveraging <code>next‑intl</code> for seamless internationalization.
+            </li>
+            <li>
+              <span className="font-semibold dark:text-zinc-300/90 text-zinc-600">
+                Provisioned and maintained Amazon Linux 2 servers
+              </span>
+              —installed and configured LAMP stacks, set up SSL/TLS
+              certificates, and hosted WordPress blogs on EC2 instances for
+              secure, performant environments.
+            </li>
+            <li>
+              <span className="font-semibold dark:text-zinc-300/90 text-zinc-600">
+                Configured S3 static website hosting
+              </span>
+              —enabled website hosting on S3 buckets, specified index and custom
+              error documents, implemented advanced JSON redirection rules, and
+              validated endpoints via both the AWS console and CLI to deliver
+              fast, reliable static sites.
+            </li>
+          </ul>
         </div>
       </div>
     </motion.section>
