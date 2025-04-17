@@ -1,0 +1,37 @@
+'use client'
+import { TextEffect } from '@/components/ui/text-effect'
+import Link from 'next/link'
+import Image from 'next/image'
+
+export function Header() {
+  return (
+    <header className="mb-8 flex items-center justify-between">
+      <div className="flex items-center gap-5">
+        <Image
+          src="/avatar.png"
+          alt="Atichat Thongnak"
+          width={85}
+          height={85}
+          className="aspect-square rounded-full object-cover"
+          priority
+          sizes="(max-width: 768px) 100vw, 33vw"
+          quality={75}
+        />
+        <div>
+          <Link href="/" className="font-medium text-lg text-black dark:text-white">
+            Atichat Thongnak
+          </Link>
+          <TextEffect
+            as="p"
+            preset="fade"
+            per="char"
+            className="text-zinc-600 dark:text-zinc-500"
+            delay={0.5}
+          >
+            Front-end developer
+          </TextEffect>
+        </div>
+      </div>
+    </header>
+  )
+}

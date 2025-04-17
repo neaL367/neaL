@@ -19,10 +19,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/contents/*": ["./src/contents/*"]
+      "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.js", "src/app/(pages)/nt/page.mdx", "src/app/page.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next.config.ts"
+  ],
   "exclude": ["node_modules"]
 }

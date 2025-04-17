@@ -1,34 +1,48 @@
-# neaL376
+<img src="/app/opengraph-image.png" alt="neaL367 - Personal Website" width="100%" />
 
-My personal website by Next.js application.
+# neaL367 - Personal Website
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fme22mer%2Fatichat)
+A clean, modern personal website built with Next.js 15, React 19, Tailwind CSS v4, and Motion animations. This site showcases my projects, work experience, and technical skills as a front-end developer based in Bangkok, Thailand.
 
-## Overview
+## 💻 Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Components**: [MDX](https://mdxjs.com/)
+This website is built using:
+
+- **Framework**: [Next.js 15](https://nextjs.org)
+- **UI Library**: [React 19](https://react.dev)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com)
+- **Animations**: [Motion-Primitives](https://motion-primitives.com)
 - **Deployment**: [Vercel](https://vercel.com)
 
-## Running Locally
-
-This application requires Node.js v18+.
+## 🛠️ Development
 
 ```bash
-git clone https://github.com/me22mer/atichat.git
-cd atichat
-bun install
-bun dev
+# Clone the repository
+git clone https://github.com/neaL367/personal-website.git
+
+# Navigate to project directory
+cd personal-website
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-## Credits
+## 📝 Content Management
 
-This project is inspired by [Lee Robinson's personal website](https://github.com/leerob/site). We'd like to express our gratitude to Lee Robinson (leerob) for the inspiration and insights his work has provided in the development of this project.
+All content is managed through:
+- Project data in `app/data.ts`
+- Posts in the MDX format
+- Work experience and personal information directly in components
 
-## License
+## 📱 Connect
 
-1. You are free to use this code as inspiration.
-2. Please do not copy it directly.
-3. Crediting the author is appreciated.
+Feel free to reach out through any of the social platforms linked on the website or via email.
+
+## 🙏 Credits
+
+This website was built using the [Nim template](https://github.com/ibelick/nim) by [ibelick](https://github.com/ibelick), which provides an excellent foundation for personal websites. The template has been customized and extended to fit my personal style and requirements.
+
+Special thanks to the creators of Motion-Primitives for the smooth animation components that bring this site to life.
