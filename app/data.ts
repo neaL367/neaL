@@ -21,11 +21,11 @@ type SocialLink = {
 
 export const PROJECTS: Project[] = [
   {
-    name: 'Rockstar Games Clone',
+    name: 'Orbit',
     description:
-      'A clone of the Rockstar Games website, built with React and TypeScript.',
-    link: 'https://rockstar-clone-one.vercel.app/',
-    image: '/projects/rg-clone/cover.png',
+      'Discover and explore anime with detailed information and recommendations',
+    link: 'https://orbit-eight-rosy.vercel.app/',
+    video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744889969/or-video_ncfpai.mp4",
     id: 'project1',
   },
   {
@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
     description:
       'A clone of the Tesla website, built with React and TypeScript.',
     link: 'https://tesla-clone-black-sigma.vercel.app/',
-    video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744870325/vype1irqnhojmaimbxer.mp4",
+    video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744889935/ts-video_sempyg.mp4",
     id: 'project2',
   },
 ]

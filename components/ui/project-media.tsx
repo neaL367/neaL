@@ -26,6 +26,7 @@ export default function ProjectMedia({ src, type }: ProjectMediaProps) {
               autoPlay
               loop
               muted
+              playsInline
               className={`aspect-video h-full w-full rounded-xl transition-all duration-700`}
             />
           </div>
@@ -49,12 +50,13 @@ export default function ProjectMedia({ src, type }: ProjectMediaProps) {
       <MorphingDialogContainer>
         <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
           {type === 'video' ? (
-            <div className="relative aspect-video h-[50vh] w-full overflow-hidden rounded-xl md:h-[70vh]">
+            <div className="relative aspect-video w-full overflow-hidden rounded-xl md:h-[70vh]">
               <video
                 src={src}
                 autoPlay
                 loop
                 muted
+                playsInline
                 className={`aspect-video h-full w-full rounded-xl transition-all duration-700`}
               />
             </div>

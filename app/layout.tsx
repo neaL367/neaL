@@ -5,8 +5,6 @@ import { Header } from './header'
 import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
 
-
-
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,

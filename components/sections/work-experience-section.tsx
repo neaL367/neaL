@@ -27,7 +27,7 @@ export function WorkExperienceSection() {
               GoodGeekClub
             </h2>
             <small className="text-sm text-zinc-500 dark:text-zinc-400">
-              Web Developer, 2022 - Present
+              Front-end developer, 2022 - Present
             </small>
           </div>
           {/* Detailed descriptions */}
