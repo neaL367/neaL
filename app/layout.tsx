@@ -4,6 +4,7 @@ import './globals.css'
 import { Header } from './header'
 import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
+import { CursorEffect } from '@/components/ui/cursor-effect'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -60,8 +61,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geist.className} bg-white tracking-tight antialiased dark:bg-zinc-950 scroll-smooth`}
+        className={`${geist.className} scroll-smooth bg-white tracking-tight antialiased dark:bg-zinc-950`}
       >
+        <CursorEffect />
         <ThemeProvider
           enableSystem={true}
           attribute="class"

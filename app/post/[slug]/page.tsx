@@ -7,7 +7,7 @@ async function getPostMetadata(slug: string) {
   const coverImagePath = `/post/${slug}/cover.png`
 
   return {
-    title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} | neaL367`,
+    title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} - neaL367`,
     description: `Thoughts and insights about ${slug}`,
     coverImage: coverImagePath,
   }
