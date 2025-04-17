@@ -1,5 +1,4 @@
 'use client'
-
 import { TextMorph } from '@/components/ui/text-morph'
 import { ScrollProgress } from '@/components/ui/scroll-progress'
 import { useEffect, useState } from 'react'
@@ -21,7 +20,7 @@ function CopyButton() {
         setText('Copied')
         navigator.clipboard.writeText(currentUrl)
       }}
-      className="font-base flex items-center gap-1 text-center text-sm text-zinc-500 transition-colors dark:text-zinc-400 hover:cursor-pointer"
+      className="font-base flex items-center gap-1 text-center text-sm text-zinc-500 transition-colors hover:cursor-pointer dark:text-zinc-400"
       type="button"
     >
       <TextMorph>{text}</TextMorph>
@@ -30,14 +29,14 @@ function CopyButton() {
   )
 }
 
-export default function LayoutBlogPost({
+export default function LayoutPost({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
     <>
-      <div className="pointer-events-none fixed left-0 top-0 z-10 h-12 w-full bg-gray-100 to-transparent backdrop-blur-xl [-webkit-mask-image:linear-gradient(to_bottom,black,transparent)] dark:bg-zinc-950" />
+      <div className="pointer-events-none fixed top-0 left-0 z-10 h-12 w-full bg-gray-100 to-transparent backdrop-blur-xl [-webkit-mask-image:linear-gradient(to_bottom,black,transparent)] dark:bg-zinc-950" />
       <ScrollProgress
         className="fixed top-0 z-20 h-0.5 bg-gray-300 dark:bg-zinc-600"
         springOptions={{
@@ -45,14 +44,14 @@ export default function LayoutBlogPost({
         }}
       />
 
-      <div className="absolute right-4 top-24">
+      <div className="absolute top-24 right-4">
         <CopyButton />
       </div>
-      <main className="prose-zinc mt-24 pb-20 prose-h4:prose-base dark:prose-invert max-w-full:prose">
+      <main className="prose-zinc prose-h4:prose-base dark:prose-invert max-w-full:prose mt-24 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
         >
           {children}
         </motion.div>
