@@ -45,6 +45,13 @@ export const POSTS: Post[] = [
     link: '/post/stack',
     uid: 'post-1',
   },
+  {
+    title: 'How Daily Meditation Supercharged My Productivity',
+    description: 'How 20 minutes of jazz-infused mindfulness each day boosted my focus, creativity, and calm',
+    link: '/post/meditation',
+    uid: 'post-2'
+  }
+
 ]
 
 export const SOCIAL_LINKS: SocialLink[] = [
