@@ -1,23 +1,32 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
-const VARIANTS_SECTION = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+const ANIMATION_VARIANTS = {
+  section: {
+    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  },
+  container: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  },
 }
 
-const TRANSITION_SECTION = {
+const ANIMATION_TRANSITION = {
   duration: 0.3,
 }
 
 export function IntroSection() {
   return (
     <motion.section
-      variants={VARIANTS_SECTION}
-      transition={TRANSITION_SECTION}
+      variants={ANIMATION_VARIANTS.section}
+      transition={ANIMATION_TRANSITION}
       className="flex-1"
     >
+      <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+        About
+      </h3>
       <p className="text-zinc-600 dark:text-zinc-400">
         I’m a 22‑year‑old Information and Communication Technology student at
         Sripatum University in Bangkok, with a keen focus on front‑end web

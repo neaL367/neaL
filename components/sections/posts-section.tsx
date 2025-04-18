@@ -1,17 +1,29 @@
 'use client'
 import { POSTS } from '@/app/data'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import Link from 'next/link'
 import { AnimatedBackground } from '../ui/animated-background'
+
+const ANIMATION_VARIANTS = {
+  section: {
+    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  },
+  container: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  },
+}
+
+const ANIMATION_TRANSITION = {
+  duration: 0.3,
+}
 
 export function PostsSection() {
   return (
     <motion.section
-      variants={{
-        hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-        visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-      }}
-      transition={{ duration: 0.3 }}
+      variants={ANIMATION_VARIANTS.section}
+      transition={ANIMATION_TRANSITION}
     >
       <h3 className="mb-3 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         Post
@@ -19,7 +31,7 @@ export function PostsSection() {
       <div className="flex flex-col space-y-0">
         <AnimatedBackground
           enableHover
-          className="h-full w-full rounded-lg bg-zinc-100 dark:bg-zinc-900/80"
+          className="h-full w-full rounded-lg bg-zinc-100 dark:bg-zinc-900/80 p-4"
           transition={{
             type: 'spring',
             bounce: 0,
@@ -29,7 +41,7 @@ export function PostsSection() {
           {POSTS.map((post) => (
             <Link
               key={post.uid}
-              className="-mx-3 rounded-xl px-3 py-3"
+              className="p-4 rounded-xl"
               href={post.link}
               data-id={post.uid}
             >

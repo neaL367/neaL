@@ -8,13 +8,15 @@ import {
 } from '@/components/ui/morphing-dialog'
 import { XIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 type ProjectMediaProps = { src?: string; type: 'video' | 'image' }
 
 export default function ProjectMedia({ src, type }: ProjectMediaProps) {
   const [mediaLoaded, setMediaLoaded] = useState(false)
   const [modalMediaLoaded, setModalMediaLoaded] = useState(false)
+  const isOpen = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   return (
     <MorphingDialog transition={{ type: 'spring', bounce: 0, duration: 0.3 }}>
@@ -22,12 +24,13 @@ export default function ProjectMedia({ src, type }: ProjectMediaProps) {
         {type === 'video' ? (
           <div className="relative aspect-video w-full overflow-hidden rounded-xl">
             <video
+              ref={videoRef}
               src={src}
               autoPlay
               loop
               muted
               playsInline
-              className={`aspect-video h-full w-full rounded-xl transition-all duration-700`}
+              className="aspect-video h-full w-full rounded-xl transition-all duration-700"
             />
           </div>
         ) : (
@@ -51,14 +54,16 @@ export default function ProjectMedia({ src, type }: ProjectMediaProps) {
         <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
           {type === 'video' ? (
             <div className="relative aspect-video w-full overflow-hidden rounded-xl md:h-[70vh]">
-              <video
-                src={src}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className={`aspect-video h-full w-full rounded-xl transition-all duration-700`}
-              />
+              {isOpen && (
+                <video
+                  src={src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="aspect-video h-full w-full rounded-xl transition-all duration-700"
+                />
+              )}
             </div>
           ) : (
             <div className="relative flex h-[50vh] w-full items-center justify-center overflow-hidden md:h-[70vh]">
@@ -94,3 +99,4 @@ export default function ProjectMedia({ src, type }: ProjectMediaProps) {
     </MorphingDialog>
   )
 }
+

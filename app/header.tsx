@@ -3,6 +3,7 @@ import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
+import { motion } from 'motion/react'
 
 export function Header() {
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -10,25 +11,37 @@ export function Header() {
   return (
     <header className="mb-8 flex items-center justify-between">
       <div className="flex items-center gap-5">
-        <div className="relative h-[85px] w-[85px]">
-          <Image
-            src="/avatar.png"
-            alt="Atichat Thongnak"
-            width={85}
-            height={85}
-            className={`aspect-square rounded-full object-cover transition-all duration-700 ${
-              imageLoaded 
-                ? 'opacity-100 scale-100 blur-0' 
-                : 'opacity-0 scale-95 blur-sm'
-            }`}
-            priority
-            sizes="(max-width: 768px) 100vw, 33vw"
-            quality={75}
-            onLoad={() => setImageLoaded(true)}
-          />
-        </div>
+        <Link href="/">
+          <motion.div
+            className="relative h-[85px] w-[85px] cursor-pointer"
+            whileHover={{
+              scale: 1.1,
+              transition: { duration: 0.2 },
+            }}
+            whileTap={{ scale: 1 }}
+          >
+            <Image
+              src="/avatar.png"
+              alt="Atichat Thongnak"
+              width={85}
+              height={85}
+              className={`avatar-image aspect-square rounded-full object-cover transition-all duration-700 ${
+                imageLoaded
+                  ? 'blur-0 scale-100 opacity-100'
+                  : 'scale-95 opacity-0 blur-sm'
+              }`}
+              priority
+              sizes="(max-width: 768px) 100vw, 33vw"
+              quality={75}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </motion.div>
+        </Link>
         <div>
-          <Link href="/" className="font-medium text-lg text-black dark:text-white">
+          <Link
+            href="/"
+            className="text-lg font-medium text-black dark:text-white"
+          >
             Atichat Thongnak
           </Link>
           <TextEffect

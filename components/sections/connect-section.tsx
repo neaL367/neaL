@@ -3,6 +3,21 @@ import { EMAIL, SOCIAL_LINKS } from '@/app/data'
 import { motion } from 'framer-motion'
 import { Magnetic } from '../ui/magnetic'
 
+const ANIMATION_VARIANTS = {
+  section: {
+    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  },
+  container: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  },
+}
+
+const ANIMATION_TRANSITION = {
+  duration: 0.3,
+}
+
 function MagneticSocialLink({
   children,
   link,
@@ -42,11 +57,8 @@ function MagneticSocialLink({
 export function ConnectSection() {
   return (
     <motion.section
-      variants={{
-        hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-        visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-      }}
-      transition={{ duration: 0.3 }}
+      variants={ANIMATION_VARIANTS.section}
+      transition={ANIMATION_TRANSITION}
     >
       <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         Connect
