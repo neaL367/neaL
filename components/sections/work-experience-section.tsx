@@ -4,36 +4,20 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Spotlight } from '../ui/spotlight'
 import { XIcon } from 'lucide-react'
+import { WORK_EXPERIENCES } from '@/app/data'
 
-interface MDXModule {
-  default: React.ComponentType;
-  metadata: {
-    id: string;
-    slug: string;
-    company: string;
-    title: string;
-    start: string;
-    end: string;
-    link: string;
-  };
+const ANIMATION_VARIANTS = {
+  section: {
+    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+  },
+  container: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  },
 }
 
-type WorkExperience = {
-  id: string
-  slug: string
-  company: string
-  title: string
-  start: string
-  end: string
-  link: string
-}
-
-const VARIANTS_SECTION = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-}
-
-const TRANSITION_SECTION = {
+const ANIMATION_TRANSITION = {
   duration: 0.3,
 }
 
@@ -41,36 +25,7 @@ export function WorkExperienceSection() {
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
   const [expandPosition, setExpandPosition] = useState({ x: 0, y: 0 })
   const [workContent, setWorkContent] = useState<React.ReactNode | null>(null)
-  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([])
   const sectionRef = useRef<HTMLDivElement>(null)
-
-  // Load metadata for all work experiences
-  useEffect(() => {
-    async function getWorkExperiences() {
-      try {
-        const modules = await Promise.all([
-          import('@/app/contents/work/goodgeekclub/page.mdx'),
-          // import other entries here
-        ]) as MDXModule[]
-
-        const experiences = modules.map((m) => ({
-          id: m.metadata.id,
-          slug: m.metadata.slug,
-          company: m.metadata.company,
-          title: m.metadata.title,
-          start: m.metadata.start,
-          end: m.metadata.end,
-          link: m.metadata.link,
-        }))
-
-        setWorkExperiences(experiences)
-      } catch (error) {
-        console.error('Failed to load work experiences:', error)
-      }
-    }
-
-    getWorkExperiences()
-  }, [])
 
   const toggleCard = (slug: string, e: React.MouseEvent) => {
     if (expandedSlug === slug) {
@@ -109,11 +64,8 @@ export function WorkExperienceSection() {
   return (
     <motion.section
       ref={sectionRef}
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 },
-      }}
-      transition={{ duration: 0.3 }}
+      variants={ANIMATION_VARIANTS.container}
+      transition={ANIMATION_TRANSITION}
       className="relative"
     >
       <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
@@ -121,10 +73,10 @@ export function WorkExperienceSection() {
       </h3>
       <motion.div
         className="flex flex-col space-y-4"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={ANIMATION_VARIANTS.section}
+        transition={ANIMATION_TRANSITION}
       >
-        {workExperiences.map((work) => (
+        {WORK_EXPERIENCES.map((work) => (
           <motion.div
             key={work.slug}
             layout
@@ -168,9 +120,8 @@ export function WorkExperienceSection() {
               onClick={() => setExpandedSlug(null)}
             />
 
-            {workExperiences
-              .filter((w) => w.slug === expandedSlug)
-              .map((work) => (
+            {WORK_EXPERIENCES.filter((w) => w.slug === expandedSlug).map(
+              (work) => (
                 <motion.div
                   key={`expanded-${work.slug}`}
                   className="no-scrollbar fixed z-50 max-h-[85vh] w-[95%] max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-2xl sm:p-8 md:p-10 dark:bg-zinc-900"
@@ -243,11 +194,11 @@ export function WorkExperienceSection() {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              ),
+            )}
           </>
         )}
       </AnimatePresence>
     </motion.section>
   )
 }
-

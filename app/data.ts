@@ -14,6 +14,16 @@ type Post = {
   uid: string
 }
 
+type WorkExperience = {
+  id: string
+  slug: string
+  company: string
+  title: string
+  start: string
+  end: string
+  link: string
+}
+
 type SocialLink = {
   label: string
   link: string
@@ -26,7 +36,7 @@ export const PROJECTS: Project[] = [
       'Discover and explore anime with detailed information and recommendations',
     link: 'https://orbit-eight-rosy.vercel.app/',
     video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744889969/or-video_ncfpai.mp4",
-    id: 'project1',
+    id: 'project-1',
   },
   {
     name: 'Tesla Clone',
@@ -34,8 +44,20 @@ export const PROJECTS: Project[] = [
       'A clone of the Tesla website, built with React and TypeScript.',
     link: 'https://tesla-clone-black-sigma.vercel.app/',
     video: "https://res.cloudinary.com/dzko1ftap/video/upload/v1744889935/ts-video_sempyg.mp4",
-    id: 'project2',
+    id: 'project-2',
   },
+]
+
+export const WORK_EXPERIENCES: WorkExperience[] = [
+  {
+    id: "work-1",
+    slug: "goodgeekclub",
+    company: "GoodGeekClub",
+    title: "Front-end developer and Volunteer",
+    start: "2022",
+    end: "Present",
+    link: "https://goodgeek.club",
+  }
 ]
 
 export const POSTS: Post[] = [
