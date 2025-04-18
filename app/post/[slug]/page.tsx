@@ -55,14 +55,14 @@ export default async function PostPage({
   const { slug } = await params
 
   const { default: PostContent } = await import(
-    `@/app/contents/post/${slug}/page.mdx`
+    `@/contents/post/${slug}/page.mdx`
   )
 
   return <PostContent />
 }
 
 export function generateStaticParams() {
-  const postsDirectory = path.join(process.cwd(), 'app/contents/post')
+  const postsDirectory = path.join(process.cwd(), '/contents/post')
   const postFolders = fs.readdirSync(postsDirectory).filter((folder) => {
     const stats = fs.statSync(path.join(postsDirectory, folder))
     return (

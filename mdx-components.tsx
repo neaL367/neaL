@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
+import CoverImage from './components/CoverImage'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -47,7 +48,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </Link>
     ),
     ul: ({ children }) => (
-      <ul className="mb-4 ml-6 list-disc text-zinc-600 dark:text-zinc-400">
+      <ul className="mb-4 ml-4 list-outside list-disc text-zinc-600 dark:text-zinc-400">
         {children}
       </ul>
     ),
@@ -56,7 +57,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="mb-1">{children}</li>,
+    li: ({ children }) => <li className="mb-1 ">{children}</li>,
     blockquote: ({ children }) => (
       <blockquote className="mb-4 border-l-2 border-zinc-300 pl-4 text-zinc-600 italic dark:border-zinc-700 dark:text-zinc-400">
         {children}
@@ -87,7 +88,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     }) => {
       return (
         <figure className="my-8">
-          <img src={src} alt={alt} className="rounded-xl border" />
+          <CoverImage src={src} alt={alt} />
           <figcaption className="mt-2 text-center text-sm text-zinc-500 dark:text-zinc-400">
             {caption}
           </figcaption>

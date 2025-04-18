@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { TextLoop } from '@/components/ui/text-loop'
 
 export function Header() {
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -42,7 +43,10 @@ export function Header() {
             href="/"
             className="text-lg font-medium text-black dark:text-white"
           >
-            Atichat Thongnak
+            <TextLoop transition={{ duration: 0.3 }} interval={3}>
+              <span>Atichat Thongnak</span>
+              <span>neaL367</span>
+            </TextLoop>
           </Link>
           <TextEffect
             as="p"

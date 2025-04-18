@@ -36,16 +36,16 @@ export function ProjectsSection() {
                 type={project.video ? 'video' : 'image'}
               />
             </div>
-            <div className="px-1">
+            <div className="px-1 group hover:cursor-pointer">
               <a
-                className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                className="font-base relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
                 href={project.link}
                 target="_blank"
               >
                 {project.name}
                 <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
               </a>
-              <p className="text-base text-zinc-600 dark:text-zinc-400">
+              <p className="text-base dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">
                 {project.description}
               </p>
             </div>

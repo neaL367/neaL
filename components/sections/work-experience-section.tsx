@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Spotlight } from '../ui/spotlight'
 import { XIcon } from 'lucide-react'
 import { WORK_EXPERIENCES } from '@/app/data'
 
@@ -23,7 +22,7 @@ const ANIMATION_TRANSITION = {
 
 export function WorkExperienceSection() {
   const [expandedSlug, setExpandedSlug] = useState<string | null>(null)
-  const [expandPosition, setExpandPosition] = useState({ x: 0, y: 0 })
+  const setExpandPosition = useState({ x: 0, y: 0 })
   const [workContent, setWorkContent] = useState<React.ReactNode | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -35,7 +34,7 @@ export function WorkExperienceSection() {
 
     if (sectionRef.current) {
       const rect = sectionRef.current.getBoundingClientRect()
-      setExpandPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+      setExpandPosition[1]({ x: e.clientX - rect.left, y: e.clientY - rect.top })
     }
 
     setExpandedSlug(slug)
@@ -47,7 +46,7 @@ export function WorkExperienceSection() {
       async function loadWorkContent() {
         try {
           const { default: Content } = await import(
-            `@/app/contents/work/${expandedSlug}/page.mdx`
+            `@/contents/work/${expandedSlug}/page.mdx`
           )
           setWorkContent(<Content />)
         } catch (error) {
@@ -81,26 +80,23 @@ export function WorkExperienceSection() {
             key={work.slug}
             layout
             onClick={(e) => toggleCard(work.slug, e)}
-            className={`relative overflow-hidden rounded-xl bg-zinc-300/30 p-[1px] hover:cursor-pointer dark:bg-zinc-600/30 ${
+            className={`relative overflow-hidden rounded-xl bg-zinc-300/30 p-[1px] transition-colors hover:cursor-pointer hover:bg-zinc-300/50 dark:bg-zinc-600/30 dark:hover:bg-zinc-600/50 ${
               expandedSlug === work.slug ? 'z-30' : 'z-10'
             }`}
             transition={{ layout: { duration: 0.3, type: 'spring' } }}
+            whileHover={{ scale: 1.01 }}
           >
             <div className="relative h-full w-full rounded-[12px] bg-white p-4 dark:bg-zinc-950">
-              <Spotlight
-                className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
-                size={64}
-              />
-              <div className="relative flex w-full flex-row justify-between">
+              <div className="relative flex w-full flex-wrap justify-between gap-3">
                 <div>
                   <h4 className="font-normal dark:text-zinc-100">
-                    {work.title}
-                  </h4>
-                  <p className="text-zinc-500 dark:text-zinc-400">
                     {work.company}
+                  </h4>
+                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                    {work.title}
                   </p>
                 </div>
-                <p className="text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
                   {work.start} - {work.end}
                 </p>
               </div>
@@ -146,7 +142,7 @@ export function WorkExperienceSection() {
                   <div className="relative">
                     <button
                       onClick={() => setExpandedSlug(null)}
-                      className="absolute right-4 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-colors hover:cursor-pointer hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                      className="absolute right-1 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition-colors hover:cursor-pointer hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
                       aria-label="Close"
                     >
                       <XIcon size={20} />
@@ -202,3 +198,4 @@ export function WorkExperienceSection() {
     </motion.section>
   )
 }
+
