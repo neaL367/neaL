@@ -12,6 +12,7 @@ type Post = {
   description: string
   link: string
   uid: string
+  coverImage?: string
 }
 
 type WorkExperience = {
@@ -66,12 +67,14 @@ export const POSTS: Post[] = [
     description: 'An overview of my preferred tech tools, projects, and community contributions',
     link: '/post/stack',
     uid: 'post-1',
+    coverImage: 'https://res.cloudinary.com/dzko1ftap/image/upload/v1745028503/cover_vgf7rw.png'
   },
   {
     title: 'How Daily Meditation Supercharged My Productivity',
     description: 'How 20 minutes of jazz-infused mindfulness each day boosted my focus, creativity, and calm',
     link: '/post/meditation',
-    uid: 'post-2'
+    uid: 'post-2',
+    coverImage: 'https://res.cloudinary.com/dzko1ftap/image/upload/v1745028487/cover_x3cznr.png'
   }
 
 ]

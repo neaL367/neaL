@@ -4,7 +4,11 @@ import fs from 'fs'
 import path from 'path'
 
 async function getPostMetadata(slug: string) {
-  const coverImagePath = `/post/${slug}/cover.png`
+  const { POSTS } = await import('@/app/data')
+  const post = POSTS.find(
+    (post) => post.uid === `post-${slug}` || post.link.includes(slug),
+  )
+  const coverImagePath = post?.coverImage || `/post/${slug}/cover.png`
 
   return {
     title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} - neaL367`,
@@ -31,7 +35,9 @@ export async function generateMetadata({
       url: `${WEBSITE_URL}/post/${slug}`,
       images: [
         {
-          url: `${WEBSITE_URL}${coverImage}`,
+          url: `${coverImage}`
+            ? `${WEBSITE_URL}${coverImage}`
+            : `${WEBSITE_URL}/opengraph-image.png`,
           width: 1200,
           height: 630,
           alt: title,
@@ -42,7 +48,17 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [`${WEBSITE_URL}${coverImage}`],
+      images: [
+        {
+          url: `${coverImage}`
+            ? `${WEBSITE_URL}${coverImage}`
+            : `${WEBSITE_URL}/opengraph-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      creator: '@NL367',
     },
   }
 }
