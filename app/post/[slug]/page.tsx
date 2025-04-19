@@ -8,12 +8,12 @@ async function getPostMetadata(slug: string) {
   const post = POSTS.find(
     (post) => post.uid === `post-${slug}` || post.link.includes(slug),
   )
-  const coverImagePath = post?.coverImage || `/post/${slug}/cover.png`
+  const coverImage = post?.coverImage || `/post/${slug}/cover.png`
 
   return {
     title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} - neaL367`,
     description: `Thoughts and insights about ${slug}`,
-    coverImage: coverImagePath,
+    coverImage,
   }
 }
 
@@ -35,9 +35,7 @@ export async function generateMetadata({
       url: `${WEBSITE_URL}/post/${slug}`,
       images: [
         {
-          url: `${coverImage}`
-            ? `${WEBSITE_URL}${coverImage}`
-            : `${WEBSITE_URL}/opengraph-image.png`,
+          url: coverImage,
           width: 1200,
           height: 630,
           alt: title,
@@ -50,9 +48,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: `${coverImage}`
-            ? `${WEBSITE_URL}${coverImage}`
-            : `${WEBSITE_URL}/opengraph-image.png`,
+          url: coverImage,
           width: 1200,
           height: 630,
           alt: title,
