@@ -31,16 +31,18 @@ export function PostsSection() {
         {POSTS.map((post) => (
           <Link
             key={post.uid}
-            className="rounded-xl group transition-all"
+            className="group rounded-xl transition-all"
             href={post.link}
             data-id={post.uid}
           >
             <div className="flex flex-col space-y-1.5">
-              <h4 className="relative line-clamp-1 text-sm font-normal text-zinc-900 dark:text-zinc-100 group-hover:text-black dark:group-hover:text-white">
-                {post.title}
-                <span className="absolute -bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-black transition-all duration-300 group-hover:max-w-full dark:bg-white"></span>
-              </h4>
-              <p className="relative line-clamp-1 text-xs md:text-sm text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">
+              <div className='relative w-max'>
+                <h4 className="line-clamp-1 text-sm font-normal text-zinc-900 group-hover:text-black dark:text-zinc-100 dark:group-hover:text-white">
+                  {post.title}
+                </h4>
+                  <span className="absolute -bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-black transition-all duration-300 group-hover:max-w-full dark:bg-white"></span>
+              </div>
+              <p className="relative line-clamp-1 text-xs text-zinc-500 group-hover:text-zinc-700 md:text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
                 {post.description}
               </p>
             </div>
@@ -50,4 +52,3 @@ export function PostsSection() {
     </motion.section>
   )
 }
-
