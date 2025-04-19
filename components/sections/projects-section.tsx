@@ -2,6 +2,7 @@
 import { PROJECTS } from '@/app/data'
 import ProjectMedia from '@/components/ui/project-media'
 import { motion } from 'motion/react'
+import Link from 'next/link'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -36,18 +37,20 @@ export function ProjectsSection() {
                 type={project.video ? 'video' : 'image'}
               />
             </div>
-            <div className="px-1 group hover:cursor-pointer">
-              <a
-                className="font-base relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
-                href={project.link}
+            <div className="px-1 hover:cursor-pointer">
+              <Link
+                className="group font-base relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                href={project.link || ''}
                 target="_blank"
               >
-                {project.name}
-                <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-              </a>
-              <p className="text-base dark:text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">
-                {project.description}
-              </p>
+                <p className='relative max-w-max'>
+                  {project.name}
+                  <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+                </p>
+                <p className="text-base group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-300">
+                  {project.description}
+                </p>
+              </Link>
             </div>
           </div>
         ))}
