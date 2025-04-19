@@ -20,6 +20,7 @@ export default function CoverImage({ src, alt }: { src: string; alt: string }) {
         }`}
         onLoad={() => setImageLoaded(true)}
         priority={true}
+        unoptimized
       />
     </div>
   )
