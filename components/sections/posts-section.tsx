@@ -37,7 +37,7 @@ export function PostsSection() {
           >
             <div className="flex flex-col space-y-1.5">
               <div className="relative max-w-max">
-                <h4 className="max-w-max truncate text-sm font-normal text-zinc-900 group-hover:text-black dark:text-zinc-100 dark:group-hover:text-white">
+                <h4 className="max-w-max truncate font-normal text-zinc-900 group-hover:text-black dark:text-zinc-100 dark:group-hover:text-white">
                   {post.title}
                   <span className="absolute -bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-black transition-all duration-300 group-hover:max-w-full dark:bg-white"></span>
                 </h4>

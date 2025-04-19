@@ -22,7 +22,7 @@ export function IntroSection() {
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
-      className="flex-1"
+      className="flex-1 mt-[5rem]"
     >
       <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         About
