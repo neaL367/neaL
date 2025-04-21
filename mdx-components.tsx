@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
-import CoverImage from './components/CoverImage'
+import CoverImage from './components/ui/cover-image'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
