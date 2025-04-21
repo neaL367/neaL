@@ -58,7 +58,7 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
     start: "2022",
     end: "Present",
     link: "https://goodgeek.club",
-  }
+  },
 ]
 
 export const POSTS: Post[] = [

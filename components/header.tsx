@@ -1,9 +1,11 @@
 'use client'
-import { TextEffect } from '@/components/ui/text-effect'
+
+import { motion } from 'motion/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
-import { motion } from 'motion/react'
+
+import { TextEffect } from '@/components/ui/text-effect'
 import { TextLoop } from '@/components/ui/text-loop'
 
 export function Header() {
