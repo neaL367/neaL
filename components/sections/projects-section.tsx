@@ -1,9 +1,8 @@
 'use client'
 import { PROJECTS } from '@/app/data'
-import ProjectMedia from '@/components/ui/project-media'
 import { motion } from 'motion/react'
 import Link from 'next/link'
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import VideoSkeleton from '../ui/video-skeleton'
 
 const ANIMATION_VARIANTS = {
@@ -20,6 +19,12 @@ const ANIMATION_VARIANTS = {
 const ANIMATION_TRANSITION = {
   duration: 0.3,
 }
+
+const ProjectMedia = lazy(() =>
+  import('@/components/ui/project-media').then((mod) => ({
+    default: mod.default,
+  })),
+)
 
 export function ProjectsSection() {
   return (

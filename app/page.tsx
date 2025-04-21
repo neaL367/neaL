@@ -4,9 +4,7 @@ import { LazyMotion, domAnimation } from 'motion/react'
 import * as m from 'motion/react-m'
 import dynamic from 'next/dynamic'
 
-const IntroSection = dynamic(() =>
-  import('@/components/sections/intro-section').then((mod) => mod.IntroSection),
-)
+import { IntroSection } from '@/components/sections/intro-section'
 
 const WorkExperienceSection = dynamic(() =>
   import('@/components/sections/work-experience-section').then(
