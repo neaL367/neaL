@@ -3,7 +3,7 @@ import { PROJECTS } from '@/app/data'
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { Suspense, lazy } from 'react'
-import VideoSkeleton from '../ui/video-skeleton'
+import VideoSkeleton from './ui/video-skeleton'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -26,13 +26,13 @@ const ProjectMedia = lazy(() =>
   })),
 )
 
-export function ProjectsSection() {
+export function Projects() {
   return (
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         Projects
       </h3>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">

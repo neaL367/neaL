@@ -4,28 +4,20 @@ import { LazyMotion, domAnimation } from 'motion/react'
 import * as m from 'motion/react-m'
 import dynamic from 'next/dynamic'
 
-import { IntroSection } from '@/components/sections/intro-section'
+import { About } from '@/components/about'
 
-const WorkExperienceSection = dynamic(() =>
-  import('@/components/sections/work-experience-section').then(
-    (mod) => mod.WorkExperienceSection,
-  ),
+const Work = dynamic(() => import('@/components/work').then((mod) => mod.Work))
+
+const Posts = dynamic(() =>
+  import('@/components/posts').then((mod) => mod.Posts),
 )
 
-const PostsSection = dynamic(() =>
-  import('@/components/sections/posts-section').then((mod) => mod.PostsSection),
+const Connect = dynamic(() =>
+  import('@/components/connect').then((mod) => mod.Connect),
 )
 
-const ConnectSection = dynamic(() =>
-  import('@/components/sections/connect-section').then(
-    (mod) => mod.ConnectSection,
-  ),
-)
-
-const ProjectsSection = dynamic(() =>
-  import('@/components/sections/projects-section').then(
-    (mod) => mod.ProjectsSection,
-  ),
+const Projects = dynamic(() =>
+  import('@/components/projects').then((mod) => mod.Projects),
 )
 
 const VARIANTS_CONTAINER = {
@@ -47,11 +39,11 @@ export default function Page() {
         initial="hidden"
         animate="visible"
       >
-        <IntroSection />
-        <ProjectsSection />
-        <WorkExperienceSection />
-        <PostsSection />
-        <ConnectSection />
+        <About />
+        <Projects />
+        <Work />
+        <Posts />
+        <Connect />
       </m.main>
     </LazyMotion>
   )

@@ -17,7 +17,7 @@ type Post = {
 
 type WorkExperience = {
   id: string
-  slug: string
+  logo: string
   company: string
   title: string
   start: string
@@ -52,7 +52,7 @@ export const PROJECTS: Project[] = [
 export const WORK_EXPERIENCES: WorkExperience[] = [
   {
     id: "work-1",
-    slug: "goodgeekclub",
+    logo: "/work/gg_logo.png",
     company: "GoodGeekClub",
     title: "Front-end developer and Volunteer",
     start: "2022",
@@ -69,14 +69,6 @@ export const POSTS: Post[] = [
     uid: 'post-1',
     coverImage: 'https://res.cloudinary.com/dzko1ftap/image/upload/v1745028503/cover_vgf7rw.png'
   },
-  {
-    title: 'How Daily Meditation Supercharged My Productivity',
-    description: 'How 20 minutes of jazz-infused mindfulness each day boosted my focus, creativity, and calm',
-    link: '/post/meditation',
-    uid: 'post-2',
-    coverImage: 'https://res.cloudinary.com/dzko1ftap/image/upload/v1745028487/cover_x3cznr.png'
-  }
-
 ]
 
 export const SOCIAL_LINKS: SocialLink[] = [

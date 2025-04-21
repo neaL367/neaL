@@ -1,7 +1,7 @@
 'use client'
 import { EMAIL, SOCIAL_LINKS } from '@/app/data'
 import { motion } from 'framer-motion'
-import { Magnetic } from '../ui/magnetic'
+import { Magnetic } from './ui/magnetic'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -54,13 +54,13 @@ function MagneticSocialLink({
   )
 }
 
-export function ConnectSection() {
+export function Connect() {
   return (
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         Connect
       </h3>
       <p className="mb-5 text-zinc-600 dark:text-zinc-400">

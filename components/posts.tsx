@@ -18,13 +18,13 @@ const ANIMATION_TRANSITION = {
   duration: 0.3,
 }
 
-export function PostsSection() {
+export function Posts() {
   return (
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
         Posts
       </h3>
       <div className="flex flex-col space-y-4">
