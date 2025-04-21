@@ -3,6 +3,8 @@ import { PROJECTS } from '@/app/data'
 import ProjectMedia from '@/components/ui/project-media'
 import { motion } from 'motion/react'
 import Link from 'next/link'
+import { Suspense } from 'react'
+import VideoSkeleton from '../ui/video-skeleton'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -32,10 +34,12 @@ export function ProjectsSection() {
         {PROJECTS.map((project) => (
           <div key={project.name} className="space-y-2">
             <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-              <ProjectMedia
-                src={project.video || project.image}
-                type={project.video ? 'video' : 'image'}
-              />
+              <Suspense fallback={<VideoSkeleton />}>
+                <ProjectMedia
+                  src={project.video || project.image}
+                  type={project.video ? 'video' : 'image'}
+                />
+              </Suspense>
             </div>
             <div className="px-1 hover:cursor-pointer">
               <Link
@@ -43,7 +47,7 @@ export function ProjectsSection() {
                 href={project.link || ''}
                 target="_blank"
               >
-                <p className='relative max-w-max'>
+                <p className="relative max-w-max">
                   {project.name}
                   <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
                 </p>
