@@ -23,7 +23,7 @@ type WorkExperience = {
   start: string
   end: string
   link: string
-  accomplishments?: string[] // Add this new optional field
+  accomplishments?: string[]
 }
 
 type SocialLink = {
@@ -60,7 +60,7 @@ export const WORK_EXPERIENCES: WorkExperience[] = [
     end: "Present",
     link: "https://goodgeek.club",
     accomplishments: [
-      'Built WordPress sites for <a href="https://qlhealthcare.co.th" target="_blank" rel="noopener noreferrer">QL Healthcare Thailand</a>, <a href="https://dseelin.co.th" target="_blank" rel="noopener noreferrer">D.Seelin</a> & multilingual <code>Next.js</code> site for <a href="https://youthplusthailand.org" target="_blank" rel="noopener noreferrer">YouthPlusThailand</a> (all hosted on Plesk)',
+      'Built WordPress sites for <a href="https://qlhealthcare.co.th" target="_blank" rel="noopener noreferrer">QL Healthcare Thailand</a>, <a href="https://dseelin.co.th" target="_blank" rel="noopener noreferrer">D.Seelin</a> & multilingual Next.js site for <a href="https://youthplusthailand.org" target="_blank" rel="noopener noreferrer">YouthPlusThailand</a> (all hosted on Plesk)',
       'Co‑created <a href="https://hopeis.us/" target="_blank" rel="noopener noreferrer">HopeIs.Us</a> - youth volunteer project promoting mindfulness through interactive quizzes, built in 2 months',
       'Managed AWS infra: Amazon Linux 2 EC2 (LAMP) & S3 static hosting with redirection rules'
     ]

@@ -46,7 +46,7 @@ export function Work() {
             className="transition-theme relative overflow-hidden "
           >
             <div className="relative h-full w-full bg-white py-4 pr-4 dark:bg-zinc-950 transition-all ease-out duration-1000">
-              <div className="flex flex-col space-y-6">
+              <div className="flex flex-col space-y-4">
                 <div className="flex items-start space-x-5">
                   <div className="relative mt-1 h-10 w-10 overflow-hidden rounded-md">
                     <Image
@@ -87,7 +87,7 @@ export function Work() {
 
                 {/* Render accomplishments if they exist */}
                 {work.accomplishments && work.accomplishments.length > 0 && (
-                  <ul className="accomplishment-list list-inside list-disc space-y-2 pl-14 text-sm text-zinc-600 dark:text-zinc-400">
+                  <ul className="accomplishment-list list-inside list-disc space-y-1.5 pl-2.5 text-sm text-zinc-600 dark:text-zinc-400">
                     {work.accomplishments.map((accomplishment, index) => (
                       <li
                         key={index}

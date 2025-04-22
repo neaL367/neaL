@@ -39,7 +39,7 @@ export function Projects() {
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {PROJECTS.map((project) => (
           <div key={project.name} className="space-y-2">
-            <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
+            <div className="relative rounded-md bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
               <ProjectMedia
                 src={project.video || project.image}
                 type={project.video ? 'video' : 'image'}
@@ -55,8 +55,8 @@ export function Projects() {
                   {project.name}
                   <AnimatedUnderline />
                 </p>
-                <p className="text-base group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-300">
-                  {project.description}
+                <p className="text-xs text-zinc-500 group-hover:text-zinc-700 md:text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
+                {project.description}
                 </p>
               </Link>
             </div>
