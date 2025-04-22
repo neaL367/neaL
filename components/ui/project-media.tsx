@@ -56,14 +56,14 @@ export default function ProjectMedia({ src, type, title, description }: ProjectM
   return (
     <div className="w-full">
       {type === 'video' ? (
-        <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+        <div className="relative aspect-video w-full overflow-hidden rounded-md">
           <video
             ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
-            className={`aspect-video h-full w-full rounded-xl transition-all duration-700 ${
+            className={`aspect-video h-full w-full rounded-md transition-all duration-700 ${
               isVideoLoaded ? 'opacity-100' : 'opacity-0'
             }`}
           >
@@ -77,11 +77,11 @@ export default function ProjectMedia({ src, type, title, description }: ProjectM
           )}
         </div>
       ) : (
-        <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+        <div className="relative aspect-video w-full overflow-hidden rounded-md">
           <Image
             src={src || ''}
             alt={title || "Project preview"}
-            className={`aspect-video h-full w-full rounded-xl object-cover transition-all duration-700 ${
+            className={`aspect-video h-full w-full rounded-md object-cover transition-all duration-700 ${
               mediaLoaded
                 ? 'blur-0 scale-100 opacity-100'
                 : 'scale-95 opacity-0 blur-sm'

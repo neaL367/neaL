@@ -16,7 +16,7 @@ export default function LayoutPost({
           bounce: 0,
         }}
       />
-      <main className="prose-zinc prose-h4:prose-base dark:prose-invert max-w-full:prose mt-24 pb-20">
+      <main className="prose-zinc dark:prose-invert max-w-full:prose mt-8 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

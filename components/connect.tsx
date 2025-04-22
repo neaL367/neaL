@@ -2,6 +2,7 @@
 import { EMAIL, SOCIAL_LINKS } from '@/app/data'
 import { motion } from 'framer-motion'
 import { Magnetic } from './ui/magnetic'
+import { AnimatedUnderline } from '@/components/ui/animated-underline'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -31,7 +32,7 @@ function MagneticSocialLink({
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 transition-all ease-out duration-1000"
       >
         {children}
         <svg
@@ -57,10 +58,10 @@ function MagneticSocialLink({
 export function Connect() {
   return (
     <motion.section
-      variants={ANIMATION_VARIANTS.section}
+      variants={ANIMATION_VARIANTS.container}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100 ">
         Connect
       </h3>
       <p className="mb-5 text-zinc-600 dark:text-zinc-400">
@@ -72,7 +73,7 @@ export function Connect() {
           rel="noopener noreferrer"
         >
           {EMAIL}
-          <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+          <AnimatedUnderline />
         </a>
       </p>
       <div className="flex items-center justify-start space-x-3">
@@ -85,3 +86,4 @@ export function Connect() {
     </motion.section>
   )
 }
+

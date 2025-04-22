@@ -1,10 +1,10 @@
-'use client'
-
-import { useRef } from 'react'
 import { motion } from 'motion/react'
-import { WORK_EXPERIENCES } from '@/app/data'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRef, useState } from 'react'
+import { AnimatedUnderline } from '@/components/ui/animated-underline'
+import { processHtmlWithAnimatedLinks } from '@/lib/utils'
+import { WORK_EXPERIENCES } from '@/app/data'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -23,6 +23,7 @@ const ANIMATION_TRANSITION = {
 
 export function Work() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <motion.section
@@ -35,28 +36,34 @@ export function Work() {
         Work Experience
       </h3>
       <motion.div
-        className="flex flex-col space-y-4 gap-5"
+        className="flex flex-col gap-5 space-y-4"
         variants={ANIMATION_VARIANTS.section}
         transition={ANIMATION_TRANSITION}
       >
         {WORK_EXPERIENCES.map((work) => (
           <motion.div
             key={work.id}
-            className="relative overflow-hidden bg-zinc-300/30 transition-colors dark:bg-zinc-600/30"
+            className="transition-theme relative overflow-hidden "
           >
-            <div className="relative h-full w-full bg-white dark:bg-zinc-950">
+            <div className="relative h-full w-full bg-white py-4 pr-4 dark:bg-zinc-950 transition-all ease-out duration-1000">
               <div className="flex flex-col space-y-6">
-                <div className="flex items-start space-x-3">
-                  <div className="relative mt-1 h-10 w-10 overflow-hidden rounded-full">
+                <div className="flex items-start space-x-5">
+                  <div className="relative mt-1 h-10 w-10 overflow-hidden rounded-md">
                     <Image
                       src={work.logo}
                       alt={`${work.company} logo`}
                       width={40}
                       height={40}
-                      className="h-full w-full object-cover"
+                      className={`h-full w-full object-cover ${
+                        imageLoaded
+                          ? 'blur-0 scale-100 opacity-100'
+                          : 'scale-95 opacity-0 blur-sm'
+                      }`}
                       priority
                       sizes="(max-width: 768px) 100vw, 33vw"
                       quality={75}
+                      unoptimized
+                      onLoad={() => setImageLoaded(true)}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -67,7 +74,7 @@ export function Work() {
                       className="group relative inline-flex max-w-max items-center text-lg font-medium text-zinc-900 dark:text-zinc-100"
                     >
                       {work.company}
-                      <span className="absolute bottom-0 left-0 h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+                      <AnimatedUnderline />
                     </Link>
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
                       {work.title}
@@ -78,63 +85,17 @@ export function Work() {
                   </div>
                 </div>
 
-                {/* Conditional rendering of work accomplishments based on work ID */}
-                {work.id === 'work-1' && (
-                  <ul className="list-disc space-y-2 pl-5 text-sm text-zinc-600 dark:text-zinc-400">
-                    <li>
-                      Built WordPress sites for{' '}
-                      <Link
-                        href="https://qlhealthcare.co.th"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative inline-flex items-center text-zinc-900 dark:text-zinc-300"
-                      >
-                        QL Healthcare Thailand
-                        <span className="absolute bottom-0 left-0 h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-                      </Link>
-                      {', '}
-                      <Link
-                        href="https://dseelin.co.th"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative inline-flex items-center text-zinc-900 dark:text-zinc-300"
-                      >
-                        D.Seelin
-                        <span className="absolute bottom-0 left-0 h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-                      </Link>{' '}
-                      & multilingual{' '}
-                      <code className="text-zinc-200">Next.js</code> site for{' '}
-                      <Link
-                        href="https://youthplusthailand.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative inline-flex items-center text-zinc-900 dark:text-zinc-300"
-                      >
-                        YouthPlusThailand
-                        <span className="absolute bottom-0 left-0 h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-                      </Link>{' '}
-                      (all hosted on Plesk)
-                    </li>
-
-                    <li>
-                      Co‑created{' '}
-                      <Link
-                        href="https://hopeis.us/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative inline-flex items-center text-zinc-900 dark:text-zinc-300"
-                      >
-                        HopeIs.Us
-                        <span className="absolute bottom-0 left-0 h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
-                      </Link>{' '}
-                      - youth volunteer project promoting mindfulness through
-                      interactive quizzes, built in 2 months
-                    </li>
-
-                    <li>
-                      Managed AWS infra: Amazon Linux 2 EC2 (LAMP) & S3 static
-                      hosting with redirection rules
-                    </li>
+                {/* Render accomplishments if they exist */}
+                {work.accomplishments && work.accomplishments.length > 0 && (
+                  <ul className="accomplishment-list list-inside list-disc space-y-2 pl-14 text-sm text-zinc-600 dark:text-zinc-400">
+                    {work.accomplishments.map((accomplishment, index) => (
+                      <li
+                        key={index}
+                        dangerouslySetInnerHTML={{
+                          __html: processHtmlWithAnimatedLinks(accomplishment),
+                        }}
+                      />
+                    ))}
                   </ul>
                 )}
               </div>

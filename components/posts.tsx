@@ -2,6 +2,7 @@
 import { POSTS } from '@/app/data'
 import { motion } from 'motion/react'
 import Link from 'next/link'
+import { AnimatedUnderline } from '@/components/ui/animated-underline'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -39,7 +40,7 @@ export function Posts() {
               <div className="relative max-w-max">
                 <h4 className="max-w-max truncate font-normal text-zinc-900 group-hover:text-black dark:text-zinc-100 dark:group-hover:text-white">
                   {post.title}
-                  <span className="absolute -bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-black transition-all duration-300 group-hover:max-w-full dark:bg-white"></span>
+                  <AnimatedUnderline />
                 </h4>
               </div>
               <p className="relative truncate text-xs text-zinc-500 group-hover:text-zinc-700 md:text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
@@ -52,3 +53,4 @@ export function Posts() {
     </motion.section>
   )
 }
+

@@ -13,10 +13,10 @@ export function Header() {
 
   return (
     <header className="mb-8 flex items-center justify-between">
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-6">
         <Link href="/">
           <motion.div
-            className="relative h-[85px] w-[85px] cursor-pointer"
+            className="relative spect-square cursor-pointer"
             whileHover={{
               scale: 1.1,
               transition: { duration: 0.2 },
@@ -26,9 +26,9 @@ export function Header() {
             <Image
               src="/avatar.png"
               alt="Atichat Thongnak"
-              width={85}
-              height={85}
-              className={`avatar-image aspect-square rounded-full object-cover transition-all duration-700 ${
+              width={70}
+              height={70}
+              className={`avatar-image aspect-square rounded-sm object-cover transition-all duration-700 ${
                 imageLoaded
                   ? 'blur-0 scale-100 opacity-100'
                   : 'scale-95 opacity-0 blur-sm'

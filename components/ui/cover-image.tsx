@@ -7,7 +7,7 @@ export default function CoverImage({ src, alt }: { src: string; alt: string }) {
   const [imageLoaded, setImageLoaded] = useState(false)
   
   return (
-    <div className="relative w-full h-auto overflow-hidden rounded-xl border">
+    <div className="relative w-full h-auto overflow-hidden rounded-sm border">
       <Image
         src={src}
         alt={alt}

@@ -1,6 +1,5 @@
-'use client'
-
 import { motion } from 'motion/react'
+import { AnimatedUnderline } from './ui/animated-underline'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -22,16 +21,46 @@ export function About() {
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
-      className="flex-1 mt-[5rem]"
+      className="mt-[5rem] flex-1"
     >
-      <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-      I craft digital experiences for the web.      </p>
-      <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-        <a href="https://react.dev/" className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4">react</a>,{' '}
-        <a href="https://nextjs.org/" className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4">next.js</a>,{' '}
-        <a href="https://tailwindcss.com/" className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4">tailwindcss</a>,{' '}
-        <a href="https://ui.shadcn.com/" className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4">shadcn/ui</a>{' '}
-        — whatever gets the job done.
+      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+        I design and build intuitive, high-performance web experiences.
+      </p>
+
+      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+        Leveraging tools like{' '}
+        <a
+          href="https://react.dev/"
+          className="group relative text-zinc-900 dark:text-zinc-300"
+        >
+          React
+          <AnimatedUnderline />
+        </a>
+        ,{' '}
+        <a
+          href="https://nextjs.org/"
+          className="group relative text-zinc-900 dark:text-zinc-300"
+        >
+          Next.js
+          <AnimatedUnderline />
+        </a>
+        ,{' '}
+        <a
+          href="https://tailwindcss.com/"
+          className="group relative text-zinc-900 dark:text-zinc-300"
+        >
+          Tailwind CSS
+          <AnimatedUnderline />
+        </a>
+        , and{' '}
+        <a
+          href="https://ui.shadcn.com/"
+          className="group relative text-zinc-900 dark:text-zinc-300"
+        >
+          shadcn/ui
+          <AnimatedUnderline />
+        </a>{' '}
+        to deliver pixel-perfect solutions.
       </p>
       <p className="text-zinc-600 dark:text-zinc-400 mb-4">
         studying at{' '}
@@ -39,58 +68,67 @@ export function About() {
           href="https://www.spu.ac.th/" 
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4"
+          className="group relative text-zinc-900 dark:text-zinc-300"
         >
-          sripatum university
-        </a>. 
-        volunteer at{' '}
-        <a 
-          href="https://goodgeek.club" 
+          Sripatum University
+          <AnimatedUnderline />
+        </a>
+        , and volunteering with{' '}
+        <a
+          href="https://goodgeek.club"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4"
+          className="group relative text-zinc-900 dark:text-zinc-300"
         >
-          goodgeekclub
-        </a>.
+          GoodGeekClub
+          <AnimatedUnderline />
+        </a>{' '}
+        to empower our local tech community.
       </p>
-      <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-        <span className="text-zinc-900 dark:text-zinc-300 font-medium">specialize in:</span> 
-        {' '}typescript, server components, multilingual sites.
-        <br />
-        clean interfaces, responsive designs.
-        <br />
-        and making websites look like someone cared.
+
+      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+        <span className="font-medium text-zinc-900 dark:text-zinc-300">
+          Specialties:
+        </span>{' '}
+        TypeScript, server components, multilingual sites,
+        <br /> clean, responsive interfaces, and a focus on craft and detail.
       </p>
-      <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-        deploy on{' '}
-        <a 
-          href="https://vercel.com" 
+
+      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+        I deploy my projects on{' '}
+        <a
+          href="https://vercel.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4"
+          className="group relative text-zinc-900 dark:text-zinc-300"
         >
-          vercel
+          Vercel
+          <AnimatedUnderline />
         </a>{' '}
         and{' '}
-        <a 
-          href="https://aws.amazon.com" 
+        <a
+          href="https://aws.amazon.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4"
+          className="group relative text-zinc-900 dark:text-zinc-300"
         >
-          aws
-        </a>. 
-        organize workshops in my free time.
+          AWS
+          <AnimatedUnderline />
+        </a>
+        , and I regularly host workshops to share best practices in web
+        development.
       </p>
+
       <p className="text-zinc-600 dark:text-zinc-400">
         off-screen, i play{' '}
         <a 
           href="https://www.rockstargames.com/" 
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-900 dark:text-zinc-300 underline underline-offset-4"
+          className="group relative text-zinc-900 dark:text-zinc-300"
         >
-          rockstar games
+          Rockstar Games
+          <AnimatedUnderline />
         </a>{' '}
         and dream about making pixel-art games.
       </p>

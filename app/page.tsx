@@ -5,6 +5,7 @@ import * as m from 'motion/react-m'
 import dynamic from 'next/dynamic'
 
 import { About } from '@/components/about'
+import { HorizontalRule } from '@/components/ui/horizontal-rule'
 
 const Work = dynamic(() => import('@/components/work').then((mod) => mod.Work))
 
@@ -40,10 +41,20 @@ export default function Page() {
         animate="visible"
       >
         <About />
+        <HorizontalRule />
+
         <Projects />
+        <HorizontalRule />
+
         <Work />
+        <HorizontalRule />
+
         <Posts />
+        <HorizontalRule />
+
         <Connect />
+        <HorizontalRule />
+
       </m.main>
     </LazyMotion>
   )

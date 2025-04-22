@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import Link from 'next/link'
+import { AnimatedUnderline } from '@/components/ui/animated-underline'
 import CoverImage from './components/ui/cover-image'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -44,7 +45,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         className="group relative inline-block text-zinc-900 no-underline dark:text-zinc-300"
       >
         {children}
-        <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full dark:bg-zinc-100"></span>
+        <AnimatedUnderline />
       </Link>
     ),
     ul: ({ children }) => (
@@ -57,7 +58,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="mb-1 ">{children}</li>,
+    li: ({ children }) => <li className="mb-1">{children}</li>,
     blockquote: ({ children }) => (
       <blockquote className="mb-4 border-l-2 border-zinc-300 pl-4 text-zinc-600 italic dark:border-zinc-700 dark:text-zinc-400">
         {children}
@@ -73,10 +74,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </pre>
     ),
-    hr: () => <hr className="my-8 border-zinc-200 dark:border-zinc-800" />,
-    strong: ({ children }) => (
-      <strong className="font-base">{children}</strong>
+    hr: () => (
+      <hr className="relative my-8 h-px w-full overflow-visible border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-zinc-100 before:content-[''] dark:before:bg-zinc-800" />
     ),
+    strong: ({ children }) => <strong className="font-base">{children}</strong>,
     Cover: ({
       src,
       alt,
