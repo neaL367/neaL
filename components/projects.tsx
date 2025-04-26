@@ -55,7 +55,7 @@ export function Projects() {
                   {project.name}
                   <AnimatedUnderline />
                 </p>
-                <p className="text-xs text-zinc-500 group-hover:text-zinc-700 md:text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
+                <p className=" text-zinc-500 group-hover:text-zinc-700 text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
                 {project.description}
                 </p>
               </Link>
