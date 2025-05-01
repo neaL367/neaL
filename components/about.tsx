@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
-import { AnimatedUnderline } from './ui/animated-underline'
+import { Paragraph } from './ui/paragraph'
+import { AccessibleLink } from './ui/accessible-link'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -21,117 +22,72 @@ export function About() {
     <motion.section
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
-      className="mt-[5rem] flex-1"
+      className="mt-[3rem] flex-1"
     >
-      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+      <Paragraph>
         I design and build intuitive, high-performance web experiences.
-      </p>
+      </Paragraph>
 
-      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+      <Paragraph>
         Leveraging tools like{' '}
-        <a
-          href="https://react.dev/"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://react.dev/" external>
           React
-          <AnimatedUnderline />
-        </a>
+        </AccessibleLink>
         ,{' '}
-        <a
-          href="https://nextjs.org/"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://nextjs.org/" external>
           Next.js
-          <AnimatedUnderline />
-        </a>
+        </AccessibleLink>
         ,{' '}
-        <a
-          href="https://tailwindcss.com/"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://tailwindcss.com/" external>
           Tailwind CSS
-          <AnimatedUnderline />
-        </a>
+        </AccessibleLink>
         , and{' '}
-        <a
-          href="https://ui.shadcn.com/"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://ui.shadcn.com/" external>
           shadcn/ui
-          <AnimatedUnderline />
-        </a>{' '}
+        </AccessibleLink>{' '}
         to deliver pixel-perfect solutions.
-      </p>
-      <p className="text-zinc-600 dark:text-zinc-400 mb-4">
+      </Paragraph>
+      
+      <Paragraph>
         studying at{' '}
-        <a 
-          href="https://www.spu.ac.th/" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://www.spu.ac.th/" external>
           Sripatum University
-          <AnimatedUnderline />
-        </a>
+        </AccessibleLink>
         , and volunteering with{' '}
-        <a
-          href="https://goodgeek.club"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://goodgeek.club" external>
           GoodGeekClub
-          <AnimatedUnderline />
-        </a>{' '}
+        </AccessibleLink>{' '}
         to empower our local tech community.
-      </p>
+      </Paragraph>
 
-      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
-        <span className="font-medium text-zinc-900 dark:text-zinc-300">
+      <Paragraph>
+        <span className="font-medium text-zinc-900 dark:text-zinc-100">
           Specialties:
         </span>{' '}
         TypeScript, server components, multilingual sites,
         <br /> clean, responsive interfaces, and a focus on craft and detail.
-      </p>
+      </Paragraph>
 
-      <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+      <Paragraph>
         I deploy my projects on{' '}
-        <a
-          href="https://vercel.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://vercel.com" external>
           Vercel
-          <AnimatedUnderline />
-        </a>{' '}
+        </AccessibleLink>{' '}
         and{' '}
-        <a
-          href="https://aws.amazon.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://aws.amazon.com" external>
           AWS
-          <AnimatedUnderline />
-        </a>
+        </AccessibleLink>
         , and I regularly host workshops to share best practices in web
         development.
-      </p>
+      </Paragraph>
 
-      <p className="text-zinc-600 dark:text-zinc-400">
+      <Paragraph>
         off-screen, i play{' '}
-        <a 
-          href="https://www.rockstargames.com/" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative text-zinc-900 dark:text-zinc-300"
-        >
+        <AccessibleLink href="https://www.rockstargames.com/" external>
           Rockstar Games
-          <AnimatedUnderline />
-        </a>{' '}
+        </AccessibleLink>{' '}
         and dream about making pixel-art games.
-      </p>
+      </Paragraph>
     </motion.section>
   )
 }

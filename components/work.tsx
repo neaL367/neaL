@@ -1,10 +1,17 @@
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { AnimatedUnderline } from '@/components/ui/animated-underline'
 import { processHtmlWithAnimatedLinks } from '@/lib/utils'
-import { WORK_EXPERIENCES } from '@/app/data'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Code, Heart } from 'lucide-react'
+import { WORK_EXPERIENCES } from '@/app/data/work'
 
 const ANIMATION_VARIANTS = {
   section: {
@@ -21,9 +28,13 @@ const ANIMATION_TRANSITION = {
   duration: 0.3,
 }
 
+const positionIcons = {
+  developer: <Code className="size-4" />,
+  volunteer: <Heart className="size-4" />,
+}
+
 export function Work() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <motion.section
@@ -36,73 +47,107 @@ export function Work() {
         Work Experience
       </h3>
       <motion.div
-        className="flex flex-col gap-5 space-y-4"
+        className="flex flex-col gap-5"
         variants={ANIMATION_VARIANTS.section}
         transition={ANIMATION_TRANSITION}
       >
-        {WORK_EXPERIENCES.map((work) => (
-          <motion.div
-            key={work.id}
-            className="transition-theme relative overflow-hidden "
-          >
-            <div className="relative h-full w-full bg-white py-4 pr-4 dark:bg-zinc-950 transition-all ease-out duration-1000">
-              <div className="flex flex-col space-y-4">
-                <div className="flex items-start space-x-5">
-                  <div className="relative mt-1 h-10 w-10 overflow-hidden rounded-md">
-                    <Image
-                      src={work.logo}
-                      alt={`${work.company} logo`}
-                      width={40}
-                      height={40}
-                      className={`h-full w-full object-cover ${
-                        imageLoaded
-                          ? 'blur-0 scale-100 opacity-100'
-                          : 'scale-95 opacity-0 blur-sm'
-                      }`}
-                      priority
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      quality={75}
-                      unoptimized
-                      onLoad={() => setImageLoaded(true)}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <Link
-                      href={work.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group relative inline-flex max-w-max items-center text-lg font-medium text-zinc-900 dark:text-zinc-100"
-                    >
-                      {work.company}
-                      <AnimatedUnderline />
-                    </Link>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {work.title}
-                    </p>
-                    <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
-                      {work.start} - {work.end}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Render accomplishments if they exist */}
-                {work.accomplishments && work.accomplishments.length > 0 && (
-                  <ul className="accomplishment-list list-inside list-disc space-y-1.5 pl-2.5 text-sm text-zinc-600 dark:text-zinc-400">
-                    {work.accomplishments.map((accomplishment, index) => (
-                      <li
-                        key={index}
-                        dangerouslySetInnerHTML={{
-                          __html: processHtmlWithAnimatedLinks(accomplishment),
-                        }}
-                      />
-                    ))}
-                  </ul>
+        {WORK_EXPERIENCES.map((experience) => (
+          <div key={experience.company} className="relative space-y-4 pt-4">
+            <div className="flex items-center gap-3">
+              <span className="flex shrink-0 items-center justify-center">
+                {experience.companyLogo ? (
+                  <Image
+                    src={experience.companyLogo}
+                    alt={experience.company}
+                    width={42}
+                    height={42}
+                    className="rounded-full"
+                    priority
+                    sizes='(max-width: 768px) 100vw, 33vw'
+                  />
+                ) : (
+                  <span className="flex size-2 rounded-full bg-zinc-300 dark:bg-zinc-600" />
                 )}
-              </div>
+              </span>
+
+              <Link
+                href={experience.link || '#'}
+                target={experience.link ? '_blank' : undefined}
+                rel={experience.link ? 'noopener noreferrer' : undefined}
+                className="group relative inline-flex max-w-max items-center text-lg font-medium text-zinc-900 dark:text-zinc-100"
+              >
+                {experience.company}
+                <AnimatedUnderline />
+              </Link>
+
+              {experience?.current && (
+                <span className="relative flex items-center justify-center">
+                  <span className="absolute inline-flex size-3 animate-ping rounded-full bg-green-500 opacity-50"></span>
+                  <span className="relative inline-flex size-2 rounded-full bg-green-500"></span>
+                </span>
+              )}
             </div>
-          </motion.div>
+
+            <Accordion
+              type="multiple"
+              defaultValue={experience.positions
+                .filter((pos) => pos.expanded)
+                .map((pos) => pos.id)}
+            >
+              {experience.positions.map((position) => (
+                <AccordionItem
+                  key={position.id}
+                  value={position.id}
+                  className="border-none"
+                >
+                  <div className="flex items-start gap-3 ml-1.5">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                      {position.icon && positionIcons[position.icon]}
+                    </span>
+
+                    <div className="flex-1 ">
+                      <AccordionTrigger className="p-0 space-y-3.5 hover:no-underline">
+                        <div className="flex flex-col items-start">
+                          <h4 className="text-left font-medium text-zinc-900 dark:text-zinc-100">
+                            {position.title}
+                          </h4>
+
+                          <p className="flex items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                            {position.employmentType && (
+                              <span>{position.employmentType}</span>
+                            )}
+                            {position.employmentType && position.year && (
+                              <span className="flex h-4 w-px shrink-0 bg-zinc-200 dark:bg-zinc-700" />
+                            )}
+                            <span>{position.year}</span>
+                          </p>
+                        </div>
+                      </AccordionTrigger>
+
+                      <AccordionContent className="pt-2 pb-4 pr-16">
+                        {position.accomplishments && position.accomplishments.length > 0 && (
+                          <ul className="space-y-1.5 text-sm text-zinc-700 dark:text-zinc-300 pl-5">
+                            {position.accomplishments.map((accomplishment, index) => (
+                              <li
+                                key={index}
+                                className="relative before:absolute before:content-['•'] before:left-[-1.25rem] before:text-zinc-500"
+                                dangerouslySetInnerHTML={{
+                                  __html: processHtmlWithAnimatedLinks(accomplishment),
+                                }}
+                              />
+                            ))}
+                          </ul>
+                        )}
+                      </AccordionContent>
+                    </div>
+                  </div>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         ))}
       </motion.div>
     </motion.section>
   )
 }
+

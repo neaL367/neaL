@@ -7,7 +7,7 @@ export default function CoverImage({ src, alt }: { src: string; alt: string }) {
   const [imageLoaded, setImageLoaded] = useState(false)
   
   return (
-    <div className="relative w-full h-auto overflow-hidden rounded-sm border">
+    <div className="relative w-full h-auto overflow-hidden border">
       <Image
         src={src}
         alt={alt}
@@ -20,8 +20,7 @@ export default function CoverImage({ src, alt }: { src: string; alt: string }) {
         }`}
         onLoad={() => setImageLoaded(true)}
         priority={true}
-        unoptimized
-      />
+        sizes="(max-width: 768px) 100vw, 33vw"      />
     </div>
   )
 }

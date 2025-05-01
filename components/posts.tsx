@@ -1,8 +1,8 @@
 'use client'
-import { POSTS } from '@/app/data'
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { AnimatedUnderline } from '@/components/ui/animated-underline'
+import { POSTS } from '@/app/data/posts'
 
 const ANIMATION_VARIANTS = {
   section: {

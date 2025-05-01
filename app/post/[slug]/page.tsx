@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 async function getPostMetadata(slug: string) {
-  const { POSTS } = await import('@/app/data')
+  const { POSTS } = await import('@/app/data/posts')
   const post = POSTS.find(
     (post) => post.uid === `post-${slug}` || post.link.includes(slug),
   )

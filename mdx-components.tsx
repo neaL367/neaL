@@ -75,7 +75,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </pre>
     ),
     hr: () => (
-      <hr className="relative my-8 h-px w-full overflow-visible border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-zinc-100 before:content-[''] dark:before:bg-zinc-800" />
+      <hr className="relative my-8 h-px w-full overflow-hidden border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-zinc-100 before:content-[''] dark:before:bg-zinc-800" />
     ),
     strong: ({ children }) => <strong className="font-base">{children}</strong>,
     Cover: ({
