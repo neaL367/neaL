@@ -112,7 +112,7 @@ export function Work() {
                             {position.title}
                           </h4>
 
-                          <p className="flex items-center gap-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                          <p className="flex items-center gap-2 font-mono text-xs text-zinc-700 dark:text-zinc-400">
                             {position.employmentType && (
                               <span>{position.employmentType}</span>
                             )}
@@ -126,7 +126,7 @@ export function Work() {
 
                       <AccordionContent className="pt-2 pb-4 pr-16">
                         {position.accomplishments && position.accomplishments.length > 0 && (
-                          <ul className="space-y-1.5 text-sm text-zinc-700 dark:text-zinc-300 pl-5">
+                          <ul className="space-y-1.5 text-sm text-zinc-700 dark:text-zinc-400 pl-5">
                             {position.accomplishments.map((accomplishment, index) => (
                               <li
                                 key={index}

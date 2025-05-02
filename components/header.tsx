@@ -15,7 +15,7 @@ export function Header() {
       <header className="my-14 flex items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-6">
           <motion.div
-            className="spect-square relative cursor-pointer"
+            className="spect-square relative rounded-full cursor-pointer"
             whileHover={{
               scale: 1.075,
               transition: { duration: 0.2 },
@@ -28,7 +28,7 @@ export function Header() {
                 alt="Atichat Thongnak"
                 width={90}
                 height={90}
-                className={`avatar-image aspect-square object-cover transition-all duration-700 ${
+                className={`avatar-image aspect-square object-cover rounded-full transition-all duration-700 ${
                   imageLoaded
                     ? 'blur-0 scale-100 opacity-100'
                     : 'scale-95 opacity-0 blur-sm'

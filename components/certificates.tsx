@@ -69,7 +69,7 @@ export function Certificates() {
                 </h4>
                 <ExternalLink className="size-4 text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-sm text-zinc-700 dark:text-zinc-400">
                 {certificate.issuer} • {certificate.date}
               </p>
             </div>

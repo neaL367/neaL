@@ -8,17 +8,23 @@ const THEMES_OPTIONS = [
   {
     label: 'Light',
     id: 'light',
-    icon: <SunIcon className="h-4 w-4 transition-all" />,
+    icon: (
+      <SunIcon className="h-4 w-4 " />
+    ),
   },
   {
     label: 'Dark',
     id: 'dark',
-    icon: <MoonIcon className="h-4 w-4 transition-all" />,
+    icon: (
+      <MoonIcon className="h-4 w-4 " />
+    ),
   },
   {
     label: 'System',
     id: 'system',
-    icon: <MonitorIcon className="h-4 w-4 transition-all" />,
+    icon: (
+      <MonitorIcon className="h-4 w-4 " />
+    ),
   },
 ]
 
@@ -31,32 +37,37 @@ export function ThemeSwitch() {
   }, [])
 
   if (!mounted) {
-    return <div className="flex gap-1" aria-hidden="true">
-      {THEMES_OPTIONS.map(theme => (
-        <div key={theme.id} className="h-7 w-7" />
-      ))}
-    </div>
+    return (
+      <div className="opacity-0">
+        {THEMES_OPTIONS.map((theme) => (
+          <button
+            key={theme.id}
+            className="inline-flex h-7 w-7 items-center justify-center"
+            aria-hidden="true"
+          >
+            {theme.icon}
+          </button>
+        ))}
+      </div>
+    )
   }
 
   return (
-    <div className="flex gap-1 rounded-md bg-zinc-100 p-1 dark:bg-zinc-800">
+    <div className="flex items-center space-x-1">
       {THEMES_OPTIONS.map((theme) => {
         const isActive = theme.id === currentTheme
         return (
           <button
             key={theme.id}
-            className={`
-              inline-flex h-7 w-7 items-center justify-center rounded-md
-              transition-colors duration-200 
-              ${isActive 
-                ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-50' 
-                : 'text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-50'}
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2
-            `}
+            className={`inline-flex h-7 w-7 items-center justify-center rounded-md ${
+              isActive 
+                ? 'text-zinc-900 dark:text-zinc-50' 
+                : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'
+            }`}
             type="button"
             aria-label={`Switch to ${theme.label} theme`}
-            aria-pressed={isActive}
             onClick={() => setTheme(theme.id)}
+            aria-pressed={isActive}
           >
             {theme.icon}
           </button>
@@ -65,3 +76,4 @@ export function ThemeSwitch() {
     </div>
   )
 }
+
