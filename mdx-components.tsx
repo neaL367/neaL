@@ -1,7 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
-import Link from 'next/link'
-import { AnimatedUnderline } from '@/components/ui/animated-underline'
 import CoverImage from './components/ui/cover-image'
+import { AccessibleLink } from './components/ui/accessible-link'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -40,13 +39,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <p className="mb-4 text-zinc-600 dark:text-zinc-400">{children}</p>
     ),
     a: ({ href, children }) => (
-      <Link
+      <AccessibleLink
         href={href || '#'}
-        className="group relative inline-block text-zinc-900 no-underline dark:text-zinc-300"
+        className="text-zinc-900 no-underline dark:text-zinc-100"
       >
         {children}
-        <AnimatedUnderline />
-      </Link>
+      </AccessibleLink>
     ),
     ul: ({ children }) => (
       <ul className="mb-4 ml-4 list-outside list-disc text-zinc-600 dark:text-zinc-400">

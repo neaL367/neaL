@@ -43,7 +43,7 @@ export function Posts() {
                   <AnimatedUnderline />
                 </h4>
               </div>
-              <p className="relative truncate text-zinc-500 group-hover:text-zinc-700 text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
+              <p className="relative truncate text-zinc-700 group-hover:text-zinc-800 text-sm dark:text-zinc-400 dark:group-hover:text-zinc-300">
                 {post.description}
               </p>
             </div>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { AnimatedUnderline } from './animated-underline'
 
 interface AccessibleLinkProps {
   href: string;
@@ -18,8 +19,6 @@ export function AccessibleLink({
     "group relative inline-flex items-center gap-1 font-medium",
     "text-zinc-900 dark:text-zinc-200",
     "focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2",
-    "underline decoration-1 underline-offset-2 decoration-zinc-400/50 dark:decoration-zinc-500/50",
-    "hover:decoration-zinc-900 dark:hover:decoration-zinc-200",
     className
   );
   
@@ -32,6 +31,7 @@ export function AccessibleLink({
         rel="noopener noreferrer"
       >
         {children}
+        <AnimatedUnderline />
       </a>
     );
   }
@@ -39,6 +39,7 @@ export function AccessibleLink({
   return (
     <Link href={href} className={linkClasses}>
       {children}
+      <AnimatedUnderline />
     </Link>
   );
 }
