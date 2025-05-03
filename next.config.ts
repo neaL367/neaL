@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react', 'motion/react'],
     mdxRs: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      }
+    ],
+  }
 }
 
 const withMDX = createMDX({})

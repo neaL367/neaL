@@ -8,7 +8,7 @@ interface ParagraphProps {
 export function Paragraph({ children, className }: ParagraphProps) {
   return (
     <p className={cn(
-      "mb-4 text-zinc-700 dark:text-zinc-400", 
+      "mb-4 text-zinc-500 dark:text-zinc-400", 
       className
     )}>
       {children}

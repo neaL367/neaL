@@ -4,17 +4,17 @@ import { AccessibleLink } from './ui/accessible-link'
 
 const ANIMATION_VARIANTS = {
   section: {
-    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
   },
   container: {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
   },
 }
 
 const ANIMATION_TRANSITION = {
-  duration: 0.3,
+  duration: 0.2,
 }
 
 export function About() {

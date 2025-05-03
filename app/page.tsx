@@ -104,7 +104,6 @@ export default function Page() {
         <div className="px-4 md:px-6">
           <Connect />
         </div>
-        <HorizontalRule />
 
         <Footer />
       </m.main>

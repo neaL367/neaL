@@ -1,4 +1,3 @@
-'use client'
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { AnimatedUnderline } from '@/components/ui/animated-underline'
@@ -6,17 +5,17 @@ import { POSTS } from '@/app/data/posts'
 
 const ANIMATION_VARIANTS = {
   section: {
-    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
   },
   container: {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
   },
 }
 
 const ANIMATION_TRANSITION = {
-  duration: 0.3,
+  duration: 0.2,
 }
 
 export function Posts() {
@@ -25,10 +24,10 @@ export function Posts() {
       variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-8 text-xl font-medium text-zinc-900 dark:text-zinc-100 flex">
         Posts
       </h3>
-      <div className="flex flex-col space-y-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {POSTS.map((post) => (
           <Link
             key={post.uid}
@@ -53,4 +52,5 @@ export function Posts() {
     </motion.section>
   )
 }
+
 

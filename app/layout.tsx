@@ -66,7 +66,7 @@ export default function RootLayout({
           storageKey="theme"
           defaultTheme="system"
         >
-          <div className="grid-background flex min-h-screen w-full flex-col font-[family-name:var(--font-inter-tight)]">
+          <div className="flex min-h-screen w-full flex-col">
             <div className="relative mx-auto w-full max-w-screen-md flex-1 pt-8">
               <div className="absolute inset-y-0 left-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
               <div className="absolute inset-y-0 right-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
