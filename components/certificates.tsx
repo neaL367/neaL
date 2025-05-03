@@ -1,50 +1,41 @@
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { CERTIFICATES } from '@/app/data/certificates'
 
 const ANIMATION_VARIANTS = {
   section: {
-    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
   },
   container: {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
   },
 }
 
 const ANIMATION_TRANSITION = {
-  duration: 0.3,
+  duration: 0.2,
 }
 
 export function Certificates() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-
   return (
     <motion.section
-      ref={sectionRef}
       variants={ANIMATION_VARIANTS.container}
       transition={ANIMATION_TRANSITION}
-      className="relative "
     >
-      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-xl font-medium text-zinc-900 dark:text-zinc-100">
         Certificates
       </h3>
-      <motion.div
-        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-        variants={ANIMATION_VARIANTS.section}
-        transition={ANIMATION_TRANSITION}
-      >
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {CERTIFICATES.map((certificate, index) => (
           <Link
             key={index}
             href={certificate.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-start gap-3 border border-zinc-200 p-4 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50"
+            className="group flex items-start gap-3 border border-zinc-200 p-4 transition-all ease-in-out duration-500 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800/50"
           >
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full">
               {certificate.logo ? (
@@ -53,7 +44,7 @@ export function Certificates() {
                   alt={certificate.issuer}
                   width={24}
                   height={24}
-                  className="size-6 dark:invert invert-0 transition-all ease-out duration-500"
+                  className="size-6 invert-0 transition-all duration-500 ease-out dark:invert"
                 />
               ) : (
                 <span className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
@@ -75,7 +66,8 @@ export function Certificates() {
             </div>
           </Link>
         ))}
-      </motion.div>
+      </div>
     </motion.section>
   )
 }
+

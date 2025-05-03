@@ -68,7 +68,7 @@ export function Header() {
                   </svg>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Official website of neaL367</p>
+                  <p>Official website of @neaL367</p>
                 </TooltipContent>
               </Tooltip>
             </div>

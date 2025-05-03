@@ -7,13 +7,13 @@ export default function CoverImage({ src, alt }: { src: string; alt: string }) {
   const [imageLoaded, setImageLoaded] = useState(false)
   
   return (
-    <div className="relative w-full h-auto overflow-hidden border">
+    <div className="relative w-full h-auto overflow-hidden rounded-lg border">
       <Image
         src={src}
         alt={alt}
         width={1200}
         height={630}
-        className={`w-full h-auto transition-all duration-700 brightness-85 ${
+        className={`w-full h-auto transition-all duration-700 rounded-lg  brightness-95 ${
           imageLoaded
             ? 'blur-0 opacity-100'
             : 'sopacity-0 blur-sm'

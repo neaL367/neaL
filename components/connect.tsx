@@ -1,5 +1,4 @@
-'use client'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import Link from 'next/link'
 
 import { Magnetic } from './ui/magnetic'
@@ -9,17 +8,17 @@ import { EMAIL, SOCIAL_LINKS } from '@/app/data/social'
 
 const ANIMATION_VARIANTS = {
   section: {
-    hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0},
   },
   container: {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0 },
   },
 }
 
 const ANIMATION_TRANSITION = {
-  duration: 0.3,
+  duration: 0.2,
 }
 
 function MagneticSocialLink({
@@ -61,10 +60,10 @@ function MagneticSocialLink({
 export function Connect() {
   return (
     <motion.section
-      variants={ANIMATION_VARIANTS.container}
+      variants={ANIMATION_VARIANTS.section}
       transition={ANIMATION_TRANSITION}
     >
-      <h3 className="mb-6 text-lg font-medium text-zinc-900 dark:text-zinc-100">
+      <h3 className="mb-6 text-xl font-medium text-zinc-900 dark:text-zinc-100">
         Connect
       </h3>
       <Paragraph>

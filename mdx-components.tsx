@@ -36,7 +36,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h6>
     ),
     p: ({ children }) => (
-      <p className="mb-4 text-zinc-600 dark:text-zinc-400">{children}</p>
+      <p className="mb-4 text-zinc-500 dark:text-zinc-400">{children}</p>
     ),
     a: ({ href, children }) => (
       <AccessibleLink

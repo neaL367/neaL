@@ -20,12 +20,12 @@ export default function ProjectMedia({
 
   return (
     <div className="w-full">
-      <div className="relative aspect-video w-full overflow-hidden">
+      <div className="relative aspect-video rounded-lg w-full overflow-hidden">
         {src ? (
           <Image
             src={src}
             alt={title || 'Project preview'}
-            className={`aspect-video h-full w-full object-cover transition-all duration-700 ${
+            className={`aspect-video h-full w-full object-cover rounded-lg transition-all duration-700 ${
               imageLoaded
                 ? 'blur-0 scale-100 opacity-100'
                 : 'scale-95 opacity-0 blur-sm'
