@@ -5,28 +5,32 @@ import * as m from 'motion/react-m'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-const About = dynamic(() => import('@/components/about').then((mod) => mod.About), {
-  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+const HelloEffect = dynamic(() =>
+  import('@/components/ui/hello-effect').then((mod) => mod.HelloEffect), {
+  loading: () => <div className="h-42 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
-
-const HorizontalRule = dynamic(() => 
-  import('@/components/ui/horizontal-rule').then((mod) => mod.HorizontalRule)
-)
 
 const Header = dynamic(() => import('@/components/header').then((mod) => mod.Header), {
   loading: () => <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
-const Footer = dynamic(() => import('@/components/footer').then((mod) => mod.Footer), {
-  loading: () => <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+const HorizontalRule = dynamic(() =>
+  import('@/components/ui/horizontal-rule').then((mod) => mod.HorizontalRule)
+)
+
+const About = dynamic(() => import('@/components/about').then((mod) => mod.About), {
+  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
-const HelloEffect = dynamic(() => 
-  import('@/components/ui/hello-effect').then((mod) => mod.HelloEffect), {
-  loading: () => <div className="h-42 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+const Projects = dynamic(() => import('@/components/projects').then((mod) => mod.Projects), {
+  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
 const Work = dynamic(() => import('@/components/work').then((mod) => mod.Work), {
+  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+})
+
+const Certificates = dynamic(() => import('@/components/certificates').then((mod) => mod.Certificates), {
   loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
@@ -38,13 +42,10 @@ const Connect = dynamic(() => import('@/components/connect').then((mod) => mod.C
   loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
-const Projects = dynamic(() => import('@/components/projects').then((mod) => mod.Projects), {
-  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+const Footer = dynamic(() => import('@/components/footer').then((mod) => mod.Footer), {
+  loading: () => <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
 })
 
-const Certificates = dynamic(() => import('@/components/certificates').then((mod) => mod.Certificates), {
-  loading: () => <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-})
 
 const VARIANTS_CONTAINER = {
   hidden: { opacity: 0 },
