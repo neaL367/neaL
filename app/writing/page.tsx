@@ -27,7 +27,7 @@ export default function BlogPosts() {
             <Link
               key={post.slug}
               className="flex flex-col space-y-1 mb-5 transition-opacity duration-200 hover:opacity-80"
-              href={`/blog/${post.slug}`}
+              href={`/writing/${post.slug}`}
             >
               <div className="w-full flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
                 <h2 className="text-black dark:text-white">
