@@ -1,23 +1,40 @@
-import createMDX from '@next/mdx'
-import type { NextConfig } from 'next'
+
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['mdx', 'ts', 'tsx'],
-  experimental: {
-    optimizePackageImports: ['lucide-react', 'motion/react'],
-    mdxRs: true,
-  },
-  images: {
-    remotePatterns: [
+  reactStrictMode: true,
+  async rewrites() {
+    return [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
-      }
-    ],
-  }
-}
+        source: "/rss.xml",
+        destination: "/feed/rss.xml",
+      },
+      {
+        source: "/atom.xml",
+        destination: "/feed/atom.xml",
+      },
+      {
+        source: "/feed.json",
+        destination: "/feed/feed.json",
+      },
+      {
+        source: "/rss",
+        destination: "/feed/rss.xml",
+      },
+      {
+        source: "/feed",
+        destination: "/feed/rss.xml",
+      },
+      {
+        source: "/atom",
+        destination: "/feed/atom.xml",
+      },
+      {
+        source: "/json",
+        destination: "/feed/feed.json",
+      },
+    ];
+  },
+};
 
-const withMDX = createMDX({})
-
-export default withMDX(nextConfig)
+export default nextConfig;

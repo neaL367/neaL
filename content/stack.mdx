@@ -1,0 +1,84 @@
+---
+title: "Stack"
+publishedAt: "2025-05-03"
+summary: "My daily web development stack"
+tags: "nextjs, astro, angular, tailwindcss, shadcn/ui, motion"
+---
+
+Hello and welcome. In this article, I share the tools and frameworks that I use daily in web development.
+
+## 1. Frameworks: Next.js, Angular, and Astro
+
+### [Next.js](https://nextjs.org/) 🗽
+Next.js is my primary tool for building robust web applications. I rely on TypeScript to maintain code quality, and I appreciate its Server Components and server-side data fetching capabilities.
+
+#### Example: Server Components for Data Fetching
+```tsx
+export default async function Page() {
+  const response = await fetch('https://api.example.com/data');
+  const items = await response.json();
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+I also use the `next-intl` package to create multilingual sites. For a live example, please visit [youthplusthailand.com](https://youthplusthailand.com).
+
+### [Angular](https://angular.dev/)
+Angular is my choice for large-scale, enterprise-level applications. Its comprehensive framework is well suited for complex projects.
+
+### [Astro](https://astro.build/) 💫
+For static websites that require fast load times, I use Astro. Its content collections feature simplifies the management of various content types such as Markdown, MDX, and JSON. This approach streamlines the process of building content-rich sites.
+
+<details className="mb-1 -mt-2">
+<summary className="text-zinc-500 text-[15px] mb-2 hover:cursor-pointer">Content Collections</summary>
+
+Astro's content collections allow me to organize and validate data efficiently. By specifying expected file types and structures, I can ensure that all content is consistent and well-managed.
+</details>
+
+&nbsp;
+
+## 2. Styling
+
+### [Tailwind CSS](https://tailwindcss.com/) 🌪️
+Tailwind CSS provides a utility-first approach to styling. It allows me to write efficient, responsive styles directly in my markup while keeping the overall CSS bundle minimal.
+
+#### Advantages of Tailwind CSS:
+- Enables inline styling that integrates well with the code.
+- Helps maintain a small, optimized CSS bundle.
+- Easily integrates with existing CSS when needed.
+
+### [shadcn/ui](https://ui.shadcn.com/) 🗿
+shadcn/ui offers a collection of accessible components that help create a polished user interface with minimal effort.
+
+### [motion](https://motion.dev/)
+For smooth and responsive animations, I rely on framer-motion. This tool enhances the user experience with refined and seamless transitions.
+
+&nbsp;
+
+## 3. Hosting and Deployment
+
+### Vercel
+I deploy modern web applications on Vercel, which is highly optimized for Next.js applications.
+
+### AWS
+For additional cloud services, I use AWS:
+- **[CloudFront](https://aws.amazon.com/cloudfront/):** Accelerates content delivery.
+- **[S3](https://aws.amazon.com/s3/):** Provides scalable storage for static assets.
+- **[EC2](https://aws.amazon.com/ec2/):** Offers flexible cloud computing resources.
+
+### Plesk and WordPress
+I also work with traditional hosting platforms. In addition to the classic example of [dseelin.co.th](https://dseelin.co.th), I have developed websites using WordPress. One notable example is [QL Healthcare Thailand](https://qlhealthcarethailand.com/), which is a healthcare-focused site built on WordPress.
+
+&nbsp;
+
+## 4. Community Involvement
+
+Beyond my technical work, I organize IT workshops and volunteer for projects that help others improve their technical skills. I believe in giving back to the community and supporting the growth of aspiring developers.
+
+Thank you for reading this overview of my tech toolbox.

@@ -1,37 +1,21 @@
-import { MetadataRoute } from 'next'
-import { WEBSITE_URL } from '@/lib/constants'
-import fs from 'fs'
-import path from 'path'
+import { MetadataRoute } from "next";
+import { getWritingPosts } from "./lib/posts";
+import { metaData } from "./lib/config";
+
+const BaseUrl = metaData.baseUrl.endsWith("/")
+  ? metaData.baseUrl
+  : `${metaData.baseUrl}/`;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrls = [
-    {
-      url: WEBSITE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 1,
-    },
-  ]
+  let blogs = getWritingPosts().map((post) => ({
+    url: `${BaseUrl}writing/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
+  }));
 
-  const postsDirectory = path.join(process.cwd(), '/contents/post')
-  const postSlugs = fs.readdirSync(postsDirectory).filter((folder) => {
-    const stats = fs.statSync(path.join(postsDirectory, folder))
-    return (
-      stats.isDirectory() && !folder.startsWith('_') && !folder.startsWith('.')
-    )
-  })
+  let routes = ["", "writing", "projects", "photos"].map((route) => ({
+    url: `${BaseUrl}${route}`,
+    lastModified: new Date().toISOString().split("T")[0],
+  }));
 
-  const postUrls = postSlugs.map((slug) => {
-    const filePath = path.join(postsDirectory, slug, 'page.mdx')
-    const stats = fs.statSync(filePath)
-    
-    return {
-      url: `${WEBSITE_URL}/post/${slug}`,
-      lastModified: stats.mtime,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }
-  })
-
-  return [...baseUrls, ...postUrls]
+  return [...routes, ...blogs];
 }

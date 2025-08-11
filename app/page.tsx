@@ -1,165 +1,124 @@
-'use client'
-
-import { LazyMotion, domAnimation } from 'motion/react'
-import * as m from 'motion/react-m'
-import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
-
-const Dither = dynamic(
-  () => import('@/components/ui/dither'),
-  { ssr: false }
-);
-
-const Header = dynamic(
-  () => import('@/components/header').then((mod) => mod.Header),
-  {
-    loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const HorizontalRule = dynamic(() =>
-  import('@/components/ui/horizontal-rule').then((mod) => mod.HorizontalRule),
-)
-
-const About = dynamic(
-  () => import('@/components/about').then((mod) => mod.About),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Projects = dynamic(
-  () => import('@/components/projects').then((mod) => mod.Projects),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Work = dynamic(
-  () => import('@/components/work').then((mod) => mod.Work),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Certificates = dynamic(
-  () => import('@/components/certificates').then((mod) => mod.Certificates),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Posts = dynamic(
-  () => import('@/components/posts').then((mod) => mod.Posts),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Connect = dynamic(
-  () => import('@/components/connect').then((mod) => mod.Connect),
-  {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const Footer = dynamic(
-  () => import('@/components/footer').then((mod) => mod.Footer),
-  {
-    loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-    ),
-  },
-)
-
-const VARIANTS_CONTAINER = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-}
+import Image from "next/image";
+import { socialLinks } from "./lib/config";
 
 export default function Page() {
   return (
-    <LazyMotion features={domAnimation}>
-      <m.main
-        className=""
-        variants={VARIANTS_CONTAINER}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="h-60 border">
-          <Dither
-            waveColor={[0.5, 0.5, 0.5]}
-            disableAnimation={false}
-            enableMouseInteraction={false}
-            mouseRadius={0.3}
-            colorNum={4}
-            waveAmplitude={0.3}
-            waveFrequency={3}
-            waveSpeed={0.045}
-          />
-        </div>
-        <div className="space-y-14">
-          <HorizontalRule />
+    <section>
+      <a href={socialLinks.twitter} target="_blank">
+        {/* <Image
+          src="/profile.png"
+          alt="Profile photo"
+          className="rounded-full bg-gray-100 block lg:mt-5 mt-0 lg:mb-5 mb-10 mx-auto sm:float-right sm:ml-5 sm:mb-5 grayscale hover:grayscale-0"
+          unoptimized
+          width={160}
+          height={160}
+          priority
+        /> */}
+      </a>
+      <h1 className="mb-8 text-2xl font-medium">
+      👋 hi, I'm atichat thongnak <sup>neal367</sup>
+      </h1>
 
-          <Suspense
-            fallback={
-              <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
-            }
+      <div className="prose prose-neutral dark:prose-invert">
+        <p>I design and build intuitive, high-performance web experiences.</p>
+
+        <p>
+          leveraging tools like{" "}
+          <a
+            href="https://react.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <Header />
-          </Suspense>
+            React
+          </a>
+          ,{" "}
+          <a
+            href="https://nextjs.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Next.js
+          </a>
+          ,{" "}
+          <a
+            href="https://tailwindcss.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Tailwind CSS
+          </a>
+          , and{" "}
+          <a
+            href="https://ui.shadcn.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            shadcn/ui
+          </a>{" "}
+          to deliver pixel-perfect solutions.
+        </p>
 
-          <div className="px-4 md:px-6">
-            <About />
-          </div>
-          <HorizontalRule />
+        <p>
+          studying at{" "}
+          <a
+            href="https://www.spu.ac.th/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sripatum University
+          </a>
+          , and volunteering with{" "}
+          <a
+            href="https://goodgeek.club"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GoodGeekClub
+          </a>{" "}
+          to empower our local tech community.
+        </p>
 
-          <div className="px-4 md:px-6">
-            <Projects />
-          </div>
-          <HorizontalRule />
+        <p>
+          <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            specialties:
+          </span>{" "}
+          TypeScript, server components, multilingual sites,
+          <br /> clean, responsive interfaces, and a focus on craft and detail.
+        </p>
 
-          <div className="px-4 md:px-6">
-            <Work />
-          </div>
-          <HorizontalRule />
+        <p>
+          I deploy my projects on{" "}
+          <a
+            href="https://vercel.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Vercel
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://aws.amazon.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            AWS
+          </a>
+          , and I regularly host workshops to share best practices in web
+          development.
+        </p>
 
-          <div className="px-4 md:px-6">
-            <Certificates />
-          </div>
-          <HorizontalRule />
-
-          <div className="px-4 md:px-6">
-            <Posts />
-          </div>
-          <HorizontalRule />
-
-          <div className="px-4 md:px-6">
-            <Connect />
-          </div>
-
-          <Footer />
-        </div>
-      </m.main>
-    </LazyMotion>
-  )
+        <p>
+          off-screen, I play{" "}
+          <a
+            href="https://www.rockstargames.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Rockstar Games
+          </a>{" "}
+          and dream about making pixel-art games.
+        </p>
+      </div>
+    </section>
+  );
 }

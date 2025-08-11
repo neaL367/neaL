@@ -1,38 +1,32 @@
-import './globals.css'
-import { ThemeProvider } from 'next-themes'
-import { Geist } from 'next/font/google'
-import type { Metadata, Viewport } from 'next'
+import "./globals.css";
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  themeColor: '#ffffff',
-}
+import { Analytics } from "@vercel/analytics/react";
+import { Geist } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
+
+import { Navbar } from "./components/nav";
+import Footer from "./components/footer";
+import { ThemeProvider } from "./components/theme-switch";
+import { metaData } from "./lib/config";
+
+const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://neal367.vercel.app'),
-  title: 'neaL367 - Personal website',
-  description: 'Gamer and Lazy Front-end developer.',
-  openGraph: {
-    title: 'neaL367 - Personal website',
-    description: 'Gamer and Lazy Front-end developer.',
-    type: 'website',
-    siteName: 'neaL367',
-    images: [
-      {
-        url: './opengraph-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'neaL367 - Personal website',
-      },
-    ],
+  metadataBase: new URL(metaData.baseUrl),
+  title: {
+    default: metaData.title,
+    template: `%s | ${metaData.title}`,
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'neaL367 - Personal website',
-    description: 'Gamer and Lazy Front-end developer.',
-    creator: '@NL367',
-    images: './opengraph-image.png',
+  description: metaData.description,
+  openGraph: {
+    images: metaData.ogImage,
+    title: metaData.title,
+    description: metaData.description,
+    url: metaData.baseUrl,
+    siteName: metaData.name,
+    locale: "en_US",
+    type: "website",
   },
   robots: {
     index: true,
@@ -40,41 +34,63 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-}
-
-const geist = Geist({
-  subsets: ['latin'],
-})
+  twitter: {
+    title: metaData.name,
+    card: "summary_large_image",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geist.className} scroll-smooth bg-white tracking-tight antialiased transition-all duration-500 ease-out dark:bg-zinc-950`}
-      >
-        <ThemeProvider
-          enableSystem={true}
-          attribute="class"
-          storageKey="theme"
-          defaultTheme="system"
-        >
-          <div className="flex min-h-screen w-full flex-col">
-            <div className="relative mx-auto w-full max-w-screen-md flex-1">
-              <div className="absolute inset-y-0 left-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
-              <div className="absolute inset-y-0 right-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
-              {children}
-            </div>
-          </div>
-        </ThemeProvider>
+    <html suppressHydrationWarning lang="en" className={`${geist.className}`}>
+      <head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          href="/rss.xml"
+          title="RSS Feed"
+        />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          href="/atom.xml"
+          title="Atom Feed"
+        />
+        <link
+          rel="alternate"
+          type="application/feed+json"
+          href="/feed.json"
+          title="JSON Feed"
+        />
+      </head>
+      <body className="antialiased flex flex-col items-center justify-center mx-auto mt-2 lg:mt-8 mb-12">
+        <main className="flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-0 max-w-[624px] w-full">
+          <ThemeProvider
+            enableSystem={true}
+            attribute="class"
+            storageKey="theme"
+            defaultTheme="system"
+          >
+            <Navbar />
+            {children}
+            <Footer />
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
+        </main>
       </body>
     </html>
-  )
+  );
 }

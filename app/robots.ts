@@ -1,13 +1,12 @@
-import type { MetadataRoute } from 'next'
-import { WEBSITE_URL } from '@/lib/constants'
+import { metaData } from "./lib/config";
 
-export default function robots(): MetadataRoute.Robots {
+export default function robots() {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: '/private/',
-    },
-    sitemap: `${WEBSITE_URL}/sitemap.xml`,
-  }
+    rules: [
+      {
+        userAgent: "*",
+      },
+    ],
+    sitemap: `${metaData.baseUrl}/sitemap.xml`,
+  };
 }
