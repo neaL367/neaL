@@ -1,48 +1,59 @@
-<img src="/app/opengraph-image.png" alt="neaL367 - Personal Website" width="100%" />
+# Nextfolio
 
-# neaL367 - Personal Website
+A clean, fast, and lightweight portfolio template built with [Next.js](https://nextjs.org/), [Vercel](https://vercel.com/), and [Tailwind CSS](https://tailwindcss.com/).
 
-A clean, modern personal website built with Next.js 15, React 19, Tailwind CSS v4, and Motion animations. This site showcases my projects, work experience, and technical skills as a front-end developer based in Bangkok, Thailand.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F1msirius%2FNextfolio)
 
-## 💻 Tech Stack
+## Technologies Used
 
-This website is built using:
+- Framework: [Next.js](https://nextjs.org/)
+- Styling: [Tailwind CSS](https://tailwindcss.com/)
+- Analytics: [Vercel Web Analytics](https://vercel.com/docs/speed-insights) and [Speed Insights](https://vercel.com/docs/speed-insights)
+- Deployment: [Vercel](https://vercel.com/)
 
-- **Framework**: [Next.js 15](https://nextjs.org)
-- **UI Library**: [React 19](https://react.dev)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com)
-- **Animations**: [Motion-Primitives](https://motion-primitives.com)
-- **Deployment**: [Vercel](https://vercel.com)
+## Features
 
-## 🛠️ Development
+- **[MDX](https://mdxjs.com/) Support**: Use Markdown with JSX components for blog posts.
+- **Light and Dark Mode Toggle**: Switch between themes for better readability.
+- **Dynamic [OG Images](https://vercel.com/docs/functions/og-image-generation)**: Auto-generate Open Graph images for sharing.
+- **SEO Optimization**: Enhance search visibility with sitemap, robots.txt, and JSON-LD schema.
+- **Dynamic Feed Generation**: Automatic dynamic [RSS](https://nextfolio-template.vercel.app/rss.xml), [Atom](https://nextfolio-template.vercel.app/atom.xml), and [JSON](https://nextfolio-template.vercel.app/feed.json) feeds.
+- **[KaTeX](https://katex.org/) Integration**: Render mathematical expressions smoothly.
+- **Performance Tracking**: Monitor web performance with [Vercel Web Analytics](https://vercel.com/docs/speed-insights) and [Speed Insights](https://vercel.com/docs/speed-insights).
+- **Interactive Embeds**: Easily embed interactive tweets and YouTube videos.
+- **Captions**: Add descriptive captions to photos, tweets, and videos.
+- **Image Grid**: Easily showcase image galleries or photos.
 
-```bash
-# Clone the repository
-git clone https://github.com/neaL367/personal-website.git
+## Installation
 
-# Navigate to project directory
-cd personal-website
+Nextfolio uses [pnpm](https://pnpm.io/installation) for dependency management, so ensure it is installed on your system.
 
-# Install dependencies
-npm install
+Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
 
-# Start development server
-npm run dev
+```
+pnpm create next-app --example https://github.com/1msirius/Nextfolio my-portfolio
 ```
 
-## 📝 Content Management
+Start the development server:
 
-All content is managed through:
-- Project data in `app/data.ts`
-- Posts in the MDX format
-- Work experience and personal information directly in components
+```
+pnpm dev
+```
 
-## 📱 Connect
+The server will be running at [http://localhost:3000](http://localhost:3000).
 
-Feel free to reach out through any of the social platforms linked on the website or via email.
+## Configuration
 
-## 🙏 Credits
+1. Update the site metadata and social links in `app/config.ts` to set up SEO, feeds, social links, and Open Graph settings.
+2. Update your routes in `app/sitemap.ts` for SEO optimization.
+3. Update your blog posts in the `/content` folder.
 
-This website was built using the [Nim template](https://github.com/ibelick/nim) by [ibelick](https://github.com/ibelick), which provides an excellent foundation for personal websites. The template has been customized and extended to fit my personal style and requirements.
+For more information about configuration, follow the instructions in the [Getting Started](https://nextfolio-template.vercel.app/blog/getting-started#configuration) post.
 
-Special thanks to the creators of Motion-Primitives for the smooth animation components that bring this site to life.
+## Contributing
+
+Contributions are welcome! To get involved, just push your code to the repo. Whether you're enhancing existing features or adding new ones, your efforts are greatly appreciated!
+
+## Licence
+
+Nextfolio is open-source and released under the MIT License.
