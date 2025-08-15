@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Photos() {
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-medium">hotos</h1>
+      <h1 className="mb-8 text-2xl font-medium">photos</h1>
       <p className="mb-8">
         A collection of my favorite photos, showcasing moments from my life.
       </p>
