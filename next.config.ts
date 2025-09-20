@@ -3,10 +3,6 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   pageExtensions: ['mdx', 'ts', 'tsx'],
-  experimental: {
-    optimizePackageImports: ['lucide-react', 'motion/react'],
-    mdxRs: true,
-  },
   images: {
     remotePatterns: [
       {

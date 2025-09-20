@@ -1,20 +1,21 @@
 'use client'
 
-import { LazyMotion, domAnimation } from 'motion/react'
-import * as m from 'motion/react-m'
+import { LazyMotion, domAnimation, m } from 'motion/react'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-const Dither = dynamic(
-  () => import('@/components/ui/dither'),
-  { ssr: false }
-);
+const Dither = dynamic(() => import('@/components/ui/dither'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-60 w-full animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
+  ),
+})
 
 const Header = dynamic(
   () => import('@/components/header').then((mod) => mod.Header),
   {
     loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -27,7 +28,7 @@ const About = dynamic(
   () => import('@/components/about').then((mod) => mod.About),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -36,7 +37,7 @@ const Projects = dynamic(
   () => import('@/components/projects').then((mod) => mod.Projects),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -45,7 +46,7 @@ const Work = dynamic(
   () => import('@/components/work').then((mod) => mod.Work),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -54,7 +55,7 @@ const Certificates = dynamic(
   () => import('@/components/certificates').then((mod) => mod.Certificates),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -63,7 +64,7 @@ const Posts = dynamic(
   () => import('@/components/posts').then((mod) => mod.Posts),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -72,7 +73,7 @@ const Connect = dynamic(
   () => import('@/components/connect').then((mod) => mod.Connect),
   {
     loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -81,7 +82,7 @@ const Footer = dynamic(
   () => import('@/components/footer').then((mod) => mod.Footer),
   {
     loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
     ),
   },
 )
@@ -122,7 +123,7 @@ export default function Page() {
 
           <Suspense
             fallback={
-              <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" />
+              <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
             }
           >
             <Header />
