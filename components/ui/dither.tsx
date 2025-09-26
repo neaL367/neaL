@@ -335,7 +335,7 @@ export default function Dither({
 
   return (
     <Canvas
-      className="relative h-full w-full"
+      className=""
       camera={{ position: [0, 0, 6] }}
       dpr={window.devicePixelRatio}
       gl={{ antialias: true, preserveDrawingBuffer: true }}

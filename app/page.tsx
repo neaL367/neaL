@@ -4,19 +4,17 @@ import { LazyMotion, domAnimation, m } from 'motion/react'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 
-const Dither = dynamic(() => import('@/components/ui/dither'), {
+const Dither = dynamic(() => import('@/components/ui/dither'), 
+{
+  loading: () => <div className="h-60 w-full" />,
   ssr: false,
-  loading: () => (
-    <div className="h-60 w-full animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-  ),
 })
 
 const Header = dynamic(
   () => import('@/components/header').then((mod) => mod.Header),
   {
-    loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-16" />,
+    ssr: false,
   },
 )
 
@@ -27,63 +25,56 @@ const HorizontalRule = dynamic(() =>
 const About = dynamic(
   () => import('@/components/about').then((mod) => mod.About),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Projects = dynamic(
   () => import('@/components/projects').then((mod) => mod.Projects),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Work = dynamic(
   () => import('@/components/work').then((mod) => mod.Work),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Certificates = dynamic(
   () => import('@/components/certificates').then((mod) => mod.Certificates),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Posts = dynamic(
   () => import('@/components/posts').then((mod) => mod.Posts),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Connect = dynamic(
   () => import('@/components/connect').then((mod) => mod.Connect),
   {
-    loading: () => (
-      <div className="h-40 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-40" />,
+    ssr: false,
   },
 )
 
 const Footer = dynamic(
   () => import('@/components/footer').then((mod) => mod.Footer),
   {
-    loading: () => (
-      <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-    ),
+    loading: () => <div className="h-16" />,
+    ssr: false,
   },
 )
 
@@ -112,20 +103,16 @@ export default function Page() {
             disableAnimation={false}
             enableMouseInteraction={false}
             mouseRadius={0.3}
-            colorNum={4}
-            waveAmplitude={0.3}
-            waveFrequency={3}
-            waveSpeed={0.045}
+            colorNum={5}
+            waveAmplitude={0.35}
+            waveFrequency={2}
+            waveSpeed={0.035}
           />
         </div>
         <div className="space-y-14">
           <HorizontalRule />
 
-          <Suspense
-            fallback={
-              <div className="h-16 animate-pulse rounded bg-zinc-100 dark:bg-zinc-900" />
-            }
-          >
+          <Suspense fallback={<div className="h-16" />}>
             <Header />
           </Suspense>
 
