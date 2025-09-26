@@ -13,6 +13,7 @@ export const PROJECTS: Project[] = [
       'Discover and explore anime with detailed information and recommendations',
     link: 'https://orbit-eight-rosy.vercel.app/',
     id: 'project-1',
+    image: "/projects/orbit/orbit.png"
   },
   {
     name: 'Tesla Clone',
@@ -20,5 +21,6 @@ export const PROJECTS: Project[] = [
       'A clone of the Tesla website, built with React and TypeScript.',
     link: 'https://tesla-clone-black-sigma.vercel.app/',
     id: 'project-2',
+    image: "/projects/ts-clone/tesla.png"
   },
 ]
