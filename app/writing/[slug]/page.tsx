@@ -27,8 +27,11 @@ export async function generateMetadata({
     notFound();
   }
 
-  const { title, publishedAt: publishedTime, summary: description } = post.metadata;
-  const ogImage = `${baseUrl}/og?title=${encodeURIComponent(title)}`;
+  const {
+    title,
+    publishedAt: publishedTime,
+    summary: description,
+  } = post.metadata;
 
   return {
     title,
@@ -39,17 +42,6 @@ export async function generateMetadata({
       type: "article",
       publishedTime,
       url: `${baseUrl}/writing/${slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [ogImage],
     },
   };
 }
@@ -86,7 +78,6 @@ export default async function Page({
             datePublished: metadata.publishedAt,
             dateModified: metadata.publishedAt,
             description: metadata.summary,
-            image: `${baseUrl}/og?title=${encodeURIComponent(metadata.title)}`,
             url: `${baseUrl}/writing/${slug}`,
             author: {
               "@type": "Person",
