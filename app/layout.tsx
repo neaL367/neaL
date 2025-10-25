@@ -9,6 +9,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: { default: "Neal367", template: "%s | Neal367" },
   description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
   openGraph: {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "./opengraph-image.png",
+        url: `${baseUrl}/opengraph-image.jpg`,
         width: 1200,
         height: 630,
         alt: "neaL367 - Personal website",
@@ -29,10 +30,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "neaL367 - Personal website",
-    description: "Gamer and Lazy Front-end developer.",
+    title: "NeaL367",
+    description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
     creator: "@NL367",
-    images: "./opengraph-image.png",
+    images: `${baseUrl}/opengraph-image.jpg`,
   },
   robots: {
     index: true,
