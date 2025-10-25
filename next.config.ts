@@ -1,19 +1,16 @@
-import createMDX from '@next/mdx'
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
-const nextConfig: NextConfig = {
-  pageExtensions: ['mdx', 'ts', 'tsx'],
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
-      }
-    ],
-  }
-}
+const nextConfig = {
+  pageExtensions: ["ts", "tsx", "mdx"],
+  typedRoutes: true,
+  experimental: {
+    mdxRs: true,
+  },
+} satisfies NextConfig;
 
-const withMDX = createMDX({})
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
 
-export default withMDX(nextConfig)
+export default withMDX(nextConfig);

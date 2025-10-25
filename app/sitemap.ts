@@ -1,37 +1,19 @@
-import { MetadataRoute } from 'next'
-import { WEBSITE_URL } from '@/lib/constants'
-import fs from 'fs'
-import path from 'path'
+import { getWritingPosts } from "@/app/writing/utils";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrls = [
-    {
-      url: WEBSITE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 1,
-    },
-  ]
+export const baseUrl = "https://neal367.site";
 
-  const postsDirectory = path.join(process.cwd(), '/contents/post')
-  const postSlugs = fs.readdirSync(postsDirectory).filter((folder) => {
-    const stats = fs.statSync(path.join(postsDirectory, folder))
-    return (
-      stats.isDirectory() && !folder.startsWith('_') && !folder.startsWith('.')
-    )
-  })
+export default async function sitemap() {
+  const posts = await getWritingPosts();
+  
+  const writings = posts.map((post) => ({
+    url: `${baseUrl}/writing/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
+  }));
 
-  const postUrls = postSlugs.map((slug) => {
-    const filePath = path.join(postsDirectory, slug, 'page.mdx')
-    const stats = fs.statSync(filePath)
-    
-    return {
-      url: `${WEBSITE_URL}/post/${slug}`,
-      lastModified: stats.mtime,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }
-  })
+  const routes = ["", "/writing"].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString().split("T")[0],
+  }));
 
-  return [...baseUrls, ...postUrls]
+  return [...routes, ...writings];
 }
