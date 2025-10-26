@@ -55,7 +55,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${geistSans.className} antialiased`}>
         <main className="w-full my-0 md:my-16">{children}</main>
       </body>
     </html>

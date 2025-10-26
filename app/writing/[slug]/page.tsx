@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { formatDate, getWritingPosts } from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
 import type { Metadata } from "next";
+import { Link } from "@/components/link";
 
 export async function generateStaticParams() {
   const posts = await getWritingPosts();
@@ -23,7 +24,7 @@ export async function generateMetadata({
   const posts = await getWritingPosts();
   const post = posts.find((p) => p.slug === slug);
 
-  if (!post) {
+  if (!post || post.metadata.publishedAt.trim() == "") {
     notFound();
   }
 
@@ -73,7 +74,7 @@ export default async function Page({
   const posts = await getWritingPosts();
   const post = posts.find((p) => p.slug === slug);
 
-  if (!post) {
+  if (!post || post.metadata.publishedAt.trim() == "") {
     notFound();
   }
 
@@ -100,13 +101,18 @@ export default async function Page({
           }),
         }}
       />
-      <h1 className="font-semibold text-2xl tracking-tighter">
-        {metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(metadata.publishedAt)}
-        </p>
+      <div className="flex justify-between">
+        <div>
+          <h1 className="font-semibold text-2xl tracking-tighter">
+            {metadata.title}
+          </h1>
+          <p className="mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
+            {formatDate(metadata.publishedAt)}
+          </p>
+        </div>
+        <div>
+          <Link href="/">{metadata.author}</Link>
+        </div>
       </div>
       <article>
         <Content />

@@ -10,58 +10,51 @@ type MDXModule = {
   default: MDXContent;
 };
 
-async function getMDXData(dir: string): Promise<Post[]> {
-  const mdxFiles = fs.readdirSync(dir).filter((file) => file.endsWith(".mdx"));
-
-  const posts = await Promise.all(
-    mdxFiles.map(async (file) => {
-      const slug = path.basename(file, path.extname(file));
-      const { default: content, metadata } = (await import(
-        `@/app/writing/posts/${slug}.mdx`
-      )) as MDXModule;
-
-      return {
-        slug,
-        metadata,
-        content,
-      };
-    }),
-  );
-  return posts;
+function getMDXSlugs(dir: string): string[] {
+  return fs
+    .readdirSync(dir)
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => path.basename(file, path.extname(file)));
 }
 
+async function importMDXPost(slug: string): Promise<Post> {
+  const { default: content, metadata } = (await import(
+    `@/app/writing/posts/${slug}.mdx`
+  )) as MDXModule;
+
+  return { slug, metadata, content };
+}
+
+async function getMDXData(dir: string): Promise<Post[]> {
+  const slugs = getMDXSlugs(dir);
+  return Promise.all(slugs.map((slug) => importMDXPost(slug)));
+}
+
+
 export function getWritingPosts(): Promise<Post[]> {
-  return getMDXData(path.join(process.cwd(), "app", "writing", "posts"));
+  const postsDir = path.join(process.cwd(), "app", "writing", "posts");
+  return getMDXData(postsDir);
 }
 
 export function formatDate(date: string, includeRelative = false): string {
   const currentDate = new Date();
-  if (!date.includes("T")) {
-    date = `${date}T00:00:00`;
-  }
-  const targetDate = new Date(date);
+  const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
 
-  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear();
-  const monthsAgo = currentDate.getMonth() - targetDate.getMonth();
-  const daysAgo = currentDate.getDate() - targetDate.getDate();
+  const diffMs = currentDate.getTime() - targetDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffMonths = Math.floor(diffDays / 30);
+  const diffYears = Math.floor(diffDays / 365);
 
-  let formattedDate = "";
+  let relative = "Today";
+  if (diffYears > 0) relative = `${diffYears}y ago`;
+  else if (diffMonths > 0) relative = `${diffMonths}mo ago`;
+  else if (diffDays > 0) relative = `${diffDays}d ago`;
 
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`;
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`;
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`;
-  } else {
-    formattedDate = "Today";
-  }
-
-  const fullDate = targetDate.toLocaleString("en-us", {
+  const fullDate = targetDate.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
 
-  return includeRelative ? `${fullDate} (${formattedDate})` : fullDate;
+  return includeRelative ? `${fullDate} (${relative})` : fullDate;
 }
