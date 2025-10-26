@@ -123,7 +123,7 @@ export default async function Page({
       <article>
         <Content />
       </article>
-      <aside className="fixed right-[calc((100vw-1024px)/2-17rem)] w-72 top-32">
+      <aside className="hidden xl:block fixed right-[calc((100vw-1024px)/2-6rem)] w-56 top-32">
         <HeadingsLink headings={headings} />
       </aside>
     </section>
