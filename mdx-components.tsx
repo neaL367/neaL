@@ -1,23 +1,45 @@
-import Image, { ImageProps } from "next/image";
 import { Link } from "@/components/link";
+import Image, { ImageProps } from "next/image";
+import { generateHeadingId } from "@/app/writing/utils";
 import type { MDXComponents } from "mdx/types";
 
 const components: MDXComponents = {
-  h1: ({ children }) => (
-    <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-      {children}
-    </h1>
-  ),
-  h2: ({ children }) => (
-    <h2 className="mt-12 mb-4 scroll-m-20 text-lg font-medium text-zinc-900 dark:text-zinc-100">
-      {children}
-    </h2>
-  ),
-  h3: ({ children }) => (
-    <h3 className="mt-8 mb-3 text-base font-medium text-zinc-900 dark:text-zinc-100">
-      {children}
-    </h3>
-  ),
+  h1: ({ children }) => {
+    const text = typeof children === "string" ? children : String(children);
+    const id = generateHeadingId(text);
+    return (
+      <h1
+        id={id}
+        className="mb-6 scroll-m-20 text-2xl font-bold text-zinc-900 dark:text-zinc-100"
+      >
+        {children}
+      </h1>
+    );
+  },
+  h2: ({ children }) => {
+    const text = typeof children === "string" ? children : String(children);
+    const id = generateHeadingId(text);
+    return (
+      <h2
+        id={id}
+        className="mt-12 mb-4 scroll-m-20 text-lg font-medium text-zinc-900 dark:text-zinc-100"
+      >
+        {children}
+      </h2>
+    );
+  },
+  h3: ({ children }) => {
+    const text = typeof children === "string" ? children : String(children);
+    const id = generateHeadingId(text);
+    return (
+      <h3
+        id={id}
+        className="mt-8 mb-3 scroll-m-20 text-base font-medium text-zinc-900 dark:text-zinc-100"
+      >
+        {children}
+      </h3>
+    );
+  },
   p: ({ children }) => (
     <p className="mb-4 text-zinc-500 dark:text-zinc-400">{children}</p>
   ),

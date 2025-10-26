@@ -1,8 +1,13 @@
 import { notFound } from "next/navigation";
-import { formatDate, getWritingPosts } from "@/app/writing/utils";
+import {
+  extractHeadingsFromMDX,
+  formatDate,
+  getWritingPosts,
+} from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
 import type { Metadata } from "next";
 import { Link } from "@/components/link";
+import { HeadingsLink } from "@/components/headings-link";
 
 export async function generateStaticParams() {
   const posts = await getWritingPosts();
@@ -79,9 +84,10 @@ export default async function Page({
   }
 
   const { metadata, content: Content } = post;
+  const headings = extractHeadingsFromMDX(slug);
 
   return (
-    <section>
+    <section className="relative">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -117,6 +123,9 @@ export default async function Page({
       <article>
         <Content />
       </article>
+      <aside className="fixed right-[calc((100vw-1024px)/2-17rem)] w-72 top-32">
+        <HeadingsLink headings={headings} />
+      </aside>
     </section>
   );
 }
