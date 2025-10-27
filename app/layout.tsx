@@ -48,15 +48,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout(props: LayoutProps<"/">) {
   return (
     <html lang="en">
       <body className={`${geistSans.className} antialiased`}>
-        <main className="w-full my-0 md:my-16">{children}</main>
+        <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>
     </html>
   );
