@@ -37,7 +37,7 @@ export default async function WritingPage() {
   return (
     <div>
       <div className="mb-16">
-        <h1 className="text-2xl font-medium mb-6">Writing</h1>
+        <h1 className="font-semibold text-2xl tracking-tighter mb-6">Writing</h1>
         <p className="mb-6 text-zinc-700 dark:text-zinc-300">
           A collection of my essays and reflections on various topics.
         </p>
