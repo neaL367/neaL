@@ -7,6 +7,7 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
   },
+  cacheComponents: true,
 } satisfies NextConfig;
 
 const withMDX = createMDX({

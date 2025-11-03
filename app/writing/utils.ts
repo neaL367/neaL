@@ -1,5 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+
+import { cacheLife } from "next/cache";
+
 import type { Metadata } from "@/types/metadata";
 import type { MDXContent } from "mdx/types";
 import type { Post } from "@/types/post";
@@ -47,7 +50,7 @@ export function extractHeadingsFromMDX(slug: string): Heading[] {
     "app",
     "writing",
     "posts",
-    `${slug}.mdx`
+    `${slug}.mdx`,
   );
 
   if (!fs.existsSync(filePath)) {
@@ -75,7 +78,12 @@ export function extractHeadingsFromMDX(slug: string): Heading[] {
   return headings;
 }
 
-export function formatDate(date: string, includeRelative = false): string {
+export async function formatDate(
+  date: string,
+  includeRelative = false,
+): Promise<string> {
+  "use cache";
+  cacheLife("max")
   const currentDate = new Date();
   const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
 

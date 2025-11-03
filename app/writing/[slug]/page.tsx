@@ -5,9 +5,9 @@ import {
   getWritingPosts,
 } from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
-import type { Metadata } from "next";
 import { Link } from "@/components/link";
 import { HeadingsLink } from "@/components/headings-link";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   const posts = await getWritingPosts();
