@@ -34,8 +34,10 @@ export const metadata: Metadata = {
 export default async function WritingPage() {
   const posts = await getWritingPosts();
 
+  const allPost = posts.map(({ ...post }) => post);
+
   return (
-    <div>
+    <section>
       <div className="mb-16">
         <h1 className="font-semibold text-2xl tracking-tighter mb-6">Writing</h1>
         <p className="mb-6 text-zinc-700 dark:text-zinc-300">
@@ -43,7 +45,9 @@ export default async function WritingPage() {
         </p>
       </div>
 
-      <Posts posts={posts} />
-    </div>
+      <article className="flex flex-col space-y-2.5 mb-4">
+        <Posts posts={allPost} />
+      </article>
+    </section>
   );
 }

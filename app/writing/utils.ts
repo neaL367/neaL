@@ -3,10 +3,9 @@ import path from "node:path";
 
 import { cacheLife } from "next/cache";
 
-import type { Metadata } from "@/types/metadata";
-import type { MDXContent } from "mdx/types";
 import type { Post } from "@/types/post";
-import type { Heading } from "@/types/heading";
+import type { MDXContent } from "mdx/types";
+import type { Metadata } from "@/types/metadata";
 
 type MDXModule = {
   metadata: Metadata;
@@ -37,19 +36,13 @@ export function getWritingPosts(): Promise<Post[]> {
   return getMDXData(postsDir);
 }
 
-export function generateHeadingId(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
 export async function formatDate(
   date: string,
   includeRelative = false,
 ): Promise<string> {
   "use cache";
   cacheLife("max")
+
   const currentDate = new Date();
   const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
 
@@ -64,7 +57,7 @@ export async function formatDate(
   else if (diffDays > 0) relative = `${diffDays}d ago`;
 
   const fullDate = targetDate.toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
     day: "numeric",
     year: "numeric",
   });

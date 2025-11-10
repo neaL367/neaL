@@ -1,33 +1,58 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { startTransition } from "react";
 import type { Route } from "next";
-import NextLink from "next/link";
 
 type Props<T extends string = string> = {
   href: Route<T> | URL;
   children: React.ReactNode;
-  className?: string;
 };
 
 export function Link<T extends string = string>({
   href,
   children,
-  className,
 }: Props<T>) {
-  const baseClass = `text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`;
-  const combinedClass = className ? `${baseClass} ${className}` : baseClass;
+  const router = useRouter();
 
+  // Normalize href to string for easier handling
+  const hrefString = typeof href === "string" ? href : href.toString();
+  const isUrl = href instanceof URL;
+  
   const isExternal =
-    href instanceof URL ||
-    (typeof href === "string" &&
-      (href.startsWith("http://") ||
-        href.startsWith("https://") ||
-        href.startsWith("mailto:")));
+    (isUrl &&
+      (href.protocol === "http:" ||
+        href.protocol === "https:" ||
+        href.protocol === "mailto:")) ||
+    (!isUrl &&
+      typeof hrefString === "string" &&
+      (hrefString.startsWith("http://") ||
+        hrefString.startsWith("https://") ||
+        hrefString.startsWith("mailto:")));
+  
+  // For internal navigation, use pathname from URL object or the string itself
+  const hrefPathname = isUrl && !isExternal ? href.pathname + href.search + href.hash : hrefString;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isExternal) {
+      return;
+    }
+
+    e.preventDefault();
+    const targetUrl = hrefPathname;
+
+    startTransition(() => {
+      router.push(targetUrl as Route);
+    });
+  };
 
   if (isExternal) {
+    const externalHref = isUrl ? href.toString() : hrefString;
     return (
       <a
-        href={href instanceof URL ? href.toString() : href}
+        href={externalHref}
         target="_blank"
-        className={combinedClass}
+        className={`text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`}
         rel="noopener noreferrer"
       >
         {children}
@@ -36,8 +61,8 @@ export function Link<T extends string = string>({
   }
 
   return (
-    <NextLink href={href as Route} className={combinedClass}>
+    <a href={hrefString} onClick={handleClick} className={`text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`}>
       {children}
-    </NextLink>
+    </a>
   );
 }
