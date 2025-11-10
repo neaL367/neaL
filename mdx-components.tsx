@@ -75,7 +75,12 @@ const components: MDXComponents = {
   ),
   strong: ({ children }) => <strong className="font-base">{children}</strong>,
   img: (props: ImageProps) => (
-    <Image sizes="100vw" style={{ width: "100%", height: "auto" }} {...props} />
+    <Image
+      sizes="100vw"
+      style={{ width: "100%", height: "auto" }}
+      {...props}
+      alt={(props as ImageProps).alt ?? ""}
+    />
   ),
 };
 

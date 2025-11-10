@@ -1,17 +1,32 @@
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { baseUrl } from "@/app/sitemap";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  preload: false,
+  weight: ["400", "500", "600", "700"],
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: { default: "Neal367", template: "%s | Neal367" },
   description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
+  icons: {
+    icon: "/icon.jpg",
+    apple: [
+      { url: "/icon.jpg", sizes: "120x120" },
+      { url: "/icon.jpg" },
+    ],
+  },
   openGraph: {
     title: "Neal367",
     description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
@@ -51,7 +66,7 @@ export const metadata: Metadata = {
 export default function RootLayout(props: LayoutProps<"/">) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${geistSans.variable} antialiased`}>
         <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>
     </html>
