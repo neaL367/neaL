@@ -10,7 +10,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-parisienne: var(--font-parisienne);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,7 +21,6 @@
 }
 
 body {
-  font-family: --var(--font-geist-sans);
   background: var(--background);
   max-width: 650px;
   color: var(--foreground);

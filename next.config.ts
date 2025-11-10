@@ -3,11 +3,12 @@ import createMDX from "@next/mdx";
 
 const nextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
+  reactStrictMode: true,
+  cacheComponents: true,
   typedRoutes: true,
   experimental: {
     mdxRs: true,
   },
-  cacheComponents: true,
 } satisfies NextConfig;
 
 const withMDX = createMDX({

@@ -56,7 +56,7 @@ const components: MDXComponents = {
   ),
   li: ({ children }) => <li className="mb-1 list-inside">{children}</li>,
   blockquote: ({ children }) => (
-    <blockquote className="mb-4 border-l-2 border-zinc-300 pl-4 text-zinc-600 italic dark:border-zinc-700 dark:text-zinc-400">
+    <blockquote className="mb-4 border-l-2 border-zinc-300 pl-4 text-sm text-zinc-600 italic dark:border-zinc-700 dark:text-zinc-400">
       {children}
     </blockquote>
   ),

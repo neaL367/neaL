@@ -1,12 +1,10 @@
 import { notFound } from "next/navigation";
 import {
-  extractHeadingsFromMDX,
   formatDate,
   getWritingPosts,
 } from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
 import { Link } from "@/components/link";
-import { HeadingsLink } from "@/components/headings-link";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -78,7 +76,6 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
   }
 
   const { metadata, content: Content } = post;
-  const headings = extractHeadingsFromMDX(slug);
 
   return (
     <section className="relative">
@@ -117,9 +114,6 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
       <article>
         <Content />
       </article>
-      <aside className="hidden xl:block fixed right-[calc((100vw-1024px)/2-6rem)] w-56 top-32">
-        <HeadingsLink headings={headings} />
-      </aside>
     </section>
   );
 }

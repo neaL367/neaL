@@ -20,7 +20,7 @@ function getMDXSlugs(dir: string): string[] {
     .map((file) => path.basename(file, path.extname(file)));
 }
 
-async function importMDXPost(slug: string): Promise<Post> {
+async function getMdxContent(slug: string): Promise<Post> {
   const { default: content, metadata } = (await import(
     `@/app/writing/posts/${slug}.mdx`
   )) as MDXModule;
@@ -29,7 +29,7 @@ async function importMDXPost(slug: string): Promise<Post> {
 
 async function getMDXData(dir: string): Promise<Post[]> {
   const slugs = getMDXSlugs(dir);
-  return Promise.all(slugs.map((slug) => importMDXPost(slug)));
+  return Promise.all(slugs.map((slug) => getMdxContent(slug)));
 }
 
 export function getWritingPosts(): Promise<Post[]> {
@@ -42,40 +42,6 @@ export function generateHeadingId(text: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
-}
-
-export function extractHeadingsFromMDX(slug: string): Heading[] {
-  const filePath = path.join(
-    process.cwd(),
-    "app",
-    "writing",
-    "posts",
-    `${slug}.mdx`,
-  );
-
-  if (!fs.existsSync(filePath)) {
-    return [];
-  }
-
-  const content = fs.readFileSync(filePath, "utf-8");
-  const headings: Heading[] = [];
-
-  const cleanContent = content
-    .replace(/^---[\s\S]*?---/m, "") // Remove frontmatter
-    .replace(/```[\s\S]*?```/g, "") // Remove code blocks
-    .replace(/`[^`]+`/g, ""); // Remove inline code
-
-  const markdownHeadingRegex = /^(#{1,2})\s+(.+)$/gm;
-
-  let match;
-  while ((match = markdownHeadingRegex.exec(cleanContent)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = generateHeadingId(text);
-    headings.push({ id, text, level });
-  }
-
-  return headings;
 }
 
 export async function formatDate(
