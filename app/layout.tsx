@@ -1,38 +1,54 @@
-import './globals.css'
-import { ThemeProvider } from 'next-themes'
-import { Geist } from 'next/font/google'
-import type { Metadata, Viewport } from 'next'
+import "./globals.css";
+import { Geist } from "next/font/google";
+import { baseUrl } from "@/app/sitemap";
+import type { Metadata, Viewport } from "next";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+  preload: false,
+  weight: ["400", "500", "600", "700"],
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ffffff',
+  themeColor: '#000000',
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://neal367.vercel.app'),
-  title: 'neaL367 - Personal website',
-  description: 'Gamer and Lazy Front-end developer.',
+  metadataBase: new URL(baseUrl),
+  title: { default: "Neal367", template: "%s | Neal367" },
+  description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
+  icons: {
+    icon: "/icon.jpg",
+    apple: [
+      { url: "/icon.jpg", sizes: "120x120" },
+      { url: "/icon.jpg" },
+    ],
+  },
   openGraph: {
-    title: 'neaL367 - Personal website',
-    description: 'Gamer and Lazy Front-end developer.',
-    type: 'website',
-    siteName: 'neaL367',
+    title: "Neal367",
+    description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
+    url: baseUrl,
+    siteName: "Neal367",
+    locale: "en_US",
+    type: "website",
     images: [
       {
-        url: './opengraph-image.png',
+        url: `${baseUrl}/opengraph-image.jpg`,
         width: 1200,
         height: 630,
-        alt: 'neaL367 - Personal website',
+        alt: "neaL367 - Personal website",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'neaL367 - Personal website',
-    description: 'Gamer and Lazy Front-end developer.',
-    creator: '@NL367',
-    images: './opengraph-image.png',
+    card: "summary_large_image",
+    title: "NeaL367",
+    description: "Lazy coding | Gamer | PixelArt | Rockstar Games fan",
+    creator: "@NL367",
+    images: `${baseUrl}/opengraph-image.jpg`,
   },
   robots: {
     index: true,
@@ -40,41 +56,19 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-}
+};
 
-const geist = Geist({
-  subsets: ['latin'],
-})
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout(props: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geist.className} scroll-smooth bg-white tracking-tight antialiased transition-all duration-500 ease-out dark:bg-zinc-950`}
-      >
-        <ThemeProvider
-          enableSystem={true}
-          attribute="class"
-          storageKey="theme"
-          defaultTheme="system"
-        >
-          <div className="flex min-h-screen w-full flex-col">
-            <div className="relative mx-auto w-full max-w-screen-md flex-1">
-              <div className="absolute inset-y-0 left-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
-              <div className="absolute inset-y-0 right-0 w-px bg-zinc-200 transition-all duration-500 ease-out dark:bg-zinc-800"></div>
-              {children}
-            </div>
-          </div>
-        </ThemeProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} antialiased`}>
+        <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>
     </html>
-  )
+  );
 }
