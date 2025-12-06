@@ -8,6 +8,7 @@ const nextConfig = {
   typedRoutes: true,
   experimental: {
     mdxRs: true,
+    webpackMemoryOptimizations: true
   },
 } satisfies NextConfig;
 
