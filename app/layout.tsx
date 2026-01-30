@@ -7,8 +7,8 @@ const geistSans = Geist({
   variable: "--font-geist-sans",
   display: "swap",
   subsets: ["latin"],
-  preload: false,
-  weight: ["400", "500", "600", "700"],
+  preload: true,
+  weight: ["400", "700"],
 });
 
 export const viewport: Viewport = {
@@ -66,8 +66,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: LayoutProps<"/">) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} font-sans antialiased`}>
+    <html lang="en" className={`${geistSans.variable}`}>
+      <body className={`font-sans antialiased`}>
         <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>
     </html>
