@@ -3,7 +3,6 @@ import "server-only";
 import { cacheLife } from "next/cache";
 
 import type { Post } from "@/types/post";
-import type { Metadata } from "@/types/metadata";
 
 import {
   allSlugs,
@@ -27,7 +26,7 @@ export async function getWritingPostSummaries(): Promise<
 }
 
 export async function getWritingPost(slug: string): Promise<Post> {
-  if (!(slug in loadersBySlug)) {
+  if (!Object.prototype.hasOwnProperty.call(loadersBySlug, slug)) {
     throw new Error(`Unknown post slug: ${slug}`);
   }
 
@@ -80,13 +79,4 @@ export function toTime(publishedAt?: string): number {
   const d = new Date(publishedAt.includes("T") ? publishedAt : `${publishedAt}T00:00:00`);
   const t = d.getTime();
   return Number.isFinite(t) ? t : 0;
-}
-
-export function escapeXml(s: string) {
-  return s
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
 }

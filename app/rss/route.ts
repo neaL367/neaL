@@ -1,5 +1,14 @@
 import { baseUrl } from "@/app/sitemap";
-import { escapeXml, getWritingPostSummaries, toTime } from "@/app/writing/utils";
+import { getWritingPostSummaries, toTime } from "@/app/writing/utils";
+
+function escapeXml(s: string) {
+  return s
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
 
 export async function GET() {
   const posts = await getWritingPostSummaries();
