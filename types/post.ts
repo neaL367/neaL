@@ -6,3 +6,8 @@ export type Post = {
   metadata: Metadata;
   content: MDXContent;
 };
+
+export type PostSummary = {
+  slug: string;
+  metadata: Metadata;
+};

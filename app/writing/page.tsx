@@ -1,4 +1,4 @@
-import { getWritingPosts } from "@/app/writing/utils";
+import { getWritingPostSummaries } from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
 import { Posts } from "@/components/posts";
 import type { Metadata } from "next";
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
 };
 
 export default async function WritingPage() {
-  const posts = await getWritingPosts();
+  const posts = await getWritingPostSummaries();
 
-  const allPost = posts.map(({ ...post }) => post);
+  const published = posts.filter((p) => p.metadata.publishedAt.trim() !== "");
 
   return (
     <section>
@@ -46,7 +46,7 @@ export default async function WritingPage() {
       </div>
 
       <article className="flex flex-col space-y-2.5 mb-4">
-        <Posts posts={allPost} />
+        <Posts posts={published} />
       </article>
     </section>
   );

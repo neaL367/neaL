@@ -1,19 +1,21 @@
-import { getWritingPosts } from "@/app/writing/utils";
 import type { MetadataRoute } from "next";
+import { getWritingPostSummaries } from "@/app/writing/utils";
 
 export const baseUrl = "https://neal367.site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getWritingPosts();
+  const posts = await getWritingPostSummaries();
 
-  const writings = posts.map((post) => ({
+  const writings: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${baseUrl}/writing/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));
 
-  const routes = ["", "/writing"].map((route) => ({
+  const now = new Date();
+
+  const routes: MetadataRoute.Sitemap = ["", "/writing"].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString().split("T")[0],
+    lastModified: now,
   }));
 
   return [...routes, ...writings];

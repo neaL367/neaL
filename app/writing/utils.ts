@@ -1,39 +1,49 @@
-import fs from "node:fs";
-import path from "node:path";
+import "server-only";
 
 import { cacheLife } from "next/cache";
 
 import type { Post } from "@/types/post";
-import type { MDXContent } from "mdx/types";
 import type { Metadata } from "@/types/metadata";
 
-type MDXModule = {
-  metadata: Metadata;
-  default: MDXContent;
-};
+import {
+  allSlugs,
+  metaBySlug,
+  loadersBySlug,
+  type PostSlug,
+  type MDXModule,
+} from "./generated/posts-manifest";
 
-function getMDXSlugs(dir: string): string[] {
-  return fs
-    .readdirSync(dir)
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => path.basename(file, path.extname(file)));
+export async function getWritingPostSummaries(): Promise<
+  Array<Pick<Post, "slug" | "metadata">>
+> {
+  const posts = allSlugs.map((slug) => ({
+    slug,
+    metadata: metaBySlug[slug],
+  }));
+
+  posts.sort((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
+
+  return posts;
 }
 
-async function getMdxContent(slug: string): Promise<Post> {
-  const { default: content, metadata } = (await import(
-    `@/app/writing/posts/${slug}.mdx`
-  )) as MDXModule;
-  return { slug, metadata, content };
+export async function getWritingPost(slug: string): Promise<Post> {
+  if (!(slug in loadersBySlug)) {
+    throw new Error(`Unknown post slug: ${slug}`);
+  }
+
+  const s = slug as PostSlug;
+  const mod: MDXModule = await loadersBySlug[s]();
+
+  return {
+    slug: s,
+    metadata: metaBySlug[s],
+    content: mod.default,
+  };
 }
 
-async function getMDXData(dir: string): Promise<Post[]> {
-  const slugs = getMDXSlugs(dir);
-  return Promise.all(slugs.map((slug) => getMdxContent(slug)));
-}
-
-export function getWritingPosts(): Promise<Post[]> {
-  const postsDir = path.join(process.cwd(), "app", "writing", "posts");
-  return getMDXData(postsDir);
+export async function getWritingPosts(): Promise<Post[]> {
+  const posts = await Promise.all(allSlugs.map((s) => getWritingPost(s)));
+  return posts;
 }
 
 export async function formatDate(
@@ -41,7 +51,7 @@ export async function formatDate(
   includeRelative = false,
 ): Promise<string> {
   "use cache";
-  cacheLife("max")
+  cacheLife("max");
 
   const currentDate = new Date();
   const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
@@ -63,4 +73,20 @@ export async function formatDate(
   });
 
   return includeRelative ? `${fullDate} (${relative})` : fullDate;
+}
+
+export function toTime(publishedAt?: string): number {
+  if (!publishedAt) return 0;
+  const d = new Date(publishedAt.includes("T") ? publishedAt : `${publishedAt}T00:00:00`);
+  const t = d.getTime();
+  return Number.isFinite(t) ? t : 0;
+}
+
+export function escapeXml(s: string) {
+  return s
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
 }

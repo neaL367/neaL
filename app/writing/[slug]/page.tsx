@@ -1,49 +1,41 @@
 import { notFound } from "next/navigation";
-import {
-  formatDate,
-  getWritingPosts,
-} from "@/app/writing/utils";
+import { formatDate, getWritingPost, getWritingPostSummaries } from "@/app/writing/utils";
 import { baseUrl } from "@/app/sitemap";
 import { Link } from "@/components/link";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
-  const posts = await getWritingPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  const posts = await getWritingPostSummaries();
+  return posts
+    .filter((p) => p.metadata.publishedAt?.trim())
+    .map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata(
   props: PageProps<"/writing/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
-  if (!slug) {
-    notFound();
-  }
+  if (!slug) notFound();
 
-  const posts = await getWritingPosts();
+  const posts = await getWritingPostSummaries();
   const post = posts.find((p) => p.slug === slug);
 
-  if (!post || post.metadata.publishedAt.trim() == "") {
-    notFound();
-  }
+  if (!post || !post.metadata.publishedAt?.trim()) notFound();
 
-  const {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-  } = post.metadata;
+  const { title, publishedAt: publishedTime, summary: description } = post.metadata;
+
+  const canonical = `${baseUrl}/writing/${slug}`;
 
   return {
     title,
     description,
+    alternates: { canonical },
     openGraph: {
       title,
       description,
       type: "article",
       publishedTime,
-      url: `/writing/${slug}`,
+      url: canonical,
       images: [
         {
           url: `${baseUrl}/opengraph-image.jpg`,
@@ -57,23 +49,18 @@ export async function generateMetadata(
       card: "summary_large_image",
       title,
       description,
-      images: `${baseUrl}/opengraph-image.jpg`,
+      images: [`${baseUrl}/opengraph-image.jpg`],
     },
   };
 }
 
-export default async function Page(props: PageProps<'/writing/[slug]'>) {
+
+export default async function Page(props: PageProps<"/writing/[slug]">) {
   const { slug } = await props.params;
-  if (!slug) {
-    notFound();
-  }
+  if (!slug) notFound();
 
-  const posts = await getWritingPosts();
-  const post = posts.find((p) => p.slug === slug);
-
-  if (!post || post.metadata.publishedAt.trim() == "") {
-    notFound();
-  }
+  const post = await getWritingPost(slug);
+  if (!post.metadata.publishedAt?.trim()) notFound();
 
   const { metadata, content: Content } = post;
 
@@ -91,20 +78,15 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
             dateModified: metadata.publishedAt,
             description: metadata.summary,
             url: `${baseUrl}/writing/${slug}`,
-            author: {
-              "@type": "Person",
-              name: "Neal367",
-            },
+            author: { "@type": "Person", name: metadata.author ?? "Neal367" },
           }),
         }}
       />
       <div className="flex justify-between">
         <div>
-          <h1 className="font-semibold text-2xl tracking-tighter">
-            {metadata.title}
-          </h1>
+          <h1 className="font-semibold text-2xl tracking-tighter">{metadata.title}</h1>
           <p className="mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(metadata.publishedAt)}
+            {await formatDate(metadata.publishedAt)}
           </p>
         </div>
         <div>
@@ -117,3 +99,4 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
     </section>
   );
 }
+
