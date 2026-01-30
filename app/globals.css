@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --selection-bg: #e4e4e7;
+  --selection-fg: #18181b;
+
+  --scrollbar-track: #f4f4f5;
+  --scrollbar-thumb: #d4d4d8;
+  --scrollbar-thumb-hover: #a1a1aa;
 }
 
 @theme inline {
@@ -16,7 +23,51 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --selection-bg: #3f3f46;
+    --selection-fg: #f4f4f5;
+
+    --scrollbar-track: #09090b;
+    --scrollbar-thumb: #3f3f46;
+    --scrollbar-thumb-hover: #52525b;
   }
+}
+
+@supports (scrollbar-gutter: stable) {
+  body {
+    scrollbar-gutter: stable both-edges;
+  }
+}
+
+
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* WebKit */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 2px solid var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 body {
@@ -25,6 +76,21 @@ body {
   color: var(--foreground);
   margin: 0 auto;
   padding: 4rem 2rem;
-  scrollbar-gutter: stable both-edges;
   scroll-behavior: smooth;
+}
+
+pre ::selection,
+code ::selection {
+  background-color: color-mix(in srgb,
+      var(--selection-bg) 70%,
+      transparent);
+  color: var(--selection-fg);
+}
+
+pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
 }
