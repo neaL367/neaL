@@ -1,7 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { startTransition } from "react";
+import NextLink from "next/link";
 import type { Route } from "next";
 
 type Props<T extends string = string> = {
@@ -13,12 +10,9 @@ export function Link<T extends string = string>({
   href,
   children,
 }: Props<T>) {
-  const router = useRouter();
-
-  // Normalize href to string for easier handling
   const hrefString = typeof href === "string" ? href : href.toString();
   const isUrl = href instanceof URL;
-  
+
   const isExternal =
     (isUrl &&
       (href.protocol === "http:" ||
@@ -29,22 +23,9 @@ export function Link<T extends string = string>({
       (hrefString.startsWith("http://") ||
         hrefString.startsWith("https://") ||
         hrefString.startsWith("mailto:")));
-  
+
   // For internal navigation, use pathname from URL object or the string itself
   const hrefPathname = isUrl && !isExternal ? href.pathname + href.search + href.hash : hrefString;
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (isExternal) {
-      return;
-    }
-
-    e.preventDefault();
-    const targetUrl = hrefPathname;
-
-    startTransition(() => {
-      router.push(targetUrl as Route);
-    });
-  };
 
   if (isExternal) {
     const externalHref = isUrl ? href.toString() : hrefString;
@@ -61,8 +42,11 @@ export function Link<T extends string = string>({
   }
 
   return (
-    <a href={hrefString} onClick={handleClick} className={`text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`}>
+    <NextLink
+      href={hrefPathname as Route}
+      className={`text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`}
+    >
       {children}
-    </a>
+    </NextLink>
   );
 }

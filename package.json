@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^16.1.6",
     "@next/mdx": "^16.1.6",
     "@types/mdx": "^2.0.13",
     "next": "^16.1.6",
@@ -23,10 +24,12 @@
     "@types/node": "^20.19.30",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "^9.39.2",
     "eslint-config-next": "16.0.0",
     "eslint-config-prettier": "^10.1.8",
     "tailwindcss": "^4.1.18",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3"
   }
 }

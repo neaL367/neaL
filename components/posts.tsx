@@ -15,7 +15,7 @@ export async function Posts({ posts }: PostsProps) {
           key={post.slug}
           href={`/writing/${post.slug}` as Route}
         >
-          <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
+          <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]">
             <p className="text-zinc-900 dark:text-zinc-100 tracking-tight">
               {post.metadata.title}
             </p>
