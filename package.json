@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "gen:posts": "bun scripts/posts.ts",
-    "dev": "bun run gen:posts && next dev --webpack",
-    "build": "bun run gen:posts && next build --webpack",
-    "start": "next start",
+    "dev": "bun run --bun gen:posts && bun run --bun next dev --webpack",
+    "build": "bun run --bun gen:posts && bun run --bun next build --webpack",
+    "start": "bun run --bun next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
