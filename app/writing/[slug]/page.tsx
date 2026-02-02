@@ -84,13 +84,20 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
       />
       <div className="flex justify-between">
         <div>
-          <h1 className="font-semibold text-2xl tracking-tighter">{metadata.title}</h1>
+          <h1
+            className="font-semibold text-2xl tracking-tighter"
+            style={{ viewTransitionName: `post-title-${slug}` } as React.CSSProperties}
+          >
+            {metadata.title}
+          </h1>
           <p className="mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
             {await formatDate(metadata.publishedAt)}
           </p>
         </div>
         <div>
-          <Link href="/">{metadata.author}</Link>
+          <Link href="/" style={{ viewTransitionName: 'author-name' } as React.CSSProperties}>
+            {metadata.author}
+          </Link>
         </div>
       </div>
       <article>

@@ -1,4 +1,5 @@
 import { getWritingPostSummaries } from "@/app/writing/utils";
+import { Suspense } from "react";
 import { baseUrl } from "@/app/sitemap";
 import { Posts } from "@/components/posts";
 import type { Metadata } from "next";
@@ -31,11 +32,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function WritingPage() {
-  const posts = await getWritingPostSummaries();
-
-  const published = posts.filter((p) => p.metadata.publishedAt.trim() !== "");
-
+export default function WritingPage() {
   return (
     <section>
       <div className="mb-16">
@@ -45,9 +42,20 @@ export default async function WritingPage() {
         </p>
       </div>
 
-      <article className="flex flex-col space-y-2.5 mb-4">
-        <Posts posts={published} />
-      </article>
+      <Suspense fallback={<p className="text-zinc-500">Loading posts...</p>}>
+        <PostList />
+      </Suspense>
     </section>
+  );
+}
+
+async function PostList() {
+  const posts = await getWritingPostSummaries();
+  const published = posts.filter((p) => p.metadata.publishedAt.trim() !== "");
+
+  return (
+    <article className="flex flex-col space-y-2.5 mb-4">
+      <Posts posts={published} />
+    </article>
   );
 }

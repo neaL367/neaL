@@ -42,3 +42,7 @@ next-env.d.ts
 
 # generated writing manifest
 app/writing/generated/
+
+#agent
+.agent/
+.agents/

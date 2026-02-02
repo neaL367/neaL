@@ -16,7 +16,10 @@ export async function Posts({ posts }: PostsProps) {
           href={`/writing/${post.slug}` as Route}
         >
           <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]">
-            <p className="text-zinc-900 dark:text-zinc-100 tracking-tight">
+            <p
+              className="text-zinc-900 dark:text-zinc-100 tracking-tight"
+              style={{ viewTransitionName: `post-title-${post.slug}` } as React.CSSProperties}
+            >
               {post.metadata.title}
             </p>
             <p className="text-zinc-500 dark:text-zinc-400 tabular-nums">

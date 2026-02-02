@@ -20,9 +20,7 @@ export async function getWritingPostSummaries(): Promise<
     metadata: metaBySlug[slug],
   }));
 
-  posts.sort((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
-
-  return posts;
+  return posts.toSorted((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
 }
 
 export async function getWritingPost(slug: string): Promise<Post> {
