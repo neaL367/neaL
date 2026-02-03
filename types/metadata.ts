@@ -3,4 +3,5 @@ export type Metadata = {
   summary: string;
   publishedAt: string;
   author: string;
+  formattedDate: string;
 };

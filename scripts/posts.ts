@@ -5,10 +5,14 @@ const postsDir = path.join(process.cwd(), "app", "writing", "posts");
 const outDir = path.join(process.cwd(), "app", "writing", "generated");
 const outFile = path.join(outDir, "posts-manifest.ts");
 
-function extractMetadataLiteral(mdx: string): string {
-    const m = mdx.match(/export\s+const\s+metadata\s*=\s*({[\s\S]*?})\s*;?/);
-    if (!m) throw new Error("Missing `export const metadata = {...}` in an .mdx file");
-    return m[1];
+function formatDate(date: string): string {
+    if (!date) return "";
+    const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
+    return targetDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
 }
 
 const files = fs
@@ -24,16 +28,22 @@ const out: string[] = [];
 out.push(`import type { Metadata } from "@/types/metadata";`);
 out.push(`import type { MDXContent } from "mdx/types";`);
 out.push(``);
+out.push(`export type MetadataWithDate = Metadata & { formattedDate: string };`);
 out.push(`export type MDXModule = { metadata: Metadata; default: MDXContent };`);
 out.push(`export const allSlugs = ${JSON.stringify(slugs)} as const;`);
 out.push(`export type PostSlug = typeof allSlugs[number];`);
 out.push(``);
-out.push(`export const metaBySlug: Record<PostSlug, Metadata> = {`);
+out.push(`export const metaBySlug: Record<PostSlug, MetadataWithDate> = {`);
 
 for (const slug of slugs) {
     const full = path.join(postsDir, `${slug}.mdx`);
     const mdx = fs.readFileSync(full, "utf8");
-    const literal = extractMetadataLiteral(mdx);
+    const m = mdx.match(/export\s+const\s+metadata\s*=\s*({[\s\S]*?})\s*;?/);
+    if (!m) throw new Error(`Missing metadata in ${slug}.mdx`);
+
+    // We can't easily parse the JS object literal perfectly with regex if it's complex,
+    // but we can inject our formatted date into the resulting manifest string.
+    const literal = m[1].replace(/}$/, `,  formattedDate: "${formatDate(mdx.match(/publishedAt:\s*"(.*?)"/)?.[1] || "")}"\n}`);
     out.push(`  "${slug}": ${literal},`);
 }
 

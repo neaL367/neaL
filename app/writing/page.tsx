@@ -1,7 +1,8 @@
-import { getWritingPostSummaries } from "@/app/writing/utils";
-import { Suspense } from "react";
+import React, { Suspense } from "react";
+import { Link } from "@/components/link";
+import { PostList, PostItem, PostTitle, PostDate } from "@/components/posts";
 import { baseUrl } from "@/app/sitemap";
-import { Posts } from "@/components/posts";
+import { getWritingPostSummaries } from "@/app/writing/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -36,26 +37,45 @@ export default function WritingPage() {
   return (
     <section>
       <div className="mb-16">
-        <h1 className="font-semibold text-2xl tracking-tighter mb-6">Writing</h1>
+        <div className="mb-4">
+          <Link
+            href="/"
+            style={{ viewTransitionName: 'author-name', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}
+            className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            Neal367
+          </Link>
+        </div>
+        <h1
+          className="font-semibold text-2xl tracking-tighter mb-6"
+          style={{ viewTransitionName: 'writing-title', width: 'fit-content' } as React.CSSProperties}
+        >
+          Writing
+        </h1>
         <p className="mb-6 text-zinc-700 dark:text-zinc-300">
           A collection of my essays and reflections on various topics.
         </p>
       </div>
 
       <Suspense fallback={<p className="text-zinc-500">Loading posts...</p>}>
-        <PostList />
+        <PostCollection />
       </Suspense>
     </section>
   );
 }
 
-async function PostList() {
+async function PostCollection() {
   const posts = await getWritingPostSummaries();
   const published = posts.filter((p) => p.metadata.publishedAt.trim() !== "");
 
   return (
-    <article className="flex flex-col space-y-2.5 mb-4">
-      <Posts posts={published} />
-    </article>
+    <PostList>
+      {published.map((post) => (
+        <PostItem key={post.slug} post={post}>
+          <PostTitle />
+          <PostDate />
+        </PostItem>
+      ))}
+    </PostList>
   );
 }

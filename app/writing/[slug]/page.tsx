@@ -1,7 +1,8 @@
-import { notFound } from "next/navigation";
-import { formatDate, getWritingPost, getWritingPostSummaries } from "@/app/writing/utils";
-import { baseUrl } from "@/app/sitemap";
 import { Link } from "@/components/link";
+import { notFound } from "next/navigation";
+import { getWritingPost, getWritingPostSummaries } from "@/app/writing/utils";
+import { metaBySlug, type PostSlug } from "../generated/posts-manifest";
+import { baseUrl } from "@/app/sitemap";
 import type { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -59,10 +60,13 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
   const { slug } = await props.params;
   if (!slug) notFound();
 
-  const post = await getWritingPost(slug);
-  if (!post.metadata.publishedAt?.trim()) notFound();
+  const metadata = metaBySlug[slug as PostSlug];
+  if (!metadata || !metadata.publishedAt?.trim()) notFound();
 
-  const { metadata, content: Content } = post;
+  const postPromise = getWritingPost(slug);
+  const post = await postPromise;
+
+  const { content: Content } = post;
 
   return (
     <section className="relative">
@@ -82,23 +86,25 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
           }),
         }}
       />
-      <div className="flex justify-between">
-        <div>
-          <h1
-            className="font-semibold text-2xl tracking-tighter"
-            style={{ viewTransitionName: `post-title-${slug}` } as React.CSSProperties}
+      <div className="mb-8">
+        <div className="mb-4">
+          <Link
+            href="/writing"
+            style={{ viewTransitionName: 'writing-title', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}
+            className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
-            {metadata.title}
-          </h1>
-          <p className="mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
-            {await formatDate(metadata.publishedAt)}
-          </p>
-        </div>
-        <div>
-          <Link href="/" style={{ viewTransitionName: 'author-name' } as React.CSSProperties}>
-            {metadata.author}
+            Writing
           </Link>
         </div>
+        <h1
+          className="font-semibold text-2xl tracking-tighter"
+          style={{ viewTransitionName: `post-title-${slug}`, width: 'fit-content' } as React.CSSProperties}
+        >
+          {metadata.title}
+        </h1>
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+          {metadata.formattedDate} • <Link href="/" style={{ viewTransitionName: 'author-name', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}>{metadata.author}</Link>
+        </p>
       </div>
       <article>
         <Content />
