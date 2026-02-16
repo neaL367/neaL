@@ -90,7 +90,7 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
         <div className="mb-4">
           <Link
             href="/writing"
-            style={{ viewTransitionName: 'writing-title', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}
+            style={{ viewTransitionName: 'writing-title', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
             className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             Writing
@@ -98,12 +98,12 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
         </div>
         <h1
           className="font-semibold text-2xl tracking-tighter"
-          style={{ viewTransitionName: `post-title-${slug}`, width: 'fit-content' } as React.CSSProperties}
+          style={{ viewTransitionName: `post-title-${slug}`, viewTransitionClass: 'via-blur', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
         >
           {metadata.title}
         </h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-          {metadata.formattedDate} • <Link href="/" style={{ viewTransitionName: 'author-name', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}>{metadata.author}</Link>
+          {metadata.formattedDate} • <Link href="/" style={{ viewTransitionName: 'author-name', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}>{metadata.author}</Link>
         </p>
       </div>
       <article>

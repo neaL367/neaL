@@ -1,9 +1,9 @@
 "use client";
 
 import NextLink from "next/link";
-import type { Route } from "next";
-import { useRouter } from "next/navigation";
+
 import React from "react";
+import type { Route } from "next";
 
 type Props<T extends string = string> = {
   href: Route<T> | URL;
@@ -19,7 +19,6 @@ export function Link<T extends string = string>({
   style,
   ...props
 }: Props<T>) {
-  const router = useRouter();
   const hrefString = typeof href === "string" ? href : href.toString();
   const isUrl = href instanceof URL;
 
@@ -52,23 +51,9 @@ export function Link<T extends string = string>({
     );
   }
 
-  const handleOnClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Only intercept left clicks without modifier keys
-    const isModifierKey = e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
-    if (isModifierKey || e.button !== 0) return;
-
-    if (document.startViewTransition) {
-      e.preventDefault();
-      document.startViewTransition(() => {
-        router.push(hrefPathname as Route);
-      });
-    }
-  };
-
   return (
     <NextLink
       href={hrefPathname as Route}
-      onClick={handleOnClick}
       className={className || `text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4`}
       style={style}
       {...props}

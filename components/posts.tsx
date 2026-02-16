@@ -17,7 +17,11 @@ function usePost() {
 }
 
 export function PostList({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col space-y-2.5 mb-4">{children}</div>;
+  return (
+    <div className="flex flex-col space-y-2.5 mb-4">
+      {children}
+    </div>
+  );
 }
 
 export function PostItem({ post, children }: { post: PostSummary; children: React.ReactNode }) {
@@ -37,7 +41,11 @@ export function PostTitle() {
   return (
     <p
       className="text-zinc-900 dark:text-zinc-100 tracking-tight"
-      style={{ viewTransitionName: `post-title-${post.slug}`, width: 'fit-content' } as React.CSSProperties}
+      style={{
+        viewTransitionName: `post-title-${post.slug}`,
+        viewTransitionClass: 'via-blur',
+        width: 'fit-content'
+      } as React.CSSProperties & { viewTransitionClass?: string }}
     >
       {post.metadata.title}
     </p>

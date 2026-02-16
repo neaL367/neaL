@@ -9,6 +9,7 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
     inlineCss: true,
+    webpackMemoryOptimizations: true,
   },
 } satisfies NextConfig;
 

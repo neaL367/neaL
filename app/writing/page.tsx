@@ -40,7 +40,7 @@ export default function WritingPage() {
         <div className="mb-4">
           <Link
             href="/"
-            style={{ viewTransitionName: 'author-name', display: 'inline-block', width: 'fit-content' } as React.CSSProperties}
+            style={{ viewTransitionName: 'author-name', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
             className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             Neal367
@@ -48,7 +48,7 @@ export default function WritingPage() {
         </div>
         <h1
           className="font-semibold text-2xl tracking-tighter mb-6"
-          style={{ viewTransitionName: 'writing-title', width: 'fit-content' } as React.CSSProperties}
+          style={{ viewTransitionName: 'writing-title', viewTransitionClass: 'via-blur', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
         >
           Writing
         </h1>
