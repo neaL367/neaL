@@ -43,7 +43,7 @@ for (const slug of slugs) {
 
     // We can't easily parse the JS object literal perfectly with regex if it's complex,
     // but we can inject our formatted date into the resulting manifest string.
-    const literal = m[1].replace(/}$/, `,  formattedDate: "${formatDate(mdx.match(/publishedAt:\s*"(.*?)"/)?.[1] || "")}"\n}`);
+    const literal = m[1].replace(/,?\s*}$/, `,\n  formattedDate: "${formatDate(mdx.match(/publishedAt:\s*"(.*?)"/)?.[1] || "")}"\n}`);
     out.push(`  "${slug}": ${literal},`);
 }
 

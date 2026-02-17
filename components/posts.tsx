@@ -5,7 +5,6 @@ import { Link } from "@/components/link";
 import type { PostSummary } from "@/types/post";
 import type { Route } from "next";
 
-
 const PostContext = React.createContext<PostSummary | null>(null);
 
 function usePost() {
@@ -55,13 +54,12 @@ export function PostTitle() {
 export function PostDate() {
   const post = usePost();
   return (
-    <p className="text-zinc-500 dark:text-zinc-400 tabular-nums lowercase">
+    <p className="text-zinc-500 dark:text-zinc-400 tabular-nums">
       {post.metadata.formattedDate}
     </p>
   );
 }
 
-// Legacy support for the old API to avoid breaking changes immediately if needed,
 export function Posts({ posts }: { posts: PostSummary[] }) {
   return (
     <PostList>
