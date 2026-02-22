@@ -20,7 +20,7 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: `
               default-src 'self';
-script-src 'self' 'unsafe-eval' 'unsafe-inline';
+              script-src 'self' 'unsafe-eval' 'unsafe-inline';
               style-src 'self' 'unsafe-inline';
               img-src 'self' blob: data:;
               font-src 'self';
@@ -29,8 +29,7 @@ script-src 'self' 'unsafe-eval' 'unsafe-inline';
               form-action 'self';
               frame-src 'none';
               frame-ancestors 'none';
-              require-trusted-types-for 'script';
-            `.replace(/\s{2,}/g, " ").trim(),
+            `.replace(/\s+/g, " ").trim(),
           },
           {
             key: "Strict-Transport-Security",
