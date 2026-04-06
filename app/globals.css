@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-
-
 @keyframes reveal {
   0% {
     scale: 0.8;

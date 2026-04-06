@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Link } from "@/components/link";
 import { PostList, PostItem, PostTitle, PostDate } from "@/components/posts";
 import { baseUrl } from "@/app/sitemap";
-import { getWritingPostSummaries } from "@/app/writing/utils";
+import { getPostListItems } from "@/app/writing/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -65,12 +65,11 @@ export default function WritingPage() {
 }
 
 async function PostCollection() {
-  const posts = await getWritingPostSummaries();
-  const published = posts.filter((p) => p.metadata.publishedAt.trim() !== "");
+  const posts = await getPostListItems();
 
   return (
     <PostList>
-      {published.map((post) => (
+      {posts.map((post) => (
         <PostItem key={post.slug} post={post}>
           <PostTitle />
           <PostDate />

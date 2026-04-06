@@ -46,3 +46,4 @@ app/writing/generated/
 #agent
 .agent/
 .agents/
+skills-lock.json

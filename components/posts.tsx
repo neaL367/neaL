@@ -1,33 +1,69 @@
-"use client"
+"use client";
 
 import React from "react";
 import { Link } from "@/components/link";
-import type { PostSummary } from "@/types/post";
 import type { Route } from "next";
 
-const PostContext = React.createContext<PostSummary | null>(null);
+// Simplified type for what a post item needs
+type PostDisplayData = {
+  slug: string;
+  title: string;
+  formattedDate: string;
+} | {
+  slug: string;
+  metadata: {
+    title: string;
+    formattedDate: string;
+  }
+};
+
+const PostContext = React.createContext<PostDisplayData | null>(null);
 
 function usePost() {
   const context = React.use(PostContext);
   if (!context) {
     throw new Error("Post subcomponents must be used within a Post.Item");
   }
+  
+  // Normalize the data
+  if ('metadata' in context) {
+    return {
+      slug: context.slug,
+      title: context.metadata.title,
+      formattedDate: context.metadata.formattedDate,
+    };
+  }
+  
   return context;
 }
 
-export function PostList({ children }: { children: React.ReactNode }) {
+export function PostList({ 
+  children, 
+  className = "flex flex-col space-y-2.5 mb-4" 
+}: { 
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="flex flex-col space-y-2.5 mb-4">
+    <div className={className}>
       {children}
     </div>
   );
 }
 
-export function PostItem({ post, children }: { post: PostSummary; children: React.ReactNode }) {
+export function PostItem({ 
+  post, 
+  children,
+  className = "w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]"
+}: { 
+  post: PostDisplayData; 
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <PostContext.Provider value={post}>
       <Link href={`/writing/${post.slug}` as Route}>
-        <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]">
+        <div className={className}>
           {children}
         </div>
       </Link>
@@ -35,32 +71,35 @@ export function PostItem({ post, children }: { post: PostSummary; children: Reac
   );
 }
 
-export function PostTitle() {
+export function PostTitle({ className = "text-zinc-900 dark:text-zinc-100 tracking-tight" }: { className?: string }) {
   const post = usePost();
   return (
     <p
-      className="text-zinc-900 dark:text-zinc-100 tracking-tight"
+      className={className}
       style={{
         viewTransitionName: `post-title-${post.slug}`,
         viewTransitionClass: 'via-blur',
         width: 'fit-content'
       } as React.CSSProperties & { viewTransitionClass?: string }}
     >
-      {post.metadata.title}
+      {post.title}
     </p>
   );
 }
 
-export function PostDate() {
+export function PostDate({ className = "text-zinc-500 dark:text-zinc-400 tabular-nums" }: { className?: string }) {
   const post = usePost();
   return (
-    <p className="text-zinc-500 dark:text-zinc-400 tabular-nums">
-      {post.metadata.formattedDate}
+    <p className={className}>
+      {post.formattedDate}
     </p>
   );
 }
 
-export function Posts({ posts }: { posts: PostSummary[] }) {
+/**
+ * Providing a default implementation while keeping compound components available
+ */
+export function Posts({ posts }: { posts: PostDisplayData[] }) {
   return (
     <PostList>
       {posts.map((post) => (

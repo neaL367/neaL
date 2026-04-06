@@ -1,7 +1,7 @@
 import "server-only";
 
 import { cache } from "react";
-import type { Post } from "@/types/post";
+import type { Post, PostSummary } from "@/types/post";
 
 import {
   allSlugs,
@@ -11,8 +11,32 @@ import {
   metaBySlug,
 } from "./generated/posts-manifest";
 
+/**
+ * server-serialization
+ * Minimize data passed to client components by returning only necessary fields.
+ */
+export type PostListItem = {
+  slug: string;
+  title: string;
+  publishedAt: string;
+  formattedDate: string;
+};
+
+export const getPostListItems = cache(async function getPostListItems(): Promise<PostListItem[]> {
+  const posts = allSlugs
+    .map((slug) => ({
+      slug,
+      title: metaBySlug[slug].title,
+      publishedAt: metaBySlug[slug].publishedAt,
+      formattedDate: metaBySlug[slug].formattedDate,
+    }))
+    .filter((p) => p.publishedAt.trim() !== "");
+
+  return posts.toSorted((a, b) => toTime(b.publishedAt) - toTime(a.publishedAt));
+});
+
 export const getWritingPostSummaries = cache(async function getWritingPostSummaries(): Promise<
-  Array<Pick<Post, "slug" | "metadata">>
+  PostSummary[]
 > {
   const posts = allSlugs.map((slug) => ({
     slug,
@@ -20,6 +44,18 @@ export const getWritingPostSummaries = cache(async function getWritingPostSummar
   }));
 
   return posts.toSorted((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
+});
+
+export const getPostMetadata = cache(async function getPostMetadata(slug: string): Promise<PostSummary | null> {
+  const s = slug as PostSlug;
+  if (!Object.prototype.hasOwnProperty.call(metaBySlug, s)) {
+    return null;
+  }
+
+  return {
+    slug: s,
+    metadata: metaBySlug[s],
+  };
 });
 
 export const getWritingPost = cache(async function getWritingPost(slug: string): Promise<Post> {

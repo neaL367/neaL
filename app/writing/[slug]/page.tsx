@@ -1,6 +1,6 @@
 import { Link } from "@/components/link";
 import { notFound } from "next/navigation";
-import { getWritingPost, getWritingPostSummaries } from "@/app/writing/utils";
+import { getWritingPost, getWritingPostSummaries, getPostMetadata } from "@/app/writing/utils";
 import { metaBySlug, type PostSlug } from "../generated/posts-manifest";
 import { baseUrl } from "@/app/sitemap";
 import type { Metadata } from "next";
@@ -18,8 +18,7 @@ export async function generateMetadata(
   const { slug } = await props.params;
   if (!slug) notFound();
 
-  const posts = await getWritingPostSummaries();
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostMetadata(slug);
 
   if (!post || !post.metadata.publishedAt?.trim()) notFound();
 
