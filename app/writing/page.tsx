@@ -1,34 +1,34 @@
-import React, { Suspense } from "react";
-import { Link } from "@/components/link";
-import { PostList, PostItem, PostTitle, PostDate } from "@/components/posts";
-import { baseUrl } from "@/app/sitemap";
-import { getPostListItems } from "@/app/writing/utils";
-import type { Metadata } from "next";
+import React, { Suspense } from 'react';
+import { Link } from '@/components/link';
+import { PostList, PostItem, PostTitle, PostDate } from '@/components/posts';
+import { baseUrl } from '@/app/sitemap';
+import { getPostListItems } from '@/app/writing/utils';
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Writing",
-  description: "Read my writing.",
+  title: 'Writing',
+  description: 'Read my writing.',
   openGraph: {
-    title: "Writing | Neal367",
-    description: "A collection of my essays and reflections on various topics.",
+    title: 'Writing | Neal367',
+    description: 'A collection of my essays and reflections on various topics.',
     url: `${baseUrl}/writing`,
-    siteName: "Neal367",
-    locale: "en_US",
-    type: "website",
+    siteName: 'Neal367',
+    locale: 'en_US',
+    type: 'website',
     images: [
       {
         url: `${baseUrl}/opengraph-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "Neal367 Writing Page",
+        alt: 'Neal367 Writing Page',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Writing | Neal367",
-    description: "A collection of my essays and reflections on various topics.",
-    creator: "@NL367",
+    card: 'summary_large_image',
+    title: 'Writing | Neal367',
+    description: 'A collection of my essays and reflections on various topics.',
+    creator: '@NL367',
     images: [`${baseUrl}/opengraph-image.jpg`],
   },
 };
@@ -40,7 +40,14 @@ export default function WritingPage() {
         <div className="mb-4">
           <Link
             href="/"
-            style={{ viewTransitionName: 'author-name', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
+            style={
+              {
+                viewTransitionName: 'author-name',
+                viewTransitionClass: 'via-blur',
+                display: 'inline-block',
+                width: 'fit-content',
+              } as React.CSSProperties & { viewTransitionClass?: string }
+            }
             className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             Neal367
@@ -48,7 +55,13 @@ export default function WritingPage() {
         </div>
         <h1
           className="font-semibold text-2xl tracking-tighter mb-6"
-          style={{ viewTransitionName: 'writing-title', viewTransitionClass: 'via-blur', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
+          style={
+            {
+              viewTransitionName: 'writing-title',
+              viewTransitionClass: 'via-blur',
+              width: 'fit-content',
+            } as React.CSSProperties & { viewTransitionClass?: string }
+          }
         >
           Writing
         </h1>

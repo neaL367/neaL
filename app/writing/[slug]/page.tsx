@@ -1,20 +1,16 @@
-import { Link } from "@/components/link";
-import { notFound } from "next/navigation";
-import { getWritingPost, getWritingPostSummaries, getPostMetadata } from "@/app/writing/utils";
-import { metaBySlug, type PostSlug } from "../generated/posts-manifest";
-import { baseUrl } from "@/app/sitemap";
-import type { Metadata } from "next";
+import { Link } from '@/components/link';
+import { notFound } from 'next/navigation';
+import { getWritingPost, getWritingPostSummaries, getPostMetadata } from '@/app/writing/utils';
+import { metaBySlug, type PostSlug } from '../generated/posts-manifest';
+import { baseUrl } from '@/app/sitemap';
+import type { Metadata } from 'next';
 
 export async function generateStaticParams() {
   const posts = await getWritingPostSummaries();
-  return posts
-    .filter((p) => p.metadata.publishedAt?.trim())
-    .map((post) => ({ slug: post.slug }));
+  return posts.filter((p) => p.metadata.publishedAt?.trim()).map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata(
-  props: PageProps<"/writing/[slug]">,
-): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/writing/[slug]'>): Promise<Metadata> {
   const { slug } = await props.params;
   if (!slug) notFound();
 
@@ -33,7 +29,7 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      type: "article",
+      type: 'article',
       publishedTime,
       url: canonical,
       images: [
@@ -46,7 +42,7 @@ export async function generateMetadata(
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
       images: [`${baseUrl}/opengraph-image.jpg`],
@@ -54,8 +50,7 @@ export async function generateMetadata(
   };
 }
 
-
-export default async function Page(props: PageProps<"/writing/[slug]">) {
+export default async function Page(props: PageProps<'/writing/[slug]'>) {
   const { slug } = await props.params;
   if (!slug) notFound();
 
@@ -74,14 +69,14 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
             headline: metadata.title,
             datePublished: metadata.publishedAt,
             dateModified: metadata.publishedAt,
             description: metadata.summary,
             url: `${baseUrl}/writing/${slug}`,
-            author: { "@type": "Person", name: metadata.author ?? "Neal367" },
+            author: { '@type': 'Person', name: metadata.author ?? 'Neal367' },
           }),
         }}
       />
@@ -89,7 +84,14 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
         <div className="mb-4">
           <Link
             href="/writing"
-            style={{ viewTransitionName: 'writing-title', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
+            style={
+              {
+                viewTransitionName: 'writing-title',
+                viewTransitionClass: 'via-blur',
+                display: 'inline-block',
+                width: 'fit-content',
+              } as React.CSSProperties & { viewTransitionClass?: string }
+            }
             className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             Writing
@@ -97,12 +99,31 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
         </div>
         <h1
           className="font-semibold text-2xl tracking-tighter"
-          style={{ viewTransitionName: `post-title-${slug}`, viewTransitionClass: 'via-blur', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}
+          style={
+            {
+              viewTransitionName: `post-title-${slug}`,
+              viewTransitionClass: 'via-blur',
+              width: 'fit-content',
+            } as React.CSSProperties & { viewTransitionClass?: string }
+          }
         >
           {metadata.title}
         </h1>
         <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-          {metadata.formattedDate} • <Link href="/" style={{ viewTransitionName: 'author-name', viewTransitionClass: 'via-blur', display: 'inline-block', width: 'fit-content' } as React.CSSProperties & { viewTransitionClass?: string }}>{metadata.author}</Link>
+          {metadata.formattedDate} •{' '}
+          <Link
+            href="/"
+            style={
+              {
+                viewTransitionName: 'author-name',
+                viewTransitionClass: 'via-blur',
+                display: 'inline-block',
+                width: 'fit-content',
+              } as React.CSSProperties & { viewTransitionClass?: string }
+            }
+          >
+            {metadata.author}
+          </Link>
         </p>
       </div>
       <article>
@@ -111,4 +132,3 @@ export default async function Page(props: PageProps<"/writing/[slug]">) {
     </section>
   );
 }
-

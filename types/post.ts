@@ -1,5 +1,5 @@
-import type { Metadata } from "@/types/metadata";
-import type { MDXContent } from "mdx/types";
+import type { Metadata } from '@/types/metadata';
+import type { MDXContent } from 'mdx/types';
 
 export type Post = {
   slug: string;

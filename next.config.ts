@@ -1,8 +1,8 @@
-import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
+import type { NextConfig } from 'next';
+import createMDX from '@next/mdx';
 
 const nextConfig = {
-  pageExtensions: ["ts", "tsx", "mdx"],
+  pageExtensions: ['ts', 'tsx', 'mdx'],
   reactStrictMode: true,
   cacheComponents: true,
   typedRoutes: true,
@@ -14,10 +14,10 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: '/(.*)',
         headers: [
           {
-            key: "Content-Security-Policy",
+            key: 'Content-Security-Policy',
             value: `
               default-src 'self';
               script-src 'self' 'unsafe-eval' 'unsafe-inline';
@@ -29,31 +29,33 @@ const nextConfig = {
               form-action 'self';
               frame-src 'none';
               frame-ancestors 'none';
-            `.replace(/\s+/g, " ").trim(),
+            `
+              .replace(/\s+/g, ' ')
+              .trim(),
           },
           {
-            key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
-            key: "Cross-Origin-Opener-Policy",
-            value: "same-origin",
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
           },
           {
-            key: "X-Frame-Options",
-            value: "DENY",
+            key: 'X-Frame-Options',
+            value: 'DENY',
           },
           {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
           },
           {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
           },
           {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },

@@ -1,29 +1,29 @@
-import { baseUrl } from "@/app/sitemap";
-import { getWritingPostSummaries, toTime } from "@/app/writing/utils";
+import { baseUrl } from '@/app/sitemap';
+import { getWritingPostSummaries, toTime } from '@/app/writing/utils';
 
 function escapeXml(s: string) {
   return s
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;');
 }
 
 export async function GET() {
   const posts = await getWritingPostSummaries();
 
   const published = posts
-    .filter((p) => p.metadata.publishedAt.trim() !== "")
+    .filter((p) => p.metadata.publishedAt.trim() !== '')
     .sort((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
 
   const itemsXml = published
     .map((post) => {
       const title = escapeXml(post.metadata.title);
       const link = `${baseUrl}/writing/${post.slug}`;
-      const description = escapeXml(post.metadata.summary ?? "");
+      const description = escapeXml(post.metadata.summary ?? '');
       const pubDate = new Date(
-        post.metadata.publishedAt.includes("T")
+        post.metadata.publishedAt.includes('T')
           ? post.metadata.publishedAt
           : `${post.metadata.publishedAt}T00:00:00`,
       ).toUTCString();
@@ -36,14 +36,14 @@ export async function GET() {
   <pubDate>${pubDate}</pubDate>
 </item>`;
     })
-    .join("\n");
+    .join('\n');
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>${escapeXml("Neal367")}</title>
+    <title>${escapeXml('Neal367')}</title>
     <link>${baseUrl}</link>
-    <description>${escapeXml("Neal367 RSS feed")}</description>
+    <description>${escapeXml('Neal367 RSS feed')}</description>
     <language>en-us</language>
     ${itemsXml}
   </channel>
@@ -51,8 +51,8 @@ export async function GET() {
 
   return new Response(rssFeed, {
     headers: {
-      "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+      'Content-Type': 'application/rss+xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400',
     },
   });
 }

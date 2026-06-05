@@ -1,7 +1,7 @@
-import "server-only";
+import 'server-only';
 
-import { cache } from "react";
-import type { Post, PostSummary } from "@/types/post";
+import { cache } from 'react';
+import type { Post, PostSummary } from '@/types/post';
 
 import {
   allSlugs,
@@ -9,7 +9,7 @@ import {
   type PostSlug,
   type MDXModule,
   metaBySlug,
-} from "./generated/posts-manifest";
+} from './generated/posts-manifest';
 
 /**
  * server-serialization
@@ -30,7 +30,7 @@ export const getPostListItems = cache(async function getPostListItems(): Promise
       publishedAt: metaBySlug[slug].publishedAt,
       formattedDate: metaBySlug[slug].formattedDate,
     }))
-    .filter((p) => p.publishedAt.trim() !== "");
+    .filter((p) => p.publishedAt.trim() !== '');
 
   return posts.toSorted((a, b) => toTime(b.publishedAt) - toTime(a.publishedAt));
 });
@@ -46,7 +46,9 @@ export const getWritingPostSummaries = cache(async function getWritingPostSummar
   return posts.toSorted((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
 });
 
-export const getPostMetadata = cache(async function getPostMetadata(slug: string): Promise<PostSummary | null> {
+export const getPostMetadata = cache(async function getPostMetadata(
+  slug: string,
+): Promise<PostSummary | null> {
   const s = slug as PostSlug;
   if (!Object.prototype.hasOwnProperty.call(metaBySlug, s)) {
     return null;
@@ -75,7 +77,7 @@ export const getWritingPost = cache(async function getWritingPost(slug: string):
 
 export function toTime(publishedAt?: string): number {
   if (!publishedAt) return 0;
-  const d = new Date(publishedAt.includes("T") ? publishedAt : `${publishedAt}T00:00:00`);
+  const d = new Date(publishedAt.includes('T') ? publishedAt : `${publishedAt}T00:00:00`);
   const t = d.getTime();
   return Number.isFinite(t) ? t : 0;
 }

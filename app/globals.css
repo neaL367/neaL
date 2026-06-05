@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @keyframes reveal {
   0% {
@@ -88,7 +88,6 @@
   }
 }
 
-
 ::selection {
   background-color: var(--selection-bg);
   color: var(--selection-fg);
@@ -130,9 +129,7 @@ body {
 
 pre ::selection,
 code ::selection {
-  background-color: color-mix(in srgb,
-      var(--selection-bg) 70%,
-      transparent);
+  background-color: color-mix(in srgb, var(--selection-bg) 70%, transparent);
   color: var(--selection-fg);
 }
 
