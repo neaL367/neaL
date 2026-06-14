@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Link } from '@/components/link';
-import type { Route } from 'next';
 
 // Simplified type for what a post item needs
 type PostDisplayData =
@@ -60,7 +59,7 @@ export function PostItem({
 }) {
   return (
     <PostContext.Provider value={post}>
-      <Link href={`/writing/${post.slug}` as Route}>
+      <Link href={`/writing/${post.slug}`} className="post-link">
         <div className={className}>{children}</div>
       </Link>
     </PostContext.Provider>
@@ -95,7 +94,11 @@ export function PostDate({
   className?: string;
 }) {
   const post = usePost();
-  return <p className={className}>{post.formattedDate}</p>;
+  return (
+    <p className={className} suppressHydrationWarning>
+      {post.formattedDate}
+    </p>
+  );
 }
 
 /**

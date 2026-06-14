@@ -1,5 +1,5 @@
 import { baseUrl } from '@/app/sitemap';
-import { getWritingPostSummaries, toTime } from '@/app/writing/utils';
+import { getPublishedPosts } from '@/app/writing/utils';
 
 function escapeXml(s: string) {
   return s
@@ -11,13 +11,9 @@ function escapeXml(s: string) {
 }
 
 export async function GET() {
-  const posts = await getWritingPostSummaries();
+  const posts = await getPublishedPosts();
 
-  const published = posts
-    .filter((p) => p.metadata.publishedAt.trim() !== '')
-    .sort((a, b) => toTime(b.metadata.publishedAt) - toTime(a.metadata.publishedAt));
-
-  const itemsXml = published
+  const itemsXml = posts
     .map((post) => {
       const title = escapeXml(post.metadata.title);
       const link = `${baseUrl}/writing/${post.slug}`;

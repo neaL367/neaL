@@ -10,7 +10,7 @@ type Props<T extends string = string> = {
 } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'>;
 
 const DEFAULT_LINK_CLASSES =
-  'text-zinc-900 no-underline dark:text-zinc-100 hover:underline hover:underline-offset-4';
+  'text-zinc-900 no-underline dark:text-zinc-100 link-animate';
 
 function ExternalLink({ href, children, className, ...props }: Props) {
   return (

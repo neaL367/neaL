@@ -1,4 +1,5 @@
 import { Link } from '@/components/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getWritingPost, getWritingPostSummaries, getPostMetadata } from '@/app/writing/utils';
 import { metaBySlug, type PostSlug } from '../generated/posts-manifest';
@@ -60,7 +61,7 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
   const postPromise = getWritingPost(slug);
   const post = await postPromise;
 
-  const { content: Content } = post;
+  const { content: Content, readingInfo } = post;
 
   return (
     <section className="relative">
@@ -109,8 +110,14 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
         >
           {metadata.title}
         </h1>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-          {metadata.formattedDate} •{' '}
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
+          <Image
+            src="/icon.jpg"
+            alt="Neal367"
+            width={20}
+            height={20}
+            className="w-5 h-5 rounded-full object-cover"
+          />
           <Link
             href="/"
             style={
@@ -124,6 +131,14 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
           >
             {metadata.author}
           </Link>
+          {' • '}
+          <span suppressHydrationWarning>{metadata.formattedDate}</span>
+          {readingInfo && (
+            <>
+              {' • '}
+              {readingInfo.readingTime} min read
+            </>
+          )}
         </p>
       </div>
       <article>

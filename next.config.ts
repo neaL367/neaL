@@ -1,6 +1,23 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
 
+const isDev = process.env.NODE_ENV === 'development';
+
+const cspHeader = `
+  default-src 'self';
+  script-src 'self'${isDev ? " 'unsafe-eval' 'unsafe-inline'" : ''};
+  style-src 'self'${isDev ? " 'unsafe-inline'" : ''};
+  img-src 'self' blob: data:;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  upgrade-insecure-requests;
+`
+  .replace(/\s+/g, ' ')
+  .trim();
+
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'mdx'],
   reactStrictMode: true,
@@ -10,6 +27,12 @@ const nextConfig = {
     mdxRs: true,
     inlineCss: true,
     webpackMemoryOptimizations: true,
+    serverComponentsHmrCache: true,
+  },
+  logging: {
+    fetches: {
+      fullUrl: isDev,
+    },
   },
   async headers() {
     return [
@@ -18,20 +41,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: `
-              default-src 'self';
-              script-src 'self' 'unsafe-eval' 'unsafe-inline';
-              style-src 'self' 'unsafe-inline';
-              img-src 'self' blob: data:;
-              font-src 'self';
-              object-src 'none';
-              base-uri 'self';
-              form-action 'self';
-              frame-src 'none';
-              frame-ancestors 'none';
-            `
-              .replace(/\s+/g, ' ')
-              .trim(),
+            value: cspHeader,
           },
           {
             key: 'Strict-Transport-Security',
