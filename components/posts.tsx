@@ -1,40 +1,125 @@
-import { Link } from "@/components/link";
-import { formatDate } from "@/app/writing/utils";
-import type { Post } from "@/types/post";
-import type { Route } from "next";
+'use client';
 
-type PostsProps = {
-  posts: Post[];
-};
+import React from 'react';
+import { Link } from '@/components/link';
 
-export function Posts({ posts }: PostsProps) {
-  const visiblePosts = posts
-    .filter((post) => post.metadata.publishedAt.trim() !== "")
-    .sort((a, b) => {
-      if (new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)) {
-        return -1;
-      }
-      return 1;
-    });
+// Simplified type for what a post item needs
+type PostDisplayData =
+  | {
+      slug: string;
+      title: string;
+      formattedDate: string;
+    }
+  | {
+      slug: string;
+      metadata: {
+        title: string;
+        formattedDate: string;
+      };
+    };
 
+const PostContext = React.createContext<PostDisplayData | null>(null);
+
+function usePost() {
+  const context = React.use(PostContext);
+  if (!context) {
+    throw new Error('Post subcomponents must be used within a Post.Item');
+  }
+
+  // Normalize the data
+  if ('metadata' in context) {
+    return {
+      slug: context.slug,
+      title: context.metadata.title,
+      formattedDate: context.metadata.formattedDate,
+    };
+  }
+
+  return context;
+}
+
+export function PostList({
+  children,
+  className = 'flex flex-col space-y-2.5 mb-4',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <div className={className}>{children}</div>;
+}
+
+export function PostItem({
+  post,
+  children,
+  className = 'w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]',
+}: {
+  post: PostDisplayData;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div>
-      {visiblePosts.map((post) => (
-        <Link
-          key={post.slug}
-          href={`/writing/${post.slug}` as Route}
-          className="flex flex-col space-y-1 mb-4 transition duration-300 ease-in-out"
-        >
-          <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
-            <p className=" text-zinc-500 dark:text-zinc-400 tabular-nums">
-              {formatDate(post.metadata.publishedAt, false)}
-            </p>
-            <p className="text-zinc-900 dark:text-zinc-100 tracking-tight">
-              {post.metadata.title}
-            </p>
-          </div>
-        </Link>
-      ))}
-    </div>
+    <PostContext.Provider value={post}>
+      <Link href={`/writing/${post.slug}`} className="post-link">
+        <div className={className}>{children}</div>
+      </Link>
+    </PostContext.Provider>
   );
 }
+
+export function PostTitle({
+  className = 'text-zinc-900 dark:text-zinc-100 tracking-tight',
+}: {
+  className?: string;
+}) {
+  const post = usePost();
+  return (
+    <p
+      className={className}
+      style={
+        {
+          viewTransitionName: `post-title-${post.slug}`,
+          viewTransitionClass: 'via-blur',
+          width: 'fit-content',
+        } as React.CSSProperties & { viewTransitionClass?: string }
+      }
+    >
+      {post.title}
+    </p>
+  );
+}
+
+export function PostDate({
+  className = 'text-zinc-500 dark:text-zinc-400 tabular-nums',
+}: {
+  className?: string;
+}) {
+  const post = usePost();
+  return (
+    <p className={className} suppressHydrationWarning>
+      {post.formattedDate}
+    </p>
+  );
+}
+
+/**
+ * Providing a default implementation while keeping compound components available
+ */
+export function Posts({ posts }: { posts: PostDisplayData[] }) {
+  return (
+    <PostList>
+      {posts.map((post) => (
+        <PostItem key={post.slug} post={post}>
+          <PostTitle />
+          <PostDate />
+        </PostItem>
+      ))}
+    </PostList>
+  );
+}
+
+export const Post = {
+  List: PostList,
+  Item: PostItem,
+  Title: PostTitle,
+  Date: PostDate,
+};

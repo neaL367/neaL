@@ -1,107 +1,137 @@
-import fs from "node:fs";
-import path from "node:path";
+import 'server-only';
 
-import { cacheLife } from "next/cache";
+import { cache } from 'react';
+import type { Post, PostSummary, ReadingInfo } from '@/types/post';
+import {
+  allSlugs,
+  loadersBySlug,
+  type PostSlug,
+  type MDXModule,
+  metaBySlug,
+} from './generated/posts-manifest';
 
-import type { Metadata } from "@/types/metadata";
-import type { MDXContent } from "mdx/types";
-import type { Post } from "@/types/post";
-import type { Heading } from "@/types/heading";
+// ─── Types ───────────────────────────────────────────────────────────────────
 
-type MDXModule = {
-  metadata: Metadata;
-  default: MDXContent;
+export type PostListItem = {
+  slug: string;
+  title: string;
+  publishedAt: string;
+  formattedDate: string;
+  readingTime?: number;
 };
 
-function getMDXSlugs(dir: string): string[] {
-  return fs
-    .readdirSync(dir)
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => path.basename(file, path.extname(file)));
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function isValidPost(slug: PostSlug): boolean {
+  return metaBySlug[slug].publishedAt.trim() !== '';
 }
 
-async function importMDXPost(slug: string): Promise<Post> {
-  const { default: content, metadata } = (await import(
-    `@/app/writing/posts/${slug}.mdx`
-  )) as MDXModule;
-  return { slug, metadata, content };
+function toReadingInfo(meta: { wordCount: number; readingTime: number }): ReadingInfo {
+  return { wordCount: meta.wordCount, readingTime: meta.readingTime };
 }
 
-async function getMDXData(dir: string): Promise<Post[]> {
-  const slugs = getMDXSlugs(dir);
-  return Promise.all(slugs.map((slug) => importMDXPost(slug)));
+function sortByPublishedAt<T>(items: T[], getPublishedAt: (item: T) => string): T[] {
+  return items.toSorted((a, b) => parseTime(getPublishedAt(b)) - parseTime(getPublishedAt(a)));
 }
 
-export function getWritingPosts(): Promise<Post[]> {
-  const postsDir = path.join(process.cwd(), "app", "writing", "posts");
-  return getMDXData(postsDir);
+function parseTime(publishedAt?: string): number {
+  if (!publishedAt) return 0;
+  const d = new Date(publishedAt.includes('T') ? publishedAt : `${publishedAt}T00:00:00`);
+  const t = d.getTime();
+  return Number.isFinite(t) ? t : 0;
 }
 
-export function generateHeadingId(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
+// ─── Queries ─────────────────────────────────────────────────────────────────
 
-export function extractHeadingsFromMDX(slug: string): Heading[] {
-  const filePath = path.join(
-    process.cwd(),
-    "app",
-    "writing",
-    "posts",
-    `${slug}.mdx`,
-  );
+export const getPostListItems = cache(async function getPostListItems(): Promise<PostListItem[]> {
+  const posts = allSlugs
+    .filter(isValidPost)
+    .map((slug) => ({
+      slug,
+      title: metaBySlug[slug].title,
+      publishedAt: metaBySlug[slug].publishedAt,
+      formattedDate: metaBySlug[slug].formattedDate,
+      readingTime: metaBySlug[slug].readingTime,
+    }));
 
-  if (!fs.existsSync(filePath)) {
-    return [];
+  return sortByPublishedAt(posts, (p) => p.publishedAt);
+});
+
+export const getPublishedPosts = cache(async function getPublishedPosts(): Promise<PostSummary[]> {
+  const posts = allSlugs
+    .filter(isValidPost)
+    .map((slug) => ({
+      slug,
+      metadata: metaBySlug[slug],
+      readingInfo: toReadingInfo(metaBySlug[slug]),
+    }));
+
+  return sortByPublishedAt(posts, (p) => p.metadata.publishedAt);
+});
+
+export const searchPosts = cache(async function searchPosts(query: string): Promise<PostSummary[]> {
+  const q = query.toLowerCase().trim();
+  if (!q) return getPublishedPosts();
+
+  const posts = allSlugs
+    .filter((slug) => {
+      if (!isValidPost(slug)) return false;
+      const meta = metaBySlug[slug];
+      return (
+        meta.title.toLowerCase().includes(q) ||
+        meta.summary.toLowerCase().includes(q)
+      );
+    })
+    .map((slug) => ({
+      slug,
+      metadata: metaBySlug[slug],
+      readingInfo: toReadingInfo(metaBySlug[slug]),
+    }));
+
+  return sortByPublishedAt(posts, (p) => p.metadata.publishedAt);
+});
+
+export const getPostBySlug = cache(async function getPostBySlug(
+  slug: string,
+): Promise<PostSummary | null> {
+  const s = slug as PostSlug;
+  if (!Object.prototype.hasOwnProperty.call(metaBySlug, s)) return null;
+  if (!isValidPost(s)) return null;
+
+  return {
+    slug: s,
+    metadata: metaBySlug[s],
+    readingInfo: toReadingInfo(metaBySlug[s]),
+  };
+});
+
+export const getPostContent = cache(async function getPostContent(slug: string): Promise<Post> {
+  if (!Object.prototype.hasOwnProperty.call(loadersBySlug, slug)) {
+    throw new Error(`Unknown post slug: ${slug}`);
   }
 
-  const content = fs.readFileSync(filePath, "utf-8");
-  const headings: Heading[] = [];
+  const s = slug as PostSlug;
+  const mod: MDXModule = await loadersBySlug[s]();
 
-  const cleanContent = content
-    .replace(/^---[\s\S]*?---/m, "") // Remove frontmatter
-    .replace(/```[\s\S]*?```/g, "") // Remove code blocks
-    .replace(/`[^`]+`/g, ""); // Remove inline code
+  return {
+    slug: s,
+    metadata: metaBySlug[s],
+    content: mod.default,
+    readingInfo: toReadingInfo(metaBySlug[s]),
+  };
+});
 
-  const markdownHeadingRegex = /^(#{1,2})\s+(.+)$/gm;
+export const getReadingInfo = cache(async function getReadingInfo(
+  slug: string,
+): Promise<ReadingInfo | null> {
+  const s = slug as PostSlug;
+  if (!Object.prototype.hasOwnProperty.call(metaBySlug, s)) return null;
+  return toReadingInfo(metaBySlug[s]);
+});
 
-  let match;
-  while ((match = markdownHeadingRegex.exec(cleanContent)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
-    const id = generateHeadingId(text);
-    headings.push({ id, text, level });
-  }
+// ─── Aliases (backward compat) ───────────────────────────────────────────────
 
-  return headings;
-}
-
-export async function formatDate(
-  date: string,
-  includeRelative = false,
-): Promise<string> {
-  "use cache";
-  cacheLife("max")
-  const currentDate = new Date();
-  const targetDate = new Date(date.includes("T") ? date : `${date}T00:00:00`);
-
-  const diffMs = currentDate.getTime() - targetDate.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const diffMonths = Math.floor(diffDays / 30);
-  const diffYears = Math.floor(diffDays / 365);
-
-  let relative = "Today";
-  if (diffYears > 0) relative = `${diffYears}y ago`;
-  else if (diffMonths > 0) relative = `${diffMonths}mo ago`;
-  else if (diffDays > 0) relative = `${diffDays}d ago`;
-
-  const fullDate = targetDate.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
-  return includeRelative ? `${fullDate} (${relative})` : fullDate;
-}
+export const getPostMetadata = getPostBySlug;
+export const getWritingPost = getPostContent;
+export const getWritingPostSummaries = getPublishedPosts;
+export const getPostReadingTime = getReadingInfo;

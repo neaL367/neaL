@@ -1,51 +1,38 @@
-import { notFound } from "next/navigation";
-import {
-  extractHeadingsFromMDX,
-  formatDate,
-  getWritingPosts,
-} from "@/app/writing/utils";
-import { baseUrl } from "@/app/sitemap";
-import { Link } from "@/components/link";
-import { HeadingsLink } from "@/components/headings-link";
-import type { Metadata } from "next";
+import { Link } from '@/components/link';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { getWritingPost, getWritingPostSummaries, getPostMetadata } from '@/app/writing/utils';
+import { metaBySlug, type PostSlug } from '../generated/posts-manifest';
+import { baseUrl } from '@/app/sitemap';
+import type { Metadata } from 'next';
 
 export async function generateStaticParams() {
-  const posts = await getWritingPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  const posts = await getWritingPostSummaries();
+  return posts.filter((p) => p.metadata.publishedAt?.trim()).map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata(
-  props: PageProps<"/writing/[slug]">,
-): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<'/writing/[slug]'>): Promise<Metadata> {
   const { slug } = await props.params;
-  if (!slug) {
-    notFound();
-  }
+  if (!slug) notFound();
 
-  const posts = await getWritingPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostMetadata(slug);
 
-  if (!post || post.metadata.publishedAt.trim() == "") {
-    notFound();
-  }
+  if (!post || !post.metadata.publishedAt?.trim()) notFound();
 
-  const {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-  } = post.metadata;
+  const { title, publishedAt: publishedTime, summary: description } = post.metadata;
+
+  const canonical = `${baseUrl}/writing/${slug}`;
 
   return {
     title,
     description,
+    alternates: { canonical },
     openGraph: {
       title,
       description,
-      type: "article",
+      type: 'article',
       publishedTime,
-      url: `/writing/${slug}`,
+      url: canonical,
       images: [
         {
           url: `${baseUrl}/opengraph-image.jpg`,
@@ -56,29 +43,25 @@ export async function generateMetadata(
       ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
       description,
-      images: `${baseUrl}/opengraph-image.jpg`,
+      images: [`${baseUrl}/opengraph-image.jpg`],
     },
   };
 }
 
 export default async function Page(props: PageProps<'/writing/[slug]'>) {
   const { slug } = await props.params;
-  if (!slug) {
-    notFound();
-  }
+  if (!slug) notFound();
 
-  const posts = await getWritingPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const metadata = metaBySlug[slug as PostSlug];
+  if (!metadata || !metadata.publishedAt?.trim()) notFound();
 
-  if (!post || post.metadata.publishedAt.trim() == "") {
-    notFound();
-  }
+  const postPromise = getWritingPost(slug);
+  const post = await postPromise;
 
-  const { metadata, content: Content } = post;
-  const headings = extractHeadingsFromMDX(slug);
+  const { content: Content, readingInfo } = post;
 
   return (
     <section className="relative">
@@ -87,39 +70,80 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
             headline: metadata.title,
             datePublished: metadata.publishedAt,
             dateModified: metadata.publishedAt,
             description: metadata.summary,
             url: `${baseUrl}/writing/${slug}`,
-            author: {
-              "@type": "Person",
-              name: "Neal367",
-            },
+            author: { '@type': 'Person', name: metadata.author ?? 'Neal367' },
           }),
         }}
       />
-      <div className="flex justify-between">
-        <div>
-          <h1 className="font-semibold text-2xl tracking-tighter">
-            {metadata.title}
-          </h1>
-          <p className="mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
-            {formatDate(metadata.publishedAt)}
-          </p>
+      <div className="mb-8">
+        <div className="mb-4">
+          <Link
+            href="/writing"
+            style={
+              {
+                viewTransitionName: 'writing-title',
+                viewTransitionClass: 'via-blur',
+                display: 'inline-block',
+                width: 'fit-content',
+              } as React.CSSProperties & { viewTransitionClass?: string }
+            }
+            className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+          >
+            Writing
+          </Link>
         </div>
-        <div>
-          <Link href="/">{metadata.author}</Link>
-        </div>
+        <h1
+          className="font-semibold text-2xl tracking-tighter"
+          style={
+            {
+              viewTransitionName: `post-title-${slug}`,
+              viewTransitionClass: 'via-blur',
+              width: 'fit-content',
+            } as React.CSSProperties & { viewTransitionClass?: string }
+          }
+        >
+          {metadata.title}
+        </h1>
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
+          <Image
+            src="/icon.jpg"
+            alt="Neal367"
+            width={20}
+            height={20}
+            className="w-5 h-5 rounded-full object-cover"
+          />
+          <Link
+            href="/"
+            style={
+              {
+                viewTransitionName: 'author-name',
+                viewTransitionClass: 'via-blur',
+                display: 'inline-block',
+                width: 'fit-content',
+              } as React.CSSProperties & { viewTransitionClass?: string }
+            }
+          >
+            {metadata.author}
+          </Link>
+          {' • '}
+          <span suppressHydrationWarning>{metadata.formattedDate}</span>
+          {readingInfo && (
+            <>
+              {' • '}
+              {readingInfo.readingTime} min read
+            </>
+          )}
+        </p>
       </div>
       <article>
         <Content />
       </article>
-      <aside className="hidden xl:block fixed right-[calc((100vw-1024px)/2-6rem)] w-56 top-32">
-        <HeadingsLink headings={headings} />
-      </aside>
     </section>
   );
 }
