@@ -81,8 +81,8 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
           }),
         }}
       />
-      <div className="mb-8">
-        <div className="mb-4">
+      <div className="mb-10">
+        <div className="mb-5">
           <Link
             href="/writing"
             style={
@@ -93,13 +93,13 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
                 width: 'fit-content',
               } as React.CSSProperties & { viewTransitionClass?: string }
             }
-            className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="text-sm font-medium text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             Writing
           </Link>
         </div>
         <h1
-          className="font-semibold text-2xl tracking-tighter"
+          className="font-bold text-4xl tracking-tight text-neutral-900 dark:text-neutral-100"
           style={
             {
               viewTransitionName: `post-title-${slug}`,
@@ -110,13 +110,13 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
         >
           {metadata.title}
         </h1>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
+        <div className="mt-4 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
           <Image
-            src="/icon.jpg"
+            src="/avatar.png"
             alt="Neal367"
-            width={20}
-            height={20}
-            className="w-5 h-5 rounded-full object-cover"
+            width={24}
+            height={24}
+            className="w-6 h-6 rounded-full object-cover ring-2 ring-neutral-200 dark:ring-neutral-700"
           />
           <Link
             href="/"
@@ -128,18 +128,19 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
                 width: 'fit-content',
               } as React.CSSProperties & { viewTransitionClass?: string }
             }
+            className="font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
             {metadata.author}
           </Link>
-          {' • '}
+          <span className="text-neutral-300 dark:text-neutral-600">/</span>
           <span suppressHydrationWarning>{metadata.formattedDate}</span>
           {readingInfo && (
             <>
-              {' • '}
-              {readingInfo.readingTime} min read
+              <span className="text-neutral-300 dark:text-neutral-600">/</span>
+              <span>{readingInfo.readingTime} min read</span>
             </>
           )}
-        </p>
+        </div>
       </div>
       <article>
         <Content />

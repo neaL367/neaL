@@ -1,10 +1,10 @@
 import './globals.css';
-import { Geist } from 'next/font/google';
+import { Merriweather } from 'next/font/google';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const merriweather = Merriweather({
+  variable: '--font-merriweather',
   display: 'swap',
   subsets: ['latin'],
   preload: true,
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   title: { default: 'Neal367', template: '%s | Neal367' },
   description: 'Lazy coding | Gamer | PixelArt | Rockstar Games fan',
   icons: {
-    icon: '/icon.jpg',
-    apple: [{ url: '/icon.jpg', sizes: '120x120' }, { url: '/icon.jpg' }],
+    icon: '/avatar.png',
+    apple: [{ url: '/avatar.png', sizes: '120x120' }, { url: '/avatar.png' }],
   },
   openGraph: {
     title: 'Neal367',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${geistSans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${merriweather.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>

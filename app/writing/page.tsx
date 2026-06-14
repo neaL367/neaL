@@ -65,12 +65,12 @@ export default function WritingPage() {
         >
           Writing
         </h1>
-        <p className="mb-6 text-zinc-700 dark:text-zinc-300">
+        <p className="mb-6 text-neutral-600 dark:text-neutral-300">
           A collection of my essays and reflections on various topics.
         </p>
       </div>
 
-      <Suspense fallback={<p className="text-zinc-500">Loading posts...</p>}>
+      <Suspense fallback={<p className="text-neutral-500">Loading posts...</p>}>
         <PostCollection />
       </Suspense>
     </section>
