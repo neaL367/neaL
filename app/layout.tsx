@@ -1,14 +1,16 @@
 import './globals.css';
-import { Merriweather } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 
-const merriweather = Merriweather({
-  variable: '--font-merriweather',
-  display: 'swap',
+const geistSans = Geist({
+  variable: '--font-geist-sans',
   subsets: ['latin'],
-  preload: true,
-  weight: ['400', '700'],
+});
+
+const geistMono = Geist_Mono({
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const viewport: Viewport = {
@@ -63,7 +65,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${merriweather.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <main className="w-full my-0 md:my-16">{props.children}</main>
       </body>

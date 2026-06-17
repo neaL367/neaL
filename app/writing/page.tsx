@@ -48,13 +48,13 @@ export default function WritingPage() {
                 width: 'fit-content',
               } as React.CSSProperties & { viewTransitionClass?: string }
             }
-            className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             Neal367
           </Link>
         </div>
         <h1
-          className="font-semibold text-2xl tracking-tighter mb-6"
+          className="font-semibold text-2xl tracking-tighter mb-6 text-zinc-900 dark:text-zinc-100"
           style={
             {
               viewTransitionName: 'writing-title',
@@ -65,12 +65,12 @@ export default function WritingPage() {
         >
           Writing
         </h1>
-        <p className="mb-6 text-neutral-600 dark:text-neutral-300">
+        <p className="mb-6 text-zinc-800 dark:text-zinc-300">
           A collection of my essays and reflections on various topics.
         </p>
       </div>
 
-      <Suspense fallback={<p className="text-neutral-500">Loading posts...</p>}>
+      <Suspense fallback={<p className="text-zinc-500">Loading posts...</p>}>
         <PostCollection />
       </Suspense>
     </section>

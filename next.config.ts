@@ -28,6 +28,7 @@ const nextConfig = {
     inlineCss: true,
     webpackMemoryOptimizations: true,
     serverComponentsHmrCache: true,
+    viewTransition: true,
   },
   logging: {
     fetches: {

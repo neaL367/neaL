@@ -165,12 +165,12 @@ function Heading({
   const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
   const sizeClasses: Record<number, string> = {
-    1: 'mb-6 scroll-m-20 text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100',
-    2: 'mt-12 mb-4 scroll-m-20 text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100',
-    3: 'mt-8 mb-3 scroll-m-20 text-xl font-bold text-neutral-900 dark:text-neutral-100',
-    4: 'mt-6 mb-2 scroll-m-20 text-lg font-semibold text-neutral-900 dark:text-neutral-100',
-    5: 'mt-4 mb-2 scroll-m-20 text-base font-semibold text-neutral-900 dark:text-neutral-100',
-    6: 'mt-4 mb-2 scroll-m-20 text-base font-semibold text-neutral-900 dark:text-neutral-100',
+    1: 'mb-6 scroll-m-20 text-3xl font-semibold tracking-tighter text-zinc-900 dark:text-zinc-100',
+    2: 'mt-12 mb-4 scroll-m-20 text-2xl font-semibold tracking-tighter text-zinc-900 dark:text-zinc-100',
+    3: 'mt-8 mb-3 scroll-m-20 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
+    4: 'mt-6 mb-2 scroll-m-20 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
+    5: 'mt-4 mb-2 scroll-m-20 text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
+    6: 'mt-4 mb-2 scroll-m-20 text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
   };
 
   return (
@@ -278,7 +278,7 @@ const components: MDXComponents = {
   h4: (props) => <Heading level={4} {...props} />,
   h5: (props) => <Heading level={5} {...props} />,
   h6: (props) => <Heading level={6} {...props} />,
-  p: ({ children }) => <p className="mb-4 text-[1rem] text-neutral-600 dark:text-neutral-300 leading-[1.75]">{children}</p>,
+  p: ({ children }) => <p className="mb-4 text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">{children}</p>,
   a: ({ children, href, ...props }) =>
     href ? (
       <Link href={href} {...props}>
@@ -288,29 +288,29 @@ const components: MDXComponents = {
       <>{children}</>
     ),
   ul: ({ children }) => (
-    <ul className="mb-4 ml-4 list-outside list-disc text-[1rem] text-neutral-600 dark:text-neutral-300 leading-[1.75]">
+    <ul className="mb-4 ml-4 list-outside list-disc text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="mb-4 ml-6 list-decimal text-[1rem] text-neutral-600 dark:text-neutral-300 leading-[1.75]">{children}</ol>
+    <ol className="mb-4 ml-6 list-decimal text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">{children}</ol>
   ),
   li: ({ children }) => <li className="mb-1 list-inside">{children}</li>,
   blockquote: ({ children }) => (
-    <blockquote className="mb-4 border-l-2 border-neutral-200 dark:border-neutral-700 pl-4 text-[1rem] text-neutral-500 dark:text-neutral-400 italic">
+    <blockquote className="mb-4 border-l-2 border-zinc-200 dark:border-zinc-700 pl-4 text-[1rem] text-zinc-500 dark:text-zinc-400 italic">
       {children}
     </blockquote>
   ),
   code: ({ children }) => (
-    <code className="rounded bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 font-mono text-sm text-neutral-800 dark:text-neutral-200">
+    <code className="rounded bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 font-mono text-sm text-zinc-800 dark:text-zinc-200">
       {children}
     </code>
   ),
   pre: CodeBlock,
   hr: () => (
-    <hr className="relative my-8 h-px w-full overflow-hidden border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-neutral-200 dark:before:bg-neutral-800 before:content-['']" />
+    <hr className="relative my-8 h-px w-full overflow-hidden border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-zinc-200 dark:before:bg-zinc-800 before:content-['']" />
   ),
-  strong: ({ children }) => <strong className="font-semibold text-neutral-900 dark:text-neutral-100">{children}</strong>,
+  strong: ({ children }) => <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{children}</strong>,
   img: (props: ImageProps) => (
     <Image
       sizes="100vw"

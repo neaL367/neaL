@@ -67,7 +67,7 @@ export function PostItem({
 }
 
 export function PostTitle({
-  className = 'text-neutral-900 dark:text-neutral-100 tracking-tight',
+  className = 'text-zinc-900 dark:text-zinc-100 font-medium tracking-tight',
 }: {
   className?: string;
 }) {
@@ -89,7 +89,7 @@ export function PostTitle({
 }
 
 export function PostDate({
-  className = 'text-neutral-500 dark:text-neutral-400 tabular-nums',
+  className = 'text-zinc-500 dark:text-zinc-400 tabular-nums',
 }: {
   className?: string;
 }) {
