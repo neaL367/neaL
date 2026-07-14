@@ -92,7 +92,7 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
                 width: 'fit-content',
               } as React.CSSProperties
             }
-            className="text-sm font-medium text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="text-sm font-medium text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             Writing
           </Link>
@@ -114,7 +114,7 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
             alt="Neal367"
             width={24}
             height={24}
-            className="w-6 h-6 rounded-full object-cover ring-2 ring-neutral-200 dark:ring-neutral-700"
+            className="w-6 h-6 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
           />
           <Link
             href="/"
@@ -125,15 +125,15 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
                 width: 'fit-content',
               } as React.CSSProperties
             }
-            className="font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+            className="font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
             {metadata.author}
           </Link>
-          <span className="text-neutral-300 dark:text-neutral-600">/</span>
+          <span className="text-zinc-300 dark:text-zinc-600">/</span>
           <span suppressHydrationWarning>{metadata.formattedDate}</span>
           {readingInfo && (
             <>
-              <span className="text-neutral-300 dark:text-neutral-600">/</span>
+              <span className="text-zinc-300 dark:text-zinc-600">/</span>
               <span>{readingInfo.readingTime} min read</span>
             </>
           )}
