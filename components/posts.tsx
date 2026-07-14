@@ -78,9 +78,8 @@ export function PostTitle({
       style={
         {
           viewTransitionName: `post-title-${post.slug}`,
-          viewTransitionClass: 'via-blur',
           width: 'fit-content',
-        } as React.CSSProperties & { viewTransitionClass?: string }
+        } as React.CSSProperties
       }
     >
       {post.title}

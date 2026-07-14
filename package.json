@@ -13,6 +13,7 @@
   "dependencies": {
     "@next/mdx": "^16.2.7",
     "@types/mdx": "^2.0.13",
+    "lenis": "^1.3.25",
     "next": "^16.2.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

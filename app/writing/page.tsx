@@ -43,10 +43,9 @@ export default function WritingPage() {
             style={
               {
                 viewTransitionName: 'author-name',
-                viewTransitionClass: 'via-blur',
                 display: 'inline-block',
                 width: 'fit-content',
-              } as React.CSSProperties & { viewTransitionClass?: string }
+              } as React.CSSProperties
             }
             className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
@@ -58,9 +57,8 @@ export default function WritingPage() {
           style={
             {
               viewTransitionName: 'writing-title',
-              viewTransitionClass: 'via-blur',
               width: 'fit-content',
-            } as React.CSSProperties & { viewTransitionClass?: string }
+            } as React.CSSProperties
           }
         >
           Writing

@@ -88,10 +88,9 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
             style={
               {
                 viewTransitionName: 'writing-title',
-                viewTransitionClass: 'via-blur',
                 display: 'inline-block',
                 width: 'fit-content',
-              } as React.CSSProperties & { viewTransitionClass?: string }
+              } as React.CSSProperties
             }
             className="text-sm font-medium text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
@@ -99,18 +98,17 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
           </Link>
         </div>
         <h1
-          className="font-bold text-4xl tracking-tight text-neutral-900 dark:text-neutral-100"
-          style={
-            {
-              viewTransitionName: `post-title-${slug}`,
-              viewTransitionClass: 'via-blur',
-              width: 'fit-content',
-            } as React.CSSProperties & { viewTransitionClass?: string }
-          }
+          className="font-bold text-4xl tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight"
+            style={
+              {
+                viewTransitionName: `post-title-${slug}`,
+                width: 'fit-content',
+              } as React.CSSProperties
+            }
         >
           {metadata.title}
         </h1>
-        <div className="mt-4 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+        <div className="mt-6 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
           <Image
             src="/avatar.png"
             alt="Neal367"
@@ -123,10 +121,9 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
             style={
               {
                 viewTransitionName: 'author-name',
-                viewTransitionClass: 'via-blur',
                 display: 'inline-block',
                 width: 'fit-content',
-              } as React.CSSProperties & { viewTransitionClass?: string }
+              } as React.CSSProperties
             }
             className="font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
           >
@@ -143,7 +140,9 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
         </div>
       </div>
       <article>
-        <Content />
+        <div className="typeset typeset-docs max-w-[37em]">
+          <Content />
+        </div>
       </article>
     </section>
   );
