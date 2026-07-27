@@ -99,12 +99,12 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
         </div>
         <h1
           className="font-bold text-4xl tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight"
-            style={
-              {
-                viewTransitionName: `post-title-${slug}`,
-                width: 'fit-content',
-              } as React.CSSProperties
-            }
+          style={
+            {
+              viewTransitionName: `post-title-${slug}`,
+              width: 'fit-content',
+            } as React.CSSProperties
+          }
         >
           {metadata.title}
         </h1>
@@ -114,7 +114,7 @@ export default async function Page(props: PageProps<'/writing/[slug]'>) {
             alt="Neal367"
             width={24}
             height={24}
-            className="w-6 h-6 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
+            className="object-cover"
           />
           <Link
             href="/"

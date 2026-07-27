@@ -1,18 +1,9 @@
 import './globals.css';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { GeistMono } from 'geist/font/mono';
+import { GeistPixelSquare } from 'geist/font/pixel';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
-
-const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
-});
-
-const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
-});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -66,7 +57,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${GeistMono.variable} ${GeistPixelSquare.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans antialiased">
         <LenisProvider>
           <main className="w-full my-0 md:my-16">{props.children}</main>

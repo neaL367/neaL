@@ -1,14 +1,14 @@
 @import 'tailwindcss';
 @import 'lenis/dist/lenis.css';
-@import "./typeset.css";
+@import './typeset.css';
 
 .typeset-docs {
-  --typeset-font-body: var(--font-geist);
-  --typeset-font-heading: var(--font-geist);
+  --typeset-font-body: var(--font-geist-pixel-square);
+  --typeset-font-heading: var(--font-geist-pixel-square);
   --typeset-font-mono: var(--font-geist-mono);
-  --typeset-size: 16px;
-  --typeset-leading: 1.6;
-  --typeset-flow: 1.5em;
+  --typeset-size: 17px;
+  --typeset-leading: 1.85;
+  --typeset-flow: 1.6em;
 }
 
 @keyframes reveal {
@@ -56,7 +56,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-geist-pixel-square);
+  --font-mono: var(--font-geist-mono);
   --font-parisienne: var(--font-parisienne);
 }
 
@@ -256,7 +257,9 @@ pre::-webkit-scrollbar-thumb {
   background: transparent;
   color: var(--code-copy-color, #a1a1aa);
   cursor: pointer;
-  transition: color 0.15s, background-color 0.15s;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
 }
 
 .copy-button:hover {
