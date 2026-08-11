@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
+import type { CSSProperties } from 'react';
 import { Link } from '@/components/link';
-import Image from 'next/image';
-import { notFound } from 'next/navigation';
-import { getWritingPost, getWritingPostSummaries, getPostMetadata } from '@/app/writing/utils';
-import { metaBySlug, type PostSlug } from '../generated/posts-manifest';
+import { getWritingPostSummaries, getPostMetadata } from '@/app/writing/utils';
 import { baseUrl } from '@/app/sitemap';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { PostArticle, PostArticleSkeleton } from './post-article';
 
 export async function generateStaticParams() {
   const posts = await getWritingPostSummaries();
@@ -51,99 +52,28 @@ export async function generateMetadata(props: PageProps<'/writing/[slug]'>): Pro
   };
 }
 
-export default async function Page(props: PageProps<'/writing/[slug]'>) {
-  const { slug } = await props.params;
-  if (!slug) notFound();
-
-  const metadata = metaBySlug[slug as PostSlug];
-  if (!metadata || !metadata.publishedAt?.trim()) notFound();
-
-  const postPromise = getWritingPost(slug);
-  const post = await postPromise;
-
-  const { content: Content, readingInfo } = post;
-
+export default function Page({ params }: PageProps<'/writing/[slug]'>) {
   return (
     <section className="relative">
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: metadata.title,
-            datePublished: metadata.publishedAt,
-            dateModified: metadata.publishedAt,
-            description: metadata.summary,
-            url: `${baseUrl}/writing/${slug}`,
-            author: { '@type': 'Person', name: metadata.author ?? 'Neal367' },
-          }),
-        }}
-      />
-      <div className="mb-10">
-        <div className="mb-5">
-          <Link
-            href="/writing"
-            style={
-              {
-                viewTransitionName: 'writing-title',
-                display: 'inline-block',
-                width: 'fit-content',
-              } as React.CSSProperties
-            }
-            className="text-sm font-medium text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-          >
-            Writing
-          </Link>
-        </div>
-        <h1
-          className="font-bold text-4xl tracking-tight text-neutral-900 dark:text-neutral-100 leading-tight"
+      <div className="mb-5">
+        <Link
+          href="/writing"
+          data-testid="writing-post-shell-marker"
           style={
             {
-              viewTransitionName: `post-title-${slug}`,
+              viewTransitionName: 'writing-title',
+              display: 'inline-block',
               width: 'fit-content',
-            } as React.CSSProperties
+            } as CSSProperties
           }
+          className="text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          {metadata.title}
-        </h1>
-        <div className="mt-6 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-          <Image
-            src="/avatar.png"
-            alt="Neal367"
-            width={24}
-            height={24}
-            className="object-cover"
-          />
-          <Link
-            href="/"
-            style={
-              {
-                viewTransitionName: 'author-name',
-                display: 'inline-block',
-                width: 'fit-content',
-              } as React.CSSProperties
-            }
-            className="font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-          >
-            {metadata.author}
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-600">/</span>
-          <span suppressHydrationWarning>{metadata.formattedDate}</span>
-          {readingInfo && (
-            <>
-              <span className="text-zinc-300 dark:text-zinc-600">/</span>
-              <span>{readingInfo.readingTime} min read</span>
-            </>
-          )}
-        </div>
+          Writing
+        </Link>
       </div>
-      <article>
-        <div className="typeset typeset-docs max-w-[37em]">
-          <Content />
-        </div>
-      </article>
+      <Suspense fallback={<PostArticleSkeleton />}>
+        {params.then(({ slug }) => <PostArticle slug={slug} />)}
+      </Suspense>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import './globals.css';
 import { GeistMono } from 'geist/font/mono';
-import { GeistPixelSquare } from 'geist/font/pixel';
+import { GeistSans } from 'geist/font/sans';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
@@ -59,7 +59,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
   return (
     <html
       lang="en"
-      className={`${GeistMono.variable} ${GeistPixelSquare.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">

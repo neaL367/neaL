@@ -22,12 +22,14 @@ const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'mdx'],
   reactStrictMode: true,
   cacheComponents: true,
+  partialPrefetching: true,
   typedRoutes: true,
   experimental: {
     mdxRs: true,
     inlineCss: true,
     webpackMemoryOptimizations: true,
     serverComponentsHmrCache: true,
+    exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === '1',
   },
   logging: {
     fetches: {

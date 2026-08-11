@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import type { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
 import type { Route } from 'next';
 
@@ -7,12 +8,15 @@ type Props<T extends string = string> = {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  prefetch?: NextLinkProps<string>['prefetch'];
 } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'>;
 
 const DEFAULT_LINK_CLASSES =
   'text-zinc-900 no-underline dark:text-zinc-100 link-animate';
 
-function ExternalLink({ href, children, className, ...props }: Props) {
+function ExternalLink({ href, children, className, prefetch, ...props }: Props) {
+  void prefetch;
+
   return (
     <a
       href={href.toString()}

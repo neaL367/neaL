@@ -59,7 +59,11 @@ export function PostItem({
 }) {
   return (
     <PostContext.Provider value={post}>
-      <Link href={`/writing/${post.slug}`} className="post-link">
+      <Link
+        href={`/writing/${post.slug}`}
+        data-testid="writing-post-link"
+        className="post-link"
+      >
         <div className={className}>{children}</div>
       </Link>
     </PostContext.Provider>

@@ -53,6 +53,7 @@ export default function WritingPage() {
           </Link>
         </div>
         <h1
+          data-testid="writing-shell-marker"
           className="font-semibold text-2xl tracking-tighter mb-6 text-zinc-900 dark:text-zinc-100"
           style={
             {

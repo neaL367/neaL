@@ -43,7 +43,9 @@ function parseTime(publishedAt?: string): number {
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
 
-export const getPostListItems = cache(async function getPostListItems(): Promise<PostListItem[]> {
+export async function getPostListItems(): Promise<PostListItem[]> {
+  'use cache';
+
   const posts = allSlugs
     .filter(isValidPost)
     .map((slug) => ({
@@ -55,7 +57,7 @@ export const getPostListItems = cache(async function getPostListItems(): Promise
     }));
 
   return sortByPublishedAt(posts, (p) => p.publishedAt);
-});
+}
 
 export const getPublishedPosts = cache(async function getPublishedPosts(): Promise<PostSummary[]> {
   const posts = allSlugs
