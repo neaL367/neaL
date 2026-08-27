@@ -27,7 +27,6 @@ const nextConfig = {
   experimental: {
     mdxRs: true,
     inlineCss: true,
-    webpackMemoryOptimizations: true,
     serverComponentsHmrCache: true,
     exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === '1',
   },

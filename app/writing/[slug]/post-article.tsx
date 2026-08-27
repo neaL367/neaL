@@ -3,14 +3,20 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Link } from '@/components/link';
 import { getWritingPost } from '@/app/writing/utils';
-import { metaBySlug, type PostSlug } from '../generated/posts-manifest';
 import { baseUrl } from '@/app/sitemap';
 
 export async function PostArticle({ slug }: { slug: string }) {
-  const metadata = metaBySlug[slug as PostSlug];
-  if (!metadata || !metadata.publishedAt?.trim()) notFound();
+  let post;
+  try {
+    post = await getWritingPost(slug);
+  } catch {
+    notFound();
+  }
 
-  const { content: Content, readingInfo } = await getWritingPost(slug);
+  if (!post || !post.metadata.publishedAt?.trim()) notFound();
+
+  const { metadata, content: Content, readingInfo } = post;
+
 
   return (
     <>
