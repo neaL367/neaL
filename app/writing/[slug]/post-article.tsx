@@ -38,7 +38,7 @@ export async function PostArticle({ slug }: { slug: string }) {
       />
       <div className="mb-10">
         <h1
-          className="text-4xl leading-tight font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
+          className="text-3xl leading-snug font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
           style={
             {
               viewTransitionName: `post-title-${slug}`,
@@ -48,8 +48,8 @@ export async function PostArticle({ slug }: { slug: string }) {
         >
           {metadata.title}
         </h1>
-        <div className="mt-6 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-          <Image src="/avatar.png" alt="Neal367" width={24} height={24} className="object-cover" />
+        <div className="mt-4 flex items-center gap-2.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <Image src="/avatar.png" alt="Neal367" width={20} height={20} className="rounded-full object-cover" />
           <Link
             href="/"
             style={
@@ -63,18 +63,18 @@ export async function PostArticle({ slug }: { slug: string }) {
           >
             {metadata.author}
           </Link>
-          <span className="text-zinc-300 dark:text-zinc-600">/</span>
+          <span className="text-zinc-300 dark:text-zinc-700">/</span>
           <span suppressHydrationWarning>{metadata.formattedDate}</span>
           {readingInfo && (
             <>
-              <span className="text-zinc-300 dark:text-zinc-600">/</span>
+              <span className="text-zinc-300 dark:text-zinc-700">/</span>
               <span>{readingInfo.readingTime} min read</span>
             </>
           )}
         </div>
       </div>
       <article data-testid="writing-post-content">
-        <div className="typeset typeset-docs max-w-[37em]">
+        <div className="typeset typeset-docs max-w-[40em]">
           <Content />
         </div>
       </article>

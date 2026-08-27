@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default function WritingPage() {
   return (
     <section>
-      <div className="mb-16">
+      <div className="mb-10">
         <div className="mb-4">
           <Link
             href="/"
@@ -47,14 +47,14 @@ export default function WritingPage() {
                 width: 'fit-content',
               } as React.CSSProperties
             }
-            className="text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            className="text-xs font-medium uppercase tracking-wider text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100 transition-colors"
           >
             Neal367
           </Link>
         </div>
         <h1
           data-testid="writing-shell-marker"
-          className="font-semibold text-2xl tracking-tighter mb-6 text-zinc-900 dark:text-zinc-100"
+          className="font-semibold text-2xl tracking-tight mb-3 text-zinc-900 dark:text-zinc-100"
           style={
             {
               viewTransitionName: 'writing-title',
@@ -64,12 +64,12 @@ export default function WritingPage() {
         >
           Writing
         </h1>
-        <p className="mb-6 text-zinc-800 dark:text-zinc-300">
+        <p className="text-sm text-zinc-600 dark:text-zinc-400">
           A collection of my essays and reflections on various topics.
         </p>
       </div>
 
-      <Suspense fallback={<p className="text-zinc-500">Loading posts...</p>}>
+      <Suspense fallback={<p className="text-xs text-zinc-400">Loading posts...</p>}>
         <PostCollection />
       </Suspense>
     </section>

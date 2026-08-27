@@ -2,6 +2,7 @@ import NextLink from 'next/link';
 import type { LinkProps as NextLinkProps } from 'next/link';
 import React from 'react';
 import type { Route } from 'next';
+import { RockstarLink } from './rockstar-link';
 
 type Props<T extends string = string> = {
   href: Route<T> | URL;
@@ -12,14 +13,28 @@ type Props<T extends string = string> = {
 } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'onClick'>;
 
 const DEFAULT_LINK_CLASSES =
-  'text-zinc-900 no-underline dark:text-zinc-100 link-animate';
+  'text-zinc-900 dark:text-zinc-100 link-animate';
 
 function ExternalLink({ href, children, className, prefetch, ...props }: Props) {
   void prefetch;
+  const hrefStr = href.toString();
+  const isRockstar = hrefStr.includes('rockstargames');
+
+  if (isRockstar) {
+    return (
+      <RockstarLink
+        href={hrefStr}
+        className={className || DEFAULT_LINK_CLASSES}
+        {...props}
+      >
+        {children}
+      </RockstarLink>
+    );
+  }
 
   return (
     <a
-      href={href.toString()}
+      href={hrefStr}
       target="_blank"
       rel="noopener noreferrer"
       className={className || DEFAULT_LINK_CLASSES}

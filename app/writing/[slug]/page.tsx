@@ -66,7 +66,7 @@ export default function Page({ params }: PageProps<'/writing/[slug]'>) {
               width: 'fit-content',
             } as CSSProperties
           }
-          className="text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+          className="text-xs font-medium uppercase tracking-wider text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100 transition-colors"
         >
           Writing
         </Link>

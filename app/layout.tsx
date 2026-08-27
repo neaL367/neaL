@@ -64,7 +64,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
     >
       <body className="font-sans antialiased">
         <LenisProvider>
-          <main className="w-full my-0 md:my-16">{props.children}</main>
+          <main className="w-full">{props.children}</main>
         </LenisProvider>
       </body>
     </html>

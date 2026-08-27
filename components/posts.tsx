@@ -40,7 +40,7 @@ function usePost() {
 
 export function PostList({
   children,
-  className = 'flex flex-col space-y-2.5 mb-4',
+  className = 'flex flex-col mb-6',
 }: {
   children: React.ReactNode;
   className?: string;
@@ -51,7 +51,7 @@ export function PostList({
 export function PostItem({
   post,
   children,
-  className = 'w-full flex flex-col md:flex-row space-x-0 md:space-x-2 [content-visibility:auto]',
+  className = 'w-full flex items-baseline justify-between py-1 group [content-visibility:auto]',
 }: {
   post: PostDisplayData;
   children: React.ReactNode;
@@ -62,7 +62,7 @@ export function PostItem({
       <Link
         href={`/writing/${post.slug}`}
         data-testid="writing-post-link"
-        className="post-link"
+        className="post-link block w-full"
       >
         <div className={className}>{children}</div>
       </Link>
@@ -71,13 +71,13 @@ export function PostItem({
 }
 
 export function PostTitle({
-  className = 'text-zinc-900 dark:text-zinc-100 font-medium tracking-tight',
+  className = 'text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-zinc-50 font-medium tracking-tight transition-colors leading-snug',
 }: {
   className?: string;
 }) {
   const post = usePost();
   return (
-    <p
+    <span
       className={className}
       style={
         {
@@ -87,20 +87,20 @@ export function PostTitle({
       }
     >
       {post.title}
-    </p>
+    </span>
   );
 }
 
 export function PostDate({
-  className = 'text-zinc-500 dark:text-zinc-400 tabular-nums',
+  className = 'text-xs text-zinc-400 dark:text-zinc-500 tabular-nums shrink-0 ml-4 font-normal leading-snug',
 }: {
   className?: string;
 }) {
   const post = usePost();
   return (
-    <p className={className} suppressHydrationWarning>
+    <span className={className} suppressHydrationWarning>
       {post.formattedDate}
-    </p>
+    </span>
   );
 }
 
