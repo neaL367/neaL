@@ -1,36 +1,41 @@
 export const metadata = {
   title: 'Vibe Coding',
   publishedAt: '2025-11-10',
-  summary: 'A post about my experience of vibe coding',
+  summary: 'Reflections on months of AI-assisted development: the pitfalls of passive generation and how to use LLMs to accelerate deep learning.',
   author: 'Neal367',
 };
 
-Hi, this writing talks about my experience of vibe coding for months.
+Over the past few months, I spent significant time experimenting with what many developers now call "vibe coding"—relying on large language models and prompt-driven workflows to scaffold features, resolve bugs, and iterate quickly.
 
-`Vibe coding` is my personal way of being lazy while the learning curve goes down. No more Stack Overflow, less searching. You can solve bugs and add new features with just a few prompts.
+It is undeniable how empowering modern AI tools feel at first glance. You type a prompt describing what you want, and seconds later, a complete component or function appears on your screen. But as I leaned further into this workflow, I realized that relying solely on intuition and generative AI comes with distinct tradeoffs that every developer needs to recognize.
 
-The result? You won't even figure out where the problem is, let alone the solution. Worst case, you just hand off all issues to AI.
+## The Illusion of Instant Velocity
 
-> In fact, it's messy if you don't even try to `read` and `understand` any lines of code. That's a path you'll never come back from.
+When you prompt your way through an entire project without inspecting the generated code, your initial velocity skyrockets. You bypass reading documentation, you skip debugging with breakpoints, and you avoid wrestling with tricky edge cases.
 
-## The Flip Side
+However, speed without comprehension is fragile. When you delegate all problem-solving to an AI model, you gradually lose touch with how your application actually functions. When a subtle state bug or memory leak inevitably happens in production, you find yourself unable to debug code you never truly understood in the first place.
 
-In the dark, there's always a tiny light.
+> If you do not read and comprehend the code you commit, you are not developing software—you are simply outsourcing your judgment.
 
-I think above all, this is an `education in failure`. But I sit in front of the monitor coding for hours and hours.
+True engineering is not just about outputting lines of code; it is about building mental models of how systems interact, fail, and scale.
 
-It's called `focusing`, and that's what you get. It's normal to get confused and distracted. Many things will attract you and make you lose focus.
+## Reframing AI as an Accelerated Learning Partner
 
-## Learning With AI
+The real breakthrough came when I shifted how I interact with AI. Instead of using it as a ghostwriter to blindly generate code, I began treating it as an interactive pair-programmer and research assistant.
 
-If you learn with AI by asking `what` is this, `how` it works, `try` this way instead, `explain` this function to me, you'll feel how fast the project moves. It makes you read more about what AI coding is and learn with it together.
+When encountering unfamiliar libraries or complex algorithms, ask questions that challenge both the model and your understanding:
 
-## My Advice
+- *Why is this specific pattern or data structure recommended here?*
+- *What are the performance implications and potential memory bottlenecks?*
+- *Can you explain how this function behaves when network conditions fail?*
+- *What are alternative architectural approaches and their tradeoffs?*
 
-- Good results come with good productivity
-- Use AI as a tool, not slave labor
-- Note everything you learn
+When used this way, AI transforms into a tireless tutor. It compresses the time required to understand complex concepts and encourages you to read official documentation with deeper curiosity.
 
-At last, this is `my 1st writing` without vibe writing or AI. English is not my mother language, so some sentences and words aren't very good, but let me cook in the future.
+## Principles I Follow When Coding with AI
 
-Thanks for reading.
+1. **Read before committing:** Always trace every execution path, check variable scopes, and verify error boundaries before merging code into your branch.
+2. **Own the architecture:** Use AI for boilerplate and exploratory snippets, but keep ownership of data flow, domain models, and high-level system design.
+3. **Document what you learn:** Take active notes on new patterns, APIs, and edge cases you discover during each session. Turning fleeting insights into written knowledge cements your skills.
+
+Tools will continue to evolve, but the fundamentals of problem solving, disciplined curiosity, and clear thinking remain irreplaceable.

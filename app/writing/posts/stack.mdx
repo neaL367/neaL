@@ -1,88 +1,76 @@
 export const metadata = {
   title: 'My Stack',
   publishedAt: '2024-04-07',
-  summary: 'A post about my tech stack',
+  summary: 'A look at the tools, frameworks, and infrastructure I use every day to build software.',
   author: 'Neal367',
 };
 
-Here's a look at the tools I use every day. Some I've been with for years, some I picked up recently. Let's get into it.
+Here is an overview of the tools, frameworks, and services I rely on to build web applications. Software choices evolve over time, but my criteria stay consistent: developer velocity, reliability, performance, and simplicity.
 
-## 1. Frameworks
+## Frameworks
 
-### Frontend
+### [Next.js](https://nextjs.org/)
 
-#### [Next.js](https://nextjs.org/) 🗽
+Next.js is my primary tool for building full-stack web applications. React Server Components changed how we architect web apps by reducing client-side JavaScript, simplifying data fetching, and giving us instant access to backend resources without writing boilerplate API layers. Combined with TypeScript, it provides the best balance of speed and reliability.
 
-This is my `main tool`. TypeScript keeps me sane, Server Components changed the game, and data fetching just works.
+If I am building a production web app today, Next.js is almost always my first choice.
 
-If I'm building a web app, it's probably Next.js.
+### [Angular](https://angular.dev/)
 
-#### [Angular](https://angular.dev/)
+When a project requires strict architectural discipline across large distributed teams, Angular is a strong contender. Its opinionated structure, built-in dependency injection, and comprehensive tooling provide consistency right out of the box.
 
-When the project is big and needs structure, I go Angular. Enterprise stuff. It's opinionated, but that's the point. It keeps everything consistent.
+### [Astro](https://astro.build/)
 
-#### [Astro](https://astro.build/) 💫
+For content-driven websites, marketing pages, and documentation where performance is paramount, Astro excels. Its zero-JavaScript by default approach and built-in content collections make managing Markdown and MDX seamless.
 
-Static sites that need to be `fast`. Astro's content collections make it easy to manage Markdown, MDX, and JSON all in one place.
+## Backend & APIs
 
-Perfect for blogs and docs.
+### [Node.js & Express](https://expressjs.com/)
 
-### Backend
+When I need a lightweight, flexible REST API or microservice in JavaScript, Express remains a dependable choice. It stays out of your way and lets you compose middleware with minimal friction.
 
-#### [Express](https://expressjs.com/)
+### [.NET & ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
 
-Lightweight and fast. I use Express when I need a quick REST API in Node.js. No bloat, just middleware and routes.
+For mission-critical backend services requiring enterprise-grade throughput and strict typing, ASP.NET Core with C# is exceptional. The runtime performance, native dependency injection, and asynchronous concurrency model handle high-traffic workloads effortlessly.
 
-Gets out of your way.
+## Styling & Design
 
-#### [.NET API Core](https://learn.microsoft.com/en-us/aspnet/core/)
+### [Tailwind CSS](https://tailwindcss.com/)
 
-When I need something `serious`. Strong typing with C#, dependency injection built in, and it handles high traffic like it's nothing.
+Tailwind fundamentally changed how I approach UI design. Co-locating styles directly with component markup eliminates context-switching between separate files. Thanks to the compiler, the resulting CSS bundle remains tiny and predictable.
 
-Enterprise grade.
+### [shadcn/ui](https://ui.shadcn.com/)
 
-## 2. Styling
+shadcn/ui provides accessible, beautifully crafted component primitives built on Radix UI. Because the code lives directly inside your repository rather than in an opaque `node_modules` package, you maintain full control over styling and behavior.
 
-### [Tailwind CSS](https://tailwindcss.com/) 🌪️
+### [Motion](https://motion.dev/)
 
-No more switching between files. I write styles right in the markup and the CSS bundle stays tiny. It just works.
+Subtle micro-interactions and smooth layout transitions make digital interfaces feel responsive and tactile. Motion provides an intuitive declarative API to build fluid animations without degrading runtime performance.
 
-- Inline styling that feels natural
-- Small, optimized CSS output
-- Plays nice with existing styles when needed
+## Artificial Intelligence
 
-### [shadcn/ui](https://ui.shadcn.com/) 🗿
+### Hermes & GLM 5.3 Flash
 
-Beautiful components out of the box. Accessible, polished, and I don't have to build everything from scratch.
+AI has become an indispensable part of my daily developer workflow. Rather than relying on oversized, sluggish models, I use Hermes paired with GLM 5.3 Flash for day-to-day coding, debugging, and ideation.
 
-That's a win.
+The combination delivers incredible inference speed, sharp reasoning, and low latency without sacrificing accuracy. It acts as an instant pair programmer—excelling at breaking down complex functions, drafting types, and answering architecture questions in real time.
 
-### [motion](https://motion.dev/)
-
-Smooth animations without the headache. This makes everything feel `alive` and responsive.
-
-Small detail, big difference.
-
-## 3. Hosting and Deployment
+## Hosting & Infrastructure
 
 ### Vercel
 
-Deploy and forget. Optimized for Next.js and that's exactly what I need.
+Vercel is my default deployment target for Next.js applications. Automatic preview environments, edge routing, and zero-configuration CI/CD pipelines make deploying frictionless.
 
 ### AWS
 
-When I need more control:
+When projects require fine-grained cloud architecture, I use AWS:
 
-- **[CloudFront](https://aws.amazon.com/cloudfront/):** Fast content delivery worldwide
-- **[S3](https://aws.amazon.com/s3/):** Store anything, scale infinitely
-- **[EC2](https://aws.amazon.com/ec2/):** When I need a full server
+- **CloudFront:** Low-latency content delivery and edge caching worldwide.
+- **S3:** Scalable, highly durable object storage for user uploads and media assets.
+- **EC2:** Dedicated virtual servers when custom daemon processes or specific compute workloads are necessary.
 
-### Plesk and WordPress
+## Community & Mentorship
 
-Sometimes the old ways work. Traditional hosting still has its place.
+Beyond writing code, I regularly organize IT workshops and volunteer for programs that help beginners and underprivileged students learn technology. Teaching concepts to others forces you to understand them deeply and helps grow the community.
 
-## 4. Community Involvement
-
-I run IT workshops and volunteer for projects that help people learn. Teaching others keeps me sharp and the community growing.
-
-That's my stack. Nothing fancy, just tools that work.
+Great software comes from choosing tools that solve real problems, stay maintainable, and let you focus on what matters most: delivering value.

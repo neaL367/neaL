@@ -54,6 +54,12 @@
 }
 
 body {
+  background: var(--background);
+  max-width: 680px;
+  color: var(--foreground);
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  scroll-behavior: smooth;
   font-family: var(--font-geist-sans), sans-serif;
   letter-spacing: -0.012em;
   text-rendering: optimizeLegibility;
@@ -66,7 +72,6 @@ body {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
-  --font-parisienne: var(--font-parisienne);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -117,18 +122,6 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-thumb-hover);
-}
-
-body {
-  background: var(--background);
-  max-width: 680px;
-  color: var(--foreground);
-  margin: 0 auto;
-  padding: 4rem 2rem;
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 pre ::selection,
@@ -431,7 +424,7 @@ pre::-webkit-scrollbar-thumb {
   opacity: 1;
 }
 
-.heading-with-anchor::before:hover {
+.heading-with-anchor:hover::before {
   color: var(--heading-anchor-hover-color, #71717a);
   text-decoration: none;
 }
@@ -441,7 +434,7 @@ pre::-webkit-scrollbar-thumb {
     color: var(--heading-anchor-color-dark, #3f3f46);
   }
 
-  .heading-with-anchor::before:hover {
+  .heading-with-anchor:hover::before {
     color: var(--heading-anchor-hover-color-dark, #a1a1aa);
   }
 }
