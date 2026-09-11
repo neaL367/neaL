@@ -53,6 +53,24 @@
   mix-blend-mode: normal;
 }
 
+/* Chat dock view transition morphing */
+::view-transition-group(chat-dock) {
+  animation-duration: 240ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+
 body {
   background: var(--background);
   max-width: 680px;

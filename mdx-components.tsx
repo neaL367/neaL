@@ -328,3 +328,5 @@ const components: MDXComponents = {
 export function useMDXComponents(): MDXComponents {
   return components;
 }
+
+export { CodeBlock, HighlightedCode, Callout, components as mdxComponents };

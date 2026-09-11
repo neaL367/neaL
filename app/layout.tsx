@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
+import { ChatDock } from '@/components/chat/chat-dock';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -65,6 +66,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
       <body className="font-sans antialiased">
         <LenisProvider>
           <main className="w-full">{props.children}</main>
+          <ChatDock />
         </LenisProvider>
       </body>
     </html>
