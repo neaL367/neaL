@@ -2,6 +2,7 @@ import type { HandlerContext, HandlerResult, BuiltResponse } from './types';
 import { finishResponse } from './types';
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
 import { extractKeySentences } from '@/lib/chat/text-rank';
+import { getRoundRobinItem } from '@/lib/chat/knowledge/personas';
 
 const HIT_FRAMES = [
   'Regarding',
@@ -10,12 +11,21 @@ const HIT_FRAMES = [
   'On the topic of',
 ];
 
+const UNCERTAINTY_PREFIXES = [
+  "I'm not fully certain, but here's my best read",
+  'My local index only turned up a loose match — here’s my best guess',
+  'I don’t have a verified section on this, but here’s what looks closest',
+];
+
 export function handleRetrieval(ctx: HandlerContext): HandlerResult {
-  const { userMessage, state, retrievalResult, turnCount } = ctx;
+  const { userMessage, state, retrievalResult } = ctx;
+  let cursors: Record<string, number> = { ...(state.roundRobinCursors || {}) };
 
   if (retrievalResult.bestHit) {
     const hit = retrievalResult.bestHit;
-    const hitFrame = HIT_FRAMES[(turnCount + (hit.title?.length || 0)) % HIT_FRAMES.length];
+    const hitPick = getRoundRobinItem('hit_frame', HIT_FRAMES, cursors);
+    cursors = hitPick.updatedCursors;
+    const hitFrame = hitPick.text;
     let replyText = '';
 
     if (hit.lane === 'kg') {
@@ -79,6 +89,7 @@ export function handleRetrieval(ctx: HandlerContext): HandlerResult {
         {
           ...state,
           lastRetrievalHits: retrievalResult.hits,
+          roundRobinCursors: cursors,
           topicThread: (() => {
             const raw = hit.heading && !/^(web overview|overview|introduction)$/i.test(hit.heading)
               ? hit.heading
@@ -97,7 +108,40 @@ export function handleRetrieval(ctx: HandlerContext): HandlerResult {
 }
 
 export function handleFallback(ctx: HandlerContext): BuiltResponse {
-  const { userMessage, state } = ctx;
+  const { userMessage, state, retrievalResult } = ctx;
+
+  // Low-confidence path: retrieval ran but nothing cleared the confidence
+  // floor (bestHit nulled in retrieval.ts). Surface uncertainty visibly
+  // instead of answering in the same full-confidence voice.
+  const looseHit = retrievalResult?.hits?.[0];
+  if (looseHit) {
+    let cursors: Record<string, number> = { ...(state.roundRobinCursors || {}) };
+    const hedgePick = getRoundRobinItem('uncertainty', UNCERTAINTY_PREFIXES, cursors);
+    cursors = hedgePick.updatedCursors;
+
+    const keySentences = extractKeySentences(looseHit.contextSentence || looseHit.excerpt, 2);
+    const summary = keySentences.length > 0 ? keySentences.join(' ') : looseHit.excerpt.slice(0, 220);
+    const replyText =
+      `${hedgePick.text} based on **${looseHit.heading || looseHit.title}**:\n\n${summary}\n\n` +
+      `*If that's off, try rephrasing — or ask me about **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\`!*`;
+    const sources = looseHit.url
+      ? [{ title: looseHit.title, heading: looseHit.heading, url: looseHit.url, excerpt: looseHit.excerpt.slice(0, 140) }]
+      : [];
+    const hitConcept = conceptGraph.findConcept(looseHit.heading || looseHit.title);
+    const suggestions = hitConcept
+      ? conceptGraph.getRelatedQuestions(hitConcept.id, 3)
+      : ['What is Neal’s stack?', 'Explain React Server Components', 'Quiz me on TypeScript'];
+
+    return finishResponse(
+      replyText,
+      sources,
+      suggestions,
+      userMessage,
+      { ...state, roundRobinCursors: cursors, lastRetrievalHits: retrievalResult.hits },
+      null
+    );
+  }
+
   const cleanQ = userMessage.slice(0, 35);
   const replyText = `That's an interesting question regarding "${cleanQ}"! I don't have a direct section on that in Neal's portfolio.\n\nTry rephrasing, or ask me about **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\` to test your frontend skills!`;
   const suggestions = ['What is Neal’s stack?', 'Explain React Server Components', 'Quiz me on TypeScript'];

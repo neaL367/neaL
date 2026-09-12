@@ -72,6 +72,7 @@ export function handleQuizAndCommands(ctx: HandlerContext): HandlerResult {
             roundRobinCursors: {},
             lastRetrievalHits: [],
             pendingOffer: null,
+            coveredConcepts: [],
           },
         },
       };

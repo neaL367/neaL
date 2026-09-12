@@ -1,4 +1,5 @@
 import type { QuizQuestion, QuizState, ExpertiseLevel } from '@/lib/chat/types';
+import { levenshteinDistance } from '@/lib/chat/knowledge/concept-graph';
 
 export const QUIZZES: QuizQuestion[] = [
   {
@@ -142,6 +143,75 @@ export class QuizManager {
       // If user typed the exact option or a distinctive part
       if (clean === opt || (clean.length >= 4 && opt.includes(clean)) || (opt.length >= 4 && clean.includes(opt))) {
         return i;
+      }
+    }
+
+    // 5. Typo-tolerant fuzzy match (reuses concept-graph Levenshtein).
+    // Catches slightly misspelled full/partial answers, e.g. "ture" -> "true",
+    // "reconciliaton" -> "Reconciliation".
+    const normalize = (s: string) =>
+      s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    const cleanNorm = normalize(clean);
+    if (cleanNorm.length >= 3) {
+      const optNorms = options.map(o => normalize(o));
+
+      // 5a. Full-string fuzzy (whole answer with 1-2 typos)
+      let bestFullIdx: number | null = null;
+      let bestFullDist = Infinity;
+      for (let i = 0; i < optNorms.length; i++) {
+        const optNorm = optNorms[i];
+        if (!optNorm) continue;
+        const lenDiff = Math.abs(cleanNorm.length - optNorm.length);
+        const maxLen = Math.max(cleanNorm.length, optNorm.length);
+        const allowedDiff = maxLen > 30 ? 5 : 3;
+        if (lenDiff > allowedDiff) continue;
+        const dist = levenshteinDistance(cleanNorm, optNorm);
+        const maxAllowed = maxLen >= 30 ? 3 : 2;
+        if (dist <= maxAllowed && dist < bestFullDist) {
+          bestFullDist = dist;
+          bestFullIdx = i;
+        }
+      }
+      if (bestFullIdx !== null) return bestFullIdx;
+
+      // 5b. Token-level fuzzy (distinctive keyword with typo).
+      // Requires every distinctive clean word to fuzzy-match some option word,
+      // so generic/ambiguous input stays null instead of guessing.
+      const cleanWords = cleanNorm.split(' ').filter(w => w.length >= 4);
+      if (cleanWords.length > 0) {
+        let bestIdx: number | null = null;
+        let bestTotal = Infinity;
+        let tie = false;
+        for (let i = 0; i < optNorms.length; i++) {
+          const optWords = optNorms[i].split(' ').filter(w => w.length >= 4);
+          if (optWords.length === 0) continue;
+          let totalDist = 0;
+          let allMatch = true;
+          for (const cw of cleanWords) {
+            let bestD = Infinity;
+            for (const ow of optWords) {
+              if (Math.abs(cw.length - ow.length) > 2) continue;
+              const d = levenshteinDistance(cw, ow);
+              if (d < bestD) bestD = d;
+              if (bestD === 0) break;
+            }
+            const allowed = cw.length >= 4 ? 2 : 1;
+            if (bestD > allowed) {
+              allMatch = false;
+              break;
+            }
+            totalDist += bestD;
+          }
+          if (!allMatch) continue;
+          if (totalDist < bestTotal) {
+            bestTotal = totalDist;
+            bestIdx = i;
+            tie = false;
+          } else if (totalDist === bestTotal) {
+            tie = true;
+          }
+        }
+        if (bestIdx !== null && !tie) return bestIdx;
       }
     }
 

@@ -4,7 +4,7 @@ import { TOPICS } from './topics';
 
 export { CONCEPT_NODES, CONCEPT_EDGES } from './concept-graph-data';
 
-function levenshteinDistance(a: string, b: string): number {
+export function levenshteinDistance(a: string, b: string): number {
   if (a === b) return 0;
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
