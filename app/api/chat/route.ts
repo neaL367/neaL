@@ -1,4 +1,5 @@
 import type { ConversationState } from '@/lib/chat/types';
+import { sanitizeConversationState } from '@/lib/chat/state';
 import { tokenize, extractEntities, classifyIntent, detectExpertise } from '@/lib/chat/nlp';
 import { orchestrateRetrieval } from '@/lib/chat/retrieval';
 import { buildResponse } from '@/lib/chat/response-builder';
@@ -30,20 +31,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2. Bound incoming state to prevent memory abuse
-    const incomingState: Partial<ConversationState> = body?.state || {};
-    const state: ConversationState = {
-      turns: Array.isArray(incomingState.turns) ? incomingState.turns.slice(-20) : [],
-      topicThread: Array.isArray(incomingState.topicThread) ? incomingState.topicThread.slice(-10) : [],
-      activeQuiz: incomingState.activeQuiz || null,
-      expertiseLevel: incomingState.expertiseLevel || 'intermediate',
-      roundRobinCursors: incomingState.roundRobinCursors || {},
-      lastRetrievalHits: Array.isArray(incomingState.lastRetrievalHits) ? incomingState.lastRetrievalHits.slice(-10) : [],
-      pendingOffer: incomingState.pendingOffer || null,
-      coveredConcepts: Array.isArray(incomingState.coveredConcepts)
-        ? incomingState.coveredConcepts.slice(-20)
-        : [],
-    };
+    // 2. Bound incoming state to prevent memory abuse (single factory)
+    const state: ConversationState = sanitizeConversationState(body?.state);
 
     // 3. NLP Analysis & Classification (rolling expertise window from recent user turns)
     const recentUserTexts = state.turns

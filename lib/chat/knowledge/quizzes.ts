@@ -1,5 +1,5 @@
 import type { QuizQuestion, QuizState, ExpertiseLevel } from '@/lib/chat/types';
-import { levenshteinDistance } from '@/lib/chat/knowledge/concept-graph';
+import { levenshteinDistance } from '@/lib/chat/text-distance';
 
 export const QUIZZES: QuizQuestion[] = [
   {

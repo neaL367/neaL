@@ -29,18 +29,6 @@ export interface TermEntry {
   sectionPostings?: Map<string, InvertedIndexPosting[]>;
 }
 
-export interface KnowledgeTriple {
-  subject: string;
-  predicate: string; // e.g. "studies_at", "uses_framework", "worked_at", "dream"
-  aliases: string[]; // Variations of the predicate or subject question
-  object: string; // Direct factual answer
-  url: string;
-  sourceTitle: string;
-  contextSentence: string;
-}
-
-
-
 export interface ScoredSection {
   section: DocumentSection;
   bm25Score: number;

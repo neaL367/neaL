@@ -3,35 +3,13 @@ import { finishResponse } from './types';
 import type { PendingOffer } from '@/lib/chat/types';
 import { TOPICS, CONCEPTS } from '@/lib/chat/knowledge/topics';
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
-import { getRoundRobinItem } from '@/lib/chat/knowledge/personas';
-
-const TOPIC_INTRO_HOOKS = [
-  'Here is how',
-  'Let’s break down',
-  'In modern engineering,',
-  'At its core,',
-  'Understanding',
-];
-
-const CODE_INTRO_HOOKS = [
-  'Here is a hands-on implementation and breakdown for',
-  'Let’s walk through a concrete code example of',
-  'Here is how you write and use',
-  'Practical demonstration for',
-];
-
-const HIT_FRAMES = [
-  'Regarding',
-  'Here is what Neal shares on',
-  'From Neal’s portfolio notes on',
-  'On the topic of',
-];
-
-const REVISIT_PREFIXES = [
-  'Since we touched on this before — here’s the angle we haven’t covered yet.',
-  'Circling back — let’s go a level deeper on',
-  'Good to revisit — here’s more depth on',
-];
+import {
+  getRoundRobinItem,
+  TOPIC_INTRO_HOOKS,
+  CODE_INTRO_HOOKS,
+  HIT_FRAMES,
+  REVISIT_PREFIXES,
+} from '@/lib/chat/knowledge/personas';
 
 export function handleKnowledge(ctx: HandlerContext): HandlerResult {
   const { userMessage, state, intentResult, entities, retrievalResult, turnCount } = ctx;

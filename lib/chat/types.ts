@@ -52,6 +52,16 @@ export interface RetrievalHit {
 
 export type ConceptRelation = 'uses' | 'built-on' | 'relates-to' | 'contrasts-with' | 'enables';
 
+/** Fact row backing personal/factual answers (Neal bio, stack, co-op). */
+export interface KnowledgeTriple {
+  subject: string;
+  predicate: string; // e.g. "studies_at", "uses_framework", "worked_at", "dream"
+  aliases: string[]; // Variations of the predicate or subject question
+  object: string; // Direct factual answer
+  url: string;
+  sourceTitle: string;
+  contextSentence: string;
+}
 export interface ConceptNode {
   id: string;
   label: string;
