@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:embeddings": "bun run scripts/build-embeddings.ts",
+    "build:site-index": "bun run scripts/build-site-index.ts",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
