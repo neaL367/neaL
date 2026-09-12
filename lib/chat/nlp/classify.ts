@@ -295,7 +295,9 @@ function scoreLocalKnowledge(clean: string, push: Push): void {
     push('personal', 'contact', 0.95, 111);
   }
   if (clean.includes('vibe code') || clean.includes('vibe coding')) {
-    push('personal', 'vibe-coding', 0.9, 112);
+    // Explicit essay route outranks the generic ai_philosophy KG triple (0.95):
+    // the dedicated handler carries the full take plus the article source link.
+    push('personal', 'vibe-coding', 0.96, 112);
   }
   const techConcept = conceptGraph.findConcept(clean);
   if (techConcept && techConcept.category !== 'personal') {

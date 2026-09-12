@@ -81,7 +81,15 @@ export class ConceptGraph {
         }
 
         // 3. Typo-tolerance via Levenshtein edit distance for tokens >= 4 chars
-        const ignoreTokens = new Set(['the', 'and', 'for', 'with', 'about', 'tell', 'you', 'your', 'are', 'was', 'this', 'that', 'from', 'what', 'how', 'why', 'who', 'movie', 'film']);
+        // Stopwords gate BOTH sides: query words and candidate aliases.
+        // Without them, function words hijack concepts ("when"→"then"→promises).
+        // Exact word-boundary matching above is unaffected, so real words still hit.
+        const ignoreTokens = new Set(['the', 'and', 'for', 'with', 'about', 'tell', 'you', 'your', 'are', 'was', 'this', 'that', 'from', 'what', 'how', 'why', 'who', 'movie', 'film',
+          'when', 'where', 'which', 'whom', 'whose', 'then', 'than',
+          'it', 'its', 'they', 'them', 'their', 'he', 'she', 'we', 'our', 'us', 'me', 'my', 'i',
+          'is', 'were', 'be', 'been', 'being', 'will', 'would', 'can', 'could', 'should', 'shall', 'may', 'might', 'must',
+          'do', 'does', 'did', 'doing', 'done', 'have', 'has', 'had', 'not', 'no', 'nor',
+          'gonna', 'wanna', 'got', 'get', 'let', 'like', 'know', 'just', 'now', 'today', 'here', 'there', 'very', 'also', 'even', 'ever', 'still']);
         if (baseScore === 0 && q.length >= 4) {
           const qWords = q.split(/\s+/).filter(w => !ignoreTokens.has(w));
           for (const cand of candidates) {

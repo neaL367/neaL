@@ -32,6 +32,54 @@ const WIKI_HEADERS = {
   Accept: 'application/json',
 };
 
+// Stopwords for relevance gating (question words + function words carry no signal).
+const WEB_RELEVANCE_STOPWORDS = new Set([
+  'who', 'what', 'when', 'where', 'why', 'how', 'which', 'whom', 'whose',
+  'is', 'are', 'was', 'were', 'be', 'been', 'will', 'would', 'can', 'could',
+  'do', 'does', 'did', 'the', 'and', 'for', 'with', 'from', 'that', 'this',
+  'about', 'tell', 'you', 'your', 'gonna', 'wanna',
+]);
+
+function significantQueryTokens(query: string): string[] {
+  return query
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(t => t.length >= 4 && !WEB_RELEVANCE_STOPWORDS.has(t));
+}
+
+/**
+ * Acronym-aware match for digit-bearing keys ("gta6" → "Grand Theft Auto VI"):
+ * letters must prefix the title's word initials in order. Narrow on purpose —
+ * digit-bearing keys are specific (gta6, ps5), so false positives are rare.
+ */
+function acronymHit(key: string, title: string): boolean {
+  const alpha = key.replace(/[^a-z]/g, '');
+  if (!/[0-9]/.test(key) || alpha.length < 2) return false;
+  const initials = title
+    .split(/[^a-z0-9]+/i)
+    .filter(w => /^[a-z0-9]/i.test(w))
+    .map(w => w[0].toLowerCase())
+    .join('');
+  return initials.startsWith(alpha);
+}
+
+/**
+ * Deterministic relevance gate: the blind Wikipedia top-hit (and thin DDG
+ * snippets) can be completely off-topic ("Open Water" for a GTA query).
+ * Single-keyword queries carry too little signal to judge → accept.
+ * Multi-keyword queries must hit the title or ≥2 distinct keys in text
+ * (acronym-aware, so "gta6" counts toward "Grand Theft Auto VI").
+ */
+function isRelevantResult(query: string, title: string, snippet: string): boolean {
+  const keys = significantQueryTokens(query);
+  if (keys.length <= 1) return true;
+  const titleLow = title.toLowerCase();
+  // Strong: any key in the title, or digit-key acronym alignment ("gta6"→title initials "gtav").
+  if (keys.some(k => titleLow.includes(k) || acronymHit(k, titleLow))) return true;
+  const hay = `${titleLow} ${snippet.toLowerCase()}`;
+  return keys.filter(k => hay.includes(k) || acronymHit(k, titleLow)).length >= 2;
+}
+
 function decodeHtmlEntities(str: string): string {
   return str
     .replace(/&#x27;/g, "'")
@@ -247,6 +295,7 @@ async function searchOpenWeb(
 
       if (!title || !snippet || snippet.length < 20) continue;
       if (domain === 'duckduckgo.com' || seenDomains.has(domain)) continue;
+      if (!isRelevantResult(query, title, snippet)) continue;
 
       seenDomains.add(domain);
       sources.push({ title, url: actualUrl, snippet, domain });
@@ -261,6 +310,8 @@ async function searchOpenWeb(
 
 /**
  * Fallback to Wikipedia REST summary when needed.
+ * Date-seeking queries ("when ... release?") also mine the full article for
+ * release-date sentences — the short summary extract usually lacks the date.
  */
 async function searchWikipediaFallback(
   query: string,
@@ -296,14 +347,75 @@ async function searchWikipediaFallback(
     const summaryData = await summaryRes.json();
     if (summaryData.type === 'disambiguation' || !summaryData.extract) return null;
 
-    return {
+    const candidate = {
       title: summaryData.title || topItem.title,
       url: summaryData.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${encodeURIComponent(topItem.title)}`,
       snippet: cleanSnippet(summaryData.extract),
       domain: 'wikipedia.org',
     };
+    // Reject off-topic top hits so the caller can retry a sharper query variant.
+    if (!isRelevantResult(query, candidate.title, candidate.snippet)) return null;
+
+    // Date-seeking query + summary lacks a date → mine the full article.
+    if (isDateSeeking(query) && !DATE_RE.test(candidate.snippet)) {
+      const facts = await fetchDateFacts(topItem.title, timeoutMs);
+      if (facts.length > 0) {
+        candidate.snippet = `${facts.join(' ')}\n\n${candidate.snippet}`;
+      }
+    }
+    return candidate;
   } catch {
     return null;
+  }
+}
+
+const MONTHS =
+  'January|February|March|April|May|June|July|August|September|October|November|December';
+
+/** Full calendar dates only ("19 November 2026") — bare years are too noisy. */
+const DATE_RE = new RegExp(
+  `\\b(?:\\d{1,2}\\s+(?:${MONTHS})\\s+\\d{4}|(?:${MONTHS})\\s+\\d{1,2},?\\s+\\d{4})\\b`
+);
+
+function isDateSeeking(query: string): boolean {
+  return /\b(when|release dates?|launch dates?|come out|release|launch)\b/i.test(query);
+}
+
+/**
+ * Pull the plaintext article and return release-date sentences
+ * ("...scheduled to be released on 19 November 2026...").
+ */
+async function fetchDateFacts(title: string, timeoutMs: number): Promise<string[]> {
+  try {
+    // Full plaintext (exchars truncates mid-lead on this endpoint and cuts the date).
+    const url = `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&explaintext&titles=${encodeURIComponent(
+      title
+    )}&format=json&utf8=&origin=*`;
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(timeoutMs),
+      headers: WIKI_HEADERS,
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const pages = data?.query?.pages ? Object.values(data.query.pages) as Array<{ extract?: string }> : [];
+    const text = pages[0]?.extract || '';
+    if (!text) return [];
+
+    const seen = new Set<string>();
+    const facts: string[] = [];
+    for (const raw of text.split(/(?<=[.!?])\s+/)) {
+      const s = raw.trim();
+      if (s.length === 0 || s.length > 350) continue;
+      if (!/releas|launch|schedul|delay|debut/i.test(s) || !DATE_RE.test(s)) continue;
+      const key = s.slice(0, 60).toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      facts.push(cleanSnippet(s));
+      if (facts.length >= 2) break;
+    }
+    return facts;
+  } catch {
+    return [];
   }
 }
 

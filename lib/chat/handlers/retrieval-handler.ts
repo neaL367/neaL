@@ -98,14 +98,58 @@ export function handleRetrieval(ctx: HandlerContext): HandlerResult {
   return { handled: false };
 }
 
+const HEDGE_STOPWORDS = new Set([
+  'what', 'when', 'where', 'which', 'who', 'how', 'why',
+  'tell', 'about', 'please', 'thanks', 'you', 'your', 'yours',
+  'the', 'and', 'for', 'with', 'from', 'that', 'this',
+]);
+
+function singularize(tok: string): string {
+  if (tok.length > 4 && tok.endsWith('es')) return tok.slice(0, -2);
+  if (tok.length > 4 && tok.endsWith('s')) return tok.slice(0, -1);
+  return tok;
+}
+
+/**
+ * Relevance gate for the hedged guess: only surface the loose top hit when it
+ * shares a real content token with the query. Otherwise fall through to the
+ * honest generic fallback ("Capital of Zorblax" must not quote TQM culture).
+ * Exported for the correctness suite.
+ */
+export function isHitRelevantToQuery(
+  query: string,
+  hit: { title: string; heading?: string; excerpt: string }
+): boolean {
+  const qToks = new Set(
+    query
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(t => t.length >= 4 && !HEDGE_STOPWORDS.has(t))
+      .map(singularize)
+  );
+  if (qToks.size === 0) return false;
+  const hayToks = new Set(
+    `${hit.title} ${hit.heading || ''} ${hit.excerpt}`
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(t => t.length >= 2)
+      .map(singularize)
+  );
+  for (const t of qToks) {
+    if (hayToks.has(t)) return true;
+  }
+  return false;
+}
+
 export function handleFallback(ctx: HandlerContext): BuiltResponse {
   const { userMessage, state, retrievalResult } = ctx;
 
   // Low-confidence path: retrieval ran but nothing cleared the confidence
   // floor (bestHit nulled in retrieval.ts). Surface uncertainty visibly
-  // instead of answering in the same full-confidence voice.
+  // instead of answering in the same full-confidence voice — but only when
+  // the loose hit is actually about the query (see gate above).
   const looseHit = retrievalResult?.hits?.[0];
-  if (looseHit) {
+  if (looseHit && isHitRelevantToQuery(userMessage, looseHit)) {
     let cursors: Record<string, number> = { ...(state.roundRobinCursors || {}) };
     const hedgePick = getRoundRobinItem('uncertainty', UNCERTAINTY_PREFIXES, cursors);
     cursors = hedgePick.updatedCursors;
