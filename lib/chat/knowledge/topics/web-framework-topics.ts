@@ -27,6 +27,7 @@ function handleClick() {
   {
     id: 'useeffect',
     keywords: ['useeffect', 'effect', 'lifecycle', 'cleanup', 'dependency', 'mount', 'subscription'],
+    phrases: ['side effects', 'side effect', 'render', 'after render', 'synchronize with external systems', 'run after render'],
     title: 'React useEffect & Lifecycle Management',
     summary: 'useEffect synchronizes a component with an external system. Dependency arrays dictate re-execution, and returned cleanup functions prevent memory leaks on unmount.',
     detail: `### React useEffect

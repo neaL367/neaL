@@ -17,8 +17,10 @@ async function buildEmbeddings() {
 
   for (let i = 0; i < SITE_SECTIONS.length; i++) {
     const sec = SITE_SECTIONS[i];
-    // Combine heading and body text for rich semantic coverage
-    const inputContent = `${sec.pageTitle} — ${sec.heading}: ${sec.text}`;
+    // Focused input when provided (topic summaries + aliases); full body text
+    // otherwise. Stored `text` stays complete for display/summarization.
+    const inputContent =
+      sec.embedText || `${sec.pageTitle} — ${sec.heading}: ${sec.text}`;
 
     const output = await extractor(inputContent, {
       pooling: 'mean',

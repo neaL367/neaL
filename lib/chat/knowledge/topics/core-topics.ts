@@ -130,6 +130,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   {
     id: 'hooks',
     keywords: ['hooks', 'react hooks', 'usestate', 'useeffect', 'usememo', 'usecallback', 'custom hooks'],
+    phrases: ['reusable', 'reuse', 'stateful', 'share state', 'share logic', 'reusing logic', 'encapsulate logic'],
     title: 'React Hooks',
     summary: 'React Hooks let functional components encapsulate state and side effects through simple functions, replacing legacy class lifecycle methods.',
     detail: `### React Hooks Under the Hood
