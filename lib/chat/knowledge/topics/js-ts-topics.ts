@@ -179,8 +179,8 @@ null === undefined// false (different types)
 
 \`\`\`javascript
 // const locks the binding, not mutation of object contents:
-const person = { name: 'Neal' };
-person.name = 'Atichat'; //  Valid mutation
+const person = { name: 'Alex' };
+person.name = 'Sam'; //  Valid mutation
 // person = {};           //  TypeError
 \`\`\``,
     level: 'beginner',
@@ -272,7 +272,7 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
 
-const developer = { name: 'Neal', stack: ['React', 'Next.js', 'TypeScript'] };
+const developer = { name: 'Alex', stack: ['React', 'Next.js', 'TypeScript'] };
 const stack = getProperty(developer, 'stack'); // Type is string[], guaranteed
 \`\`\``,
     level: 'intermediate',
