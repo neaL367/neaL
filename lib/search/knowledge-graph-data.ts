@@ -108,6 +108,8 @@ export const SITE_KNOWLEDGE_TRIPLES: KnowledgeTriple[] = [
     predicate: 'company_role',
     aliases: [
       'where did you do your co-op',
+      'where did neal do his co-op',
+      'neal co-op experience',
       'where was your internship',
       'what company did you work for',
       'where did neal work',

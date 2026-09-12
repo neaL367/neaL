@@ -34,8 +34,8 @@ export function handleQuizAndCommands(ctx: HandlerContext): HandlerResult {
   // 2. COMMAND HANDLING
   if (intent === 'command') {
     if (conceptId === 'quiz') {
-      const preferredTopic = entities.concepts[0] || undefined;
-      activeQuiz = QuizManager.startQuiz(preferredTopic, state.expertiseLevel);
+      const preferredTopics = entities.concepts.length > 0 ? entities.concepts : undefined;
+      activeQuiz = QuizManager.startQuiz(preferredTopics, state.expertiseLevel);
       const replyText = QuizManager.formatQuestionPrompt(activeQuiz);
       const suggestions = ['A', 'B', 'C', 'D'];
 

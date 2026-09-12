@@ -84,6 +84,7 @@ export function queryKnowledgeGraph(
   if (qTokenSet.size > 0) {
     let bestTriple: KnowledgeTriple | null = null;
     let highestMatchRatio = 0;
+    let highestMatchCount = 0;
 
     for (const item of PREPROCESSED_ALIASES) {
       const aTokenSet = item.tokens;
@@ -100,8 +101,15 @@ export function queryKnowledgeGraph(
       // Avoid single generic words matching long queries
       if (aTokenSet.size === 1 && qTokenSet.size > 3 && ratio < 1.0) continue;
 
-      if (ratio >= 0.6 && ratio > highestMatchRatio) {
+      // Ratio first, then absolute evidence: 2-token overlap beats 1-token
+      // ("co-op" query → company_role over name_identity on ratio ties).
+      if (
+        ratio >= 0.6 &&
+        (ratio > highestMatchRatio ||
+          (ratio === highestMatchRatio && matchCount > highestMatchCount))
+      ) {
         highestMatchRatio = ratio;
+        highestMatchCount = matchCount;
         bestTriple = item.triple;
       }
     }
