@@ -2,7 +2,9 @@
  * Query Reformulator & Normalizer
  * Cleans conversational fluff, expands domain synonyms, and preserves technical compounds
  * to optimize search effectiveness across lexical (BM25F) and vector (Dense) retrieval lanes.
+ * Also owns concept-graph recall expansion so all term expansion lives in one module.
  */
+import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
 
 const CONVERSATIONAL_BOILERPLATE = [
   /^(can you\s+)?(please\s+)?(tell me about|explain to me|explain|what is the meaning of|what is|what are|how do you|how does|how to|i want to know about|do you know about|what do you know about)\s+/i,
@@ -102,4 +104,40 @@ export function reformulateQuery(
     bm25Tokens: allTokens,
     expandedTerms: Array.from(expandedSet),
   };
+}
+
+const GRAPH_EXPANSION_STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'from', 'that', 'this', 'what', 'how', 'why',
+  'its', 'into', 'using', 'used', 'via', 'per', 'are', 'was', 'you', 'your',
+]);
+
+/**
+ * Deterministic vocabulary-gap expansion (HyDE-lite without an LLM).
+ * Adds concept-graph aliases + 1-hop neighbor labels for detected concepts
+ * to BM25 *recall* terms only — precision anchors stay exact so expansion
+ * can never drown the user's own words. Capped at 8 terms.
+ */
+export function expandWithConceptGraph(conceptIds: string[], baseTokens: string[]): string[] {
+  const base = new Set(baseTokens.map(t => t.toLowerCase()));
+  const extra: string[] = [];
+  const seen = new Set<string>();
+  const uniqueIds = Array.from(new Set(conceptIds.filter(Boolean))).slice(0, 2);
+
+  for (const id of uniqueIds) {
+    const node = conceptGraph.getNode(id);
+    if (!node) continue;
+    const candidates = [
+      ...node.aliases,
+      ...conceptGraph.getNeighbors(id, 1).map(n => n.label),
+    ];
+    for (const c of candidates) {
+      for (const w of c.toLowerCase().split(/[^a-z0-9]+/)) {
+        if (w.length < 3 || base.has(w) || seen.has(w) || GRAPH_EXPANSION_STOPWORDS.has(w)) continue;
+        seen.add(w);
+        extra.push(w);
+        if (extra.length >= 8) return extra;
+      }
+    }
+  }
+  return extra;
 }

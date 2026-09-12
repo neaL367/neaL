@@ -2,20 +2,11 @@ import type { HandlerContext, HandlerResult, BuiltResponse } from './types';
 import { finishResponse } from './types';
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
 import { extractKeySentences } from '@/lib/chat/text-rank';
-import { getRoundRobinItem } from '@/lib/chat/knowledge/personas';
-
-const HIT_FRAMES = [
-  'Regarding',
-  'Here is what Neal shares on',
-  'From Neal’s portfolio notes on',
-  'On the topic of',
-];
-
-const UNCERTAINTY_PREFIXES = [
-  "I'm not fully certain, but here's my best read",
-  'My local index only turned up a loose match — here’s my best guess',
-  'I don’t have a verified section on this, but here’s what looks closest',
-];
+import {
+  getRoundRobinItem,
+  HIT_FRAMES,
+  UNCERTAINTY_PREFIXES,
+} from '@/lib/chat/knowledge/personas';
 
 export function handleRetrieval(ctx: HandlerContext): HandlerResult {
   const { userMessage, state, retrievalResult } = ctx;

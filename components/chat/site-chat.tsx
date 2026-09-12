@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ConversationState } from '@/lib/chat/types';
+import { createInitialConversationState, sanitizeConversationState } from '@/lib/chat/state';
 import {
   MessageGroup,
 } from '@/components/ui/message';
@@ -28,17 +29,6 @@ const DEFAULT_STARTERS = [
   'Tell me a joke',
 ];
 
-const INITIAL_STATE: ConversationState = {
-  turns: [],
-  topicThread: [],
-  activeQuiz: null,
-  expertiseLevel: 'intermediate',
-  roundRobinCursors: {},
-  lastRetrievalHits: [],
-  pendingOffer: null,
-  coveredConcepts: [],
-};
-
 function SiteChatInner({ className = '' }: { className?: string }) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -56,12 +46,12 @@ function SiteChatInner({ className = '' }: { className?: string }) {
     if (typeof window !== 'undefined') {
       try {
         const saved = sessionStorage.getItem('nara_session_state');
-        if (saved) return JSON.parse(saved);
+        if (saved) return sanitizeConversationState(JSON.parse(saved));
       } catch {
         // Storage unavailable or disabled
       }
     }
-    return INITIAL_STATE;
+    return createInitialConversationState();
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -255,7 +245,7 @@ function SiteChatInner({ className = '' }: { className?: string }) {
   };
 
   const handleResetSession = () => {
-    updateSessionState(INITIAL_STATE);
+    updateSessionState(createInitialConversationState());
     setSuggestions(DEFAULT_STARTERS);
     setMessages([
       {

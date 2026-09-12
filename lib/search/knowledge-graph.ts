@@ -1,4 +1,4 @@
-import type { KnowledgeTriple } from './types';
+import type { KnowledgeTriple } from '@/lib/chat/types';
 import { SITE_KNOWLEDGE_TRIPLES } from './knowledge-graph-data';
 
 export { SITE_KNOWLEDGE_TRIPLES } from './knowledge-graph-data';

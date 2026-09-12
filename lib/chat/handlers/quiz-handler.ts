@@ -1,5 +1,6 @@
 import type { HandlerContext, HandlerResult } from './types';
 import { finishResponse } from './types';
+import { createInitialConversationState } from '@/lib/chat/state';
 import { QuizManager } from '@/lib/chat/knowledge/quizzes';
 
 export function handleQuizAndCommands(ctx: HandlerContext): HandlerResult {
@@ -64,16 +65,7 @@ export function handleQuizAndCommands(ctx: HandlerContext): HandlerResult {
           text: replyText,
           sources: [],
           suggestions,
-          updatedState: {
-            turns: [],
-            topicThread: [],
-            activeQuiz: null,
-            expertiseLevel: 'intermediate',
-            roundRobinCursors: {},
-            lastRetrievalHits: [],
-            pendingOffer: null,
-            coveredConcepts: [],
-          },
+          updatedState: createInitialConversationState(),
         },
       };
     }

@@ -1,4 +1,4 @@
-import type { KnowledgeTriple } from './types';
+import type { KnowledgeTriple } from '@/lib/chat/types';
 
 /**
  * Curated Entity-Attribute-Value (EAV) facts extracted directly from the website.

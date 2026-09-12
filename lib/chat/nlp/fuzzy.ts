@@ -1,4 +1,4 @@
-import { levenshteinDistance } from '@/lib/chat/knowledge/concept-graph';
+import { levenshteinDistance } from '@/lib/chat/text-distance';
 
 export interface FuzzyCommand {
   conceptId: string;

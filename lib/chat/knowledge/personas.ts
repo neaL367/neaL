@@ -214,3 +214,38 @@ export function getRoundRobinItem(
 
   return { text: item, updatedCursors };
 }
+
+// --- Single home for handler openers (one variety system, no copies) ---
+export const TOPIC_INTRO_HOOKS = [
+  'Here is how',
+  'Let’s break down',
+  'In modern engineering,',
+  'At its core,',
+  'Understanding',
+];
+
+export const CODE_INTRO_HOOKS = [
+  'Here is a hands-on implementation and breakdown for',
+  'Let’s walk through a concrete code example of',
+  'Here is how you write and use',
+  'Practical demonstration for',
+];
+
+export const HIT_FRAMES = [
+  'Regarding',
+  'Here is what Neal shares on',
+  'From Neal’s portfolio notes on',
+  'On the topic of',
+];
+
+export const REVISIT_PREFIXES = [
+  'Since we touched on this before — here’s the angle we haven’t covered yet.',
+  'Circling back — let’s go a level deeper on',
+  'Good to revisit — here’s more depth on',
+];
+
+export const UNCERTAINTY_PREFIXES = [
+  "I'm not fully certain, but here's my best read",
+  'My local index only turned up a loose match — here’s my best guess',
+  'I don’t have a verified section on this, but here’s what looks closest',
+];
