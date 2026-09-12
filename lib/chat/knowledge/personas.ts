@@ -249,3 +249,9 @@ export const UNCERTAINTY_PREFIXES = [
   'My local index only turned up a loose match — here’s my best guess',
   'I don’t have a verified section on this, but here’s what looks closest',
 ];
+
+export const WHY_EXPLAINERS = [
+  'The reason comes down to this:',
+  'Here’s the reasoning behind it:',
+  'The underlying reason is:',
+];

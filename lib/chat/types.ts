@@ -86,6 +86,19 @@ export interface PendingOffer {
   suggestedAtTurn: number;
 }
 
+export interface ClarifyOption {
+  label: string;
+  intent: IntentType;
+  conceptId?: string;
+  matchTerms: string[];
+  /** Quiz options borrow the other side's concept as quiz subject. */
+  subjectId?: string;
+}
+
+export interface PendingClarification {
+  options: ClarifyOption[];
+}
+
 export interface ConversationState {
   turns: ConversationTurn[];
   topicThread: string[];
@@ -95,6 +108,7 @@ export interface ConversationState {
   lastRetrievalHits: RetrievalHit[];
   pendingOffer?: PendingOffer | null;
   coveredConcepts?: string[];
+  pendingClarification?: PendingClarification | null;
 }
 
 export type NaraStreamChunk =
