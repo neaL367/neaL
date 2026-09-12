@@ -178,22 +178,9 @@ export async function orchestrateRetrieval(
     (hasStrongBm25 && topSemanticRawScore >= 0.3) ||
     hasStrongSemantic;
 
-  const isConversationalOrLocalIntent =
-    context?.intent === 'conversational' ||
-    context?.intent === 'continuation' ||
-    context?.intent === 'rejection' ||
-    context?.intent === 'joke' ||
-    context?.intent === 'command' ||
-    context?.intent === 'quiz_answer' ||
-    context?.conceptId?.startsWith('film:') ||
-    context?.intent === 'personal';
-
-  // 4. Web Search: explicit Web Search Mode, or by default for anything the
-  // local index can't answer confidently (smalltalk, quizzes, commands, films,
-  // and portfolio-personal stay local — everything else deserves a live try).
-  const shouldSearchWeb =
-    context?.webSearch === true ||
-    (!isLocalConfidenceHigh && !isConversationalOrLocalIntent);
+  // 4. Web Search: explicit opt-in only (UI toggle or "search the web" /
+  // "google it" phrasing, detected in route.ts). No implicit fallback.
+  const shouldSearchWeb = context?.webSearch === true;
 
   if (shouldSearchWeb) {
     // Sharp keyword variant first: leading interrogatives poison keyword

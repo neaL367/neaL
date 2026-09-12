@@ -6,10 +6,23 @@
  */
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
 
+// Explicit on-demand web requests ("search the web for X", "google it").
+// Anchored so plain questions ("search for good patterns") stay local.
+// Declared before CONVERSATIONAL_BOILERPLATE (TDZ: the array references it).
+const WEB_REQUEST_PATTERN =
+  /^(?:(?:can you|could you|please)\s+)?(search the web( for)?|search online( for)?|look \S+ up( online)?|google( it)?|search google( for)?|check online( for)?|browse the web( for)?)\b[:\s]*/i;
+
+/** True when the user explicitly asks for a live web lookup. */
+export function isExplicitWebRequest(cleanedMessage: string): boolean {
+  return WEB_REQUEST_PATTERN.test(cleanedMessage.trim());
+}
+
 const CONVERSATIONAL_BOILERPLATE = [
   /^(can you\s+)?(please\s+)?(tell me about|explain to me|explain|what is the meaning of|what is|what are|how do you|how does|how to|i want to know about|do you know about|what do you know about)\s+/i,
   /^(?:no,?\s+)?(?:i mean|i meant|i am talking about|i'm talking about|meaning|referring to)\s+/i,
   /\b(please|thanks|thank you|could you|would you)\b/gi,
+  // Explicit web-request wrappers strip for every lane, not just web.
+  WEB_REQUEST_PATTERN,
 ];
 
 const CLARIFICATION_PATTERN =

@@ -158,7 +158,7 @@ export function handleFallback(ctx: HandlerContext): BuiltResponse {
     const summary = keySentences.length > 0 ? keySentences.join(' ') : looseHit.excerpt.slice(0, 220);
     const replyText =
       `${hedgePick.text} based on **${looseHit.heading || looseHit.title}**:\n\n${summary}\n\n` +
-      `*If that's off, try rephrasing — or ask me about **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\`!*`;
+      `*If that's off, try rephrasing — or ask me to **search the web** for it. Otherwise explore **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\`!*`;
     const sources = looseHit.url
       ? [{ title: looseHit.title, heading: looseHit.heading, url: looseHit.url, excerpt: looseHit.excerpt.slice(0, 140) }]
       : [];
@@ -178,7 +178,7 @@ export function handleFallback(ctx: HandlerContext): BuiltResponse {
   }
 
   const cleanQ = userMessage.slice(0, 35);
-  const replyText = `That's an interesting question regarding "${cleanQ}"! I don't have a direct section on that in Neal's portfolio.\n\nTry rephrasing, or ask me about **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\` to test your frontend skills!`;
+  const replyText = `That's an interesting question regarding "${cleanQ}"! I don't have a direct section on that in Neal's portfolio.\n\nYou can ask me to **search the web** for it (e.g. "search the web for ..."), or try rephrasing — or ask me about **TypeScript**, **React Server Components**, **Neal's co-op at TQM**, or type \`/quiz\` to test your frontend skills!`;
   const suggestions = ['What is Neal’s stack?', 'Explain React Server Components', 'Quiz me on TypeScript'];
 
   return finishResponse(replyText, [], suggestions, userMessage, state, null);
