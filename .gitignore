@@ -64,6 +64,10 @@ test-*.js
 scratch/
 *.scratch.*
 
+# local-only eval harnesses (never push to GitHub)
+scripts/eval-*.ts
+scripts/demo-*.local.ts
+
 # ide & os
 .vscode/
 .idea/
