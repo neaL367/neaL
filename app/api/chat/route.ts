@@ -40,10 +40,17 @@ export async function POST(req: Request) {
       roundRobinCursors: incomingState.roundRobinCursors || {},
       lastRetrievalHits: Array.isArray(incomingState.lastRetrievalHits) ? incomingState.lastRetrievalHits.slice(-10) : [],
       pendingOffer: incomingState.pendingOffer || null,
+      coveredConcepts: Array.isArray(incomingState.coveredConcepts)
+        ? incomingState.coveredConcepts.slice(-20)
+        : [],
     };
 
-    // 3. NLP Analysis & Classification
-    state.expertiseLevel = detectExpertise(cleanMessage, state.expertiseLevel);
+    // 3. NLP Analysis & Classification (rolling expertise window from recent user turns)
+    const recentUserTexts = state.turns
+      .filter(t => t.role === 'user')
+      .map(t => t.text)
+      .slice(-2);
+    state.expertiseLevel = detectExpertise(cleanMessage, state.expertiseLevel, recentUserTexts);
     const tokens = tokenize(cleanMessage);
     const entities = extractEntities(cleanMessage, tokens, state);
     const intentResult = classifyIntent(cleanMessage, state);
@@ -123,7 +130,27 @@ export async function POST(req: Request) {
                 const sseEvent = `event: text\ndata: ${JSON.stringify(currentChunk)}\n\n`;
                 controller.enqueue(encoder.encode(sseEvent));
                 didEmitAnyText = true;
+                // Longer pause after headings / list items sells the "typing" illusion
+                const isStructuralBoundary =
+                  !inCodeBlock &&
+                  (/(^|\n)\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s)/.test(currentChunk) ||
+                    /\n\s*$/.test(currentChunk));
+                const baseDelay = inCodeBlock
+                  ? 5
+                  : isEndOfSentence
+                    ? 40
+                    : isStructuralBoundary
+                      ? 70
+                      : 20;
+                // Small randomized jitter (±12ms prose, ±3ms code) breaks mechanical regularity
+                const spread = inCodeBlock ? 3 : 12;
+                const jittered = Math.max(
+                  0,
+                  baseDelay + Math.random() * 2 * spread - spread
+                );
                 currentChunk = '';
+                await sleep(jittered);
+                continue;
               }
 
               const delay = inCodeBlock ? 5 : isEndOfSentence ? 40 : 20;

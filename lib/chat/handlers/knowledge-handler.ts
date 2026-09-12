@@ -3,6 +3,7 @@ import { finishResponse } from './types';
 import type { PendingOffer } from '@/lib/chat/types';
 import { TOPICS, CONCEPTS } from '@/lib/chat/knowledge/topics';
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
+import { getRoundRobinItem } from '@/lib/chat/knowledge/personas';
 
 const TOPIC_INTRO_HOOKS = [
   'Here is how',
@@ -26,17 +27,31 @@ const HIT_FRAMES = [
   'On the topic of',
 ];
 
+const REVISIT_PREFIXES = [
+  'Since we touched on this before — here’s the angle we haven’t covered yet.',
+  'Circling back — let’s go a level deeper on',
+  'Good to revisit — here’s more depth on',
+];
+
 export function handleKnowledge(ctx: HandlerContext): HandlerResult {
   const { userMessage, state, intentResult, entities, retrievalResult, turnCount } = ctx;
   const { intent, conceptId } = intentResult;
   const topicThread = [...state.topicThread];
+  let cursors: Record<string, number> = { ...(state.roundRobinCursors || {}) };
+  const covered: string[] = [...(state.coveredConcepts || [])];
+  const markCovered = (id: string): string[] => {
+    if (covered.includes(id)) return [...covered];
+    return [...covered, id].slice(-20);
+  };
 
   // 1. HIGH-CONFIDENCE KNOWLEDGE GRAPH HITS (Primary for factual & portfolio questions)
   // Evaluated before generic graph nodes so questions like "Where did Neal study?"
   // receive the exact triple fact rather than a generic author bio node.
   if (retrievalResult.bestHit?.lane === 'kg' && intent !== 'continuation') {
     const hit = retrievalResult.bestHit;
-    const hitFrame = HIT_FRAMES[(turnCount + (hit.title?.length || 0)) % HIT_FRAMES.length];
+    const hitPick = getRoundRobinItem('hit_frame', HIT_FRAMES, cursors);
+    cursors = hitPick.updatedCursors;
+    const hitFrame = hitPick.text;
 
     let replyText = `${hitFrame} **${hit.heading || hit.title}**: ${hit.excerpt}`;
     if (hit.contextSentence && hit.contextSentence !== hit.excerpt) {
@@ -63,6 +78,8 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
           ...state,
           lastRetrievalHits: retrievalResult.hits,
           topicThread,
+          roundRobinCursors: cursors,
+          coveredConcepts: covered,
         },
         null
       ),
@@ -74,7 +91,10 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
     const topic = TOPICS.find(t => t.id === conceptId);
     const conceptDef = CONCEPTS[conceptId];
     const graphNode = conceptGraph.getNode(conceptId);
-    const codeHook = CODE_INTRO_HOOKS[(turnCount + conceptId.length) % CODE_INTRO_HOOKS.length];
+    const codePick = getRoundRobinItem('code_intro', CODE_INTRO_HOOKS, cursors);
+    cursors = codePick.updatedCursors;
+    const codeHook = codePick.text;
+    const nextCovered = markCovered(conceptId);
 
     if (topic) {
       const replyText = `${codeHook} **${topic.title}**:\n\n${topic.detail}`;
@@ -86,7 +106,7 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
           [],
           suggestions,
           userMessage,
-          { ...state, topicThread },
+          { ...state, topicThread, roundRobinCursors: cursors, coveredConcepts: nextCovered },
           null
         ),
       };
@@ -102,7 +122,7 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
           [],
           suggestions,
           userMessage,
-          { ...state, topicThread },
+          { ...state, topicThread, roundRobinCursors: cursors, coveredConcepts: nextCovered },
           null
         ),
       };
@@ -118,7 +138,7 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
           [],
           suggestions,
           userMessage,
-          { ...state, topicThread },
+          { ...state, topicThread, roundRobinCursors: cursors, coveredConcepts: nextCovered },
           null
         ),
       };
@@ -145,12 +165,31 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
         }
       }
 
-      const introHook = TOPIC_INTRO_HOOKS[(turnCount + activeConceptId.length) % TOPIC_INTRO_HOOKS.length];
+      const isRepeat = covered.includes(activeConceptId);
+      const nextCovered = markCovered(activeConceptId);
       let replyText = '';
       let pendingOffer: PendingOffer | null = null;
 
       if (topic) {
-        if (state.expertiseLevel === 'beginner') {
+        if (isRepeat) {
+          // Repeat: vary opener and shift depth — always give full detail
+          // instead of replaying the identical summary/detail verbatim.
+          const revisitPick = getRoundRobinItem('revisit_prefix', REVISIT_PREFIXES, cursors);
+          cursors = revisitPick.updatedCursors;
+          const revisit = revisitPick.text.endsWith('on')
+            ? `${revisitPick.text} **${topic.title}**`
+            : revisitPick.text;
+          const body = revisit.endsWith(`**${topic.title}**`)
+            ? `:\n\n${topic.detail}`
+            : `\n\n**${topic.title}**:\n\n${topic.detail}`;
+          replyText = `${bridge}*${revisit}*${body}\n\n*Want a hands-on code example or a quiz to lock it in?*`;
+          pendingOffer = {
+            type: 'code_example',
+            subjectId: topic.id,
+            title: topic.title,
+            suggestedAtTurn: turnCount + 1,
+          };
+        } else if (state.expertiseLevel === 'beginner') {
           replyText = `${bridge}**${topic.title}**\n\n${topic.summary}\n\n*Would you like a hands-on code example or a deeper look?*`;
           pendingOffer = {
             type: 'code_example',
@@ -159,13 +198,27 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
             suggestedAtTurn: turnCount + 1,
           };
         } else {
-          replyText = `${bridge}${introHook} **${topic.title}**:\n\n${topic.detail}`;
+          const introPick = getRoundRobinItem('topic_intro', TOPIC_INTRO_HOOKS, cursors);
+          cursors = introPick.updatedCursors;
+          replyText = `${bridge}${introPick.text} **${topic.title}**:\n\n${topic.detail}`;
           pendingOffer = null;
         }
       } else if (conceptDef) {
-        replyText = `${bridge}**${conceptDef.label}**\n\n${conceptDef.definition}`;
+        if (isRepeat) {
+          const revisitPick = getRoundRobinItem('revisit_prefix', REVISIT_PREFIXES, cursors);
+          cursors = revisitPick.updatedCursors;
+          replyText = `${bridge}*${revisitPick.text}*\n\n**${conceptDef.label}**\n\n${conceptDef.definition}`;
+        } else {
+          replyText = `${bridge}**${conceptDef.label}**\n\n${conceptDef.definition}`;
+        }
       } else if (graphNode) {
-        replyText = `${bridge}**${graphNode.label}**\n\n${graphNode.description}`;
+        if (isRepeat) {
+          const revisitPick = getRoundRobinItem('revisit_prefix', REVISIT_PREFIXES, cursors);
+          cursors = revisitPick.updatedCursors;
+          replyText = `${bridge}*${revisitPick.text}*\n\n**${graphNode.label}**\n\n${graphNode.description}`;
+        } else {
+          replyText = `${bridge}**${graphNode.label}**\n\n${graphNode.description}`;
+        }
       }
 
       const suggestions = conceptGraph.getRelatedQuestions(activeConceptId, 3);
@@ -177,7 +230,7 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
           [],
           suggestions,
           userMessage,
-          { ...state, topicThread },
+          { ...state, topicThread, roundRobinCursors: cursors, coveredConcepts: nextCovered },
           pendingOffer
         ),
       };

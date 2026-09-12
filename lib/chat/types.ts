@@ -84,6 +84,7 @@ export interface ConversationState {
   roundRobinCursors: Record<string, number>;
   lastRetrievalHits: RetrievalHit[];
   pendingOffer?: PendingOffer | null;
+  coveredConcepts?: string[];
 }
 
 export type NaraStreamChunk =
