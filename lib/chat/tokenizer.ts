@@ -59,7 +59,7 @@ export function stem(word: string): string {
   else if (w.endsWith('tion') && w.length > 5) result = w.slice(0, -4);
   else if (w.endsWith('ment') && w.length > 5) result = w.slice(0, -4);
   else if (w.endsWith('ness') && w.length > 5) result = w.slice(0, -4);
-  else if (w.endsWith('ers') && w.length > 4) result = w.slice(0, -2);
+  else if (w.endsWith('ers') && w.length > 4) result = w.slice(0, -3);
   else if (w.endsWith('er') && w.length > 4) result = w.slice(0, -2);
   else if (w.endsWith('est') && w.length > 4) result = w.slice(0, -3);
   else if (w.endsWith('ed') && w.length > 4) result = w.slice(0, -2);

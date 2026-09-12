@@ -20,7 +20,7 @@ export class SemanticIndex {
   private queryCache = new Map<string, Float32Array>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private extractor: any = null;
-  private isInitializing = false;
+  private initPromise: Promise<void> | null = null;
   private isReady = false;
 
   constructor() {
@@ -64,24 +64,28 @@ export class SemanticIndex {
   }
 
   async initialize(): Promise<void> {
-    if (this.isReady || this.isInitializing) return;
-    this.isInitializing = true;
+    if (this.isReady) return;
+    if (this.initPromise) return this.initPromise;
 
-    try {
-      // Dynamically import @huggingface/transformers
-      const { pipeline, env } = await import('@huggingface/transformers');
-      env.cacheDir = path.join(process.cwd(), '.cache', 'models');
+    this.initPromise = (async () => {
+      try {
+        // Dynamically import @huggingface/transformers
+        const { pipeline, env } = await import('@huggingface/transformers');
+        env.cacheDir = path.join(process.cwd(), '.cache', 'models');
 
-      // Use 8-bit quantized all-MiniLM-L6-v2 (~22MB)
-      this.extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-        dtype: 'q8',
-      });
-      this.isReady = true;
-    } catch (err) {
-      console.warn('[SemanticIndex] Note: Model pipeline init deferred or offline:', err);
-    } finally {
-      this.isInitializing = false;
-    }
+        // Use 8-bit quantized all-MiniLM-L6-v2 (~22MB)
+        this.extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+          dtype: 'q8',
+        });
+        this.isReady = true;
+      } catch (err) {
+        console.warn('[SemanticIndex] Note: Model pipeline init deferred or offline:', err);
+      } finally {
+        this.initPromise = null;
+      }
+    })();
+
+    return this.initPromise;
   }
 
   async search(query: string, limit: number = 3): Promise<RetrievalHit[]> {
@@ -94,7 +98,7 @@ export class SemanticIndex {
     }
 
     try {
-      if (!this.extractor && !this.isInitializing) {
+      if (!this.extractor) {
         await this.initialize();
       }
 

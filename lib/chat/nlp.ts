@@ -73,13 +73,22 @@ export interface IntentClassification {
   confidence: number;
 }
 
+import { evaluateMathExpression } from './math-evaluator';
+
+const VOWEL_LESS_EXCEPTIONS = new Set([
+  'rhythm', 'rhythms', 'crypt', 'crypts', 'lynx', 'flyby', 'flybys',
+  'gypsy', 'gypsies', 'slyly', 'dryly', 'shyly', 'spryly', 'myrrh', 'sync', 'syncs',
+  'myth', 'myths', 'hymn', 'hymns', 'psych', 'glyph', 'glyphs', 'tryst', 'trysts'
+]);
+
 export function isGibberish(text: string): boolean {
   const clean = text.toLowerCase().trim();
   if (!clean) return false;
-  // Keyboard spam or long consonant sequence
-  if (/^[b-df-hj-np-tv-z]{5,}$/i.test(clean)) return true;
+  if (VOWEL_LESS_EXCEPTIONS.has(clean)) return false;
+  // Keyboard spam or long consonant sequence (treating 'y' as vowel)
+  if (/^[b-df-hj-np-tv-xz]{5,}$/i.test(clean)) return true;
   if (/^(asdf|qwer|zxcv|1234|hjkl)/i.test(clean) && clean.length >= 7) return true;
-  if (/^([a-z])\1{4,}$/i.test(clean)) return true;
+  if (/^([a-z])\1{3,}$/i.test(clean)) return true;
   if (/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`\s]+$/.test(clean) && clean.length >= 3) return true;
   return false;
 }
@@ -90,37 +99,9 @@ export function tryEvaluateMath(text: string): string | null {
     .replace(/[?=]/g, '')
     .trim();
 
-  // 1. Percentage check: "15% of 80" or "20% * 150"
-  const pctMatch = clean.match(/^(\d+(?:\.\d+)?)\s*%\s*(?:of|\*)\s*(\d+(?:\.\d+)?)$/i);
-  if (pctMatch) {
-    const p = parseFloat(pctMatch[1]);
-    const total = parseFloat(pctMatch[2]);
-    const res = (p / 100) * total;
-    const rounded = Number.isInteger(res) ? res : parseFloat(res.toFixed(4));
-    return `${pctMatch[1]}% of ${pctMatch[2]} = ${rounded}`;
-  }
-
-  // 2. Normalize word arithmetic into standard symbols
-  const normalized = clean
-    .replace(/\btimes\b|\bx\b/gi, '*')
-    .replace(/\bplus\b/gi, '+')
-    .replace(/\bminus\b/gi, '-')
-    .replace(/\bdivided\s+by\b/gi, '/')
-    .replace(/\bmod(?:ulo)?\b/gi, '%')
-    .trim();
-
-  if (/^[\d\s\+\-\*\/\^\(\)\.\%]+$/.test(normalized) && /[\+\-\*\/\^\%]/.test(normalized)) {
-    try {
-      const sanitized = normalized.replace(/[^0-9\+\-\*\/\.\(\)\%]/g, '');
-      if (!sanitized || sanitized.length > 50) return null;
-      const result = Function(`"use strict"; return (${sanitized})`)();
-      if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
-        const rounded = Number.isInteger(result) ? result : parseFloat(result.toFixed(4));
-        return `${clean} = ${rounded}`;
-      }
-    } catch {
-      return null;
-    }
+  const res = evaluateMathExpression(clean);
+  if (res !== null) {
+    return `${clean} = ${res}`;
   }
   return null;
 }
@@ -134,11 +115,14 @@ export function classifyIntent(
 
   // 1. Active Quiz Answer Check (Highest priority when a quiz is waiting for an answer)
   if (state?.activeQuiz && !state.activeQuiz.answered) {
-    // Check if the user is trying to abandon or ask something else
-    const isAbandon = /^(help|stop|cancel|exit|quit|nevermind)\b/i.test(clean);
+    // Check if the user is trying to abandon or decline the quiz
+    const isAbandon =
+      /^(help|stop|cancel|exit|quit|nevermind|no|nah|nope|no thanks|skip|skip this|something else|different topic|not now)\b/i.test(clean);
+
     if (!isAbandon) {
       const selected = QuizManager.parseUserSelection(clean, state.activeQuiz.question.options);
-      if (selected !== null || clean.length <= 25) {
+      const isExplicitOption = /^[a-d1-4]\b/i.test(clean) || /^(option|choice)\s+[a-d1-4]\b/i.test(clean);
+      if (selected !== null || isExplicitOption) {
         return { intent: 'quiz_answer', confidence: 1.0 };
       }
     }
