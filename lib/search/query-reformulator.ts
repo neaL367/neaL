@@ -15,6 +15,39 @@ const CONVERSATIONAL_BOILERPLATE = [
 const CLARIFICATION_PATTERN =
   /^(?:no,?\s+)?(?:i mean|i meant|i am talking about|i'm talking about|meaning|referring to)\s+(.+)$/i;
 
+// Filler words that pollute re-anchored queries ("when gta6 release date gonna release").
+const FILLER_WORDS = new Set([
+  'gonna', 'wanna', 'please', 'pls', 'just', 'really', 'actually', 'basically', 'well', 'um', 'uh',
+]);
+
+// Leading interrogatives/auxiliaries stripped only for the web-search variant.
+const LEADING_QUESTION_WORDS = new Set([
+  'who', 'what', 'when', 'where', 'why', 'how', 'which',
+  'is', 'are', 'was', 'were', 'will', 'would', 'can', 'could', 'do', 'does', 'did',
+]);
+
+/** Drop fillers + duplicate tokens (keep first order). Repairs re-anchored queries. */
+function tidyTokens(cleaned: string): string {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const tok of cleaned.split(/\s+/)) {
+    const low = tok.toLowerCase();
+    if (!low || FILLER_WORDS.has(low) || seen.has(low)) continue;
+    seen.add(low);
+    out.push(tok);
+  }
+  return out.join(' ');
+}
+
+/** Sharp keyword query for the live-web lane ("when gta6 release date" → "gta6 release date"). */
+function toWebQuery(cleaned: string): string {
+  const toks = cleaned.split(/\s+/).filter(Boolean);
+  let i = 0;
+  while (i < toks.length - 1 && LEADING_QUESTION_WORDS.has(toks[i].toLowerCase())) i++;
+  const sharp = toks.slice(i).join(' ').trim();
+  return sharp || cleaned;
+}
+
 const DOMAIN_SYNONYMS: Record<string, string[]> = {
   internship: ['co-op', 'tqm', 'work experience', 'developer'],
   school: ['university', 'sripatum', 'education', 'study'],
@@ -30,6 +63,8 @@ export interface ReformulatedQuery {
   cleaned: string;
   bm25Tokens: string[];
   expandedTerms: string[];
+  /** De-fluffed keyword variant for the live-web lane; retry when `cleaned` finds nothing. */
+  webQuery: string;
 }
 
 export function reformulateQuery(
@@ -39,7 +74,7 @@ export function reformulateQuery(
 ): ReformulatedQuery {
   const trimmed = rawQuery.trim();
   if (!trimmed) {
-    return { raw: '', cleaned: '', bm25Tokens: [], expandedTerms: [] };
+    return { raw: '', cleaned: '', bm25Tokens: [], expandedTerms: [], webQuery: '' };
   }
 
   let cleaned = trimmed;
@@ -81,6 +116,10 @@ export function reformulateQuery(
     cleaned = trimmed; // Keep original if stripped to empty
   }
 
+  // Tidy re-anchored queries: drop fillers ("gonna") and duplicate tokens
+  // ("when gta6 release date gonna release" → "when gta6 release date")
+  cleaned = tidyTokens(cleaned) || cleaned;
+
   // Generate tokens
   const baseTokens = cleaned
     .toLowerCase()
@@ -103,6 +142,7 @@ export function reformulateQuery(
     cleaned,
     bm25Tokens: allTokens,
     expandedTerms: Array.from(expandedSet),
+    webQuery: toWebQuery(cleaned),
   };
 }
 

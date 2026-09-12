@@ -1,4 +1,5 @@
 import type { DocumentSection } from './types';
+import { TOPICS, CONCEPTS } from '@/lib/chat/knowledge/topics';
 
 /**
  * Pre-compiled, structured sections of the website content.
@@ -32,6 +33,7 @@ interface RawSectionConfig {
   summary?: string;
   publishedAt?: string;
   text: string;
+  embedText?: string;
 }
 
 const RAW_SECTIONS: RawSectionConfig[] = [
@@ -263,7 +265,41 @@ const RAW_SECTIONS: RawSectionConfig[] = [
   },
 ];
 
-export const SITE_SECTIONS: DocumentSection[] = RAW_SECTIONS.map((raw) => {
+export const SITE_SECTIONS: DocumentSection[] = [
+  ...RAW_SECTIONS,
+  // ─── Curated knowledge (TOPICS + CONCEPTS) ───────────────────────────────
+  // Indexed here so BM25 and semantic lanes cover concepts, not just pages.
+  // Ids intentionally match the topic/concept retrieval lanes (`topic:<id>`,
+  // `concept:<id>`) so RRF fuses cross-lane votes for the same doc instead
+  // of surfacing duplicates.
+  ...TOPICS.map(
+    (t): RawSectionConfig => ({
+      id: `topic:${t.id}`,
+      slug: 'topics',
+      url: '/',
+      pageTitle: t.title,
+      heading: t.title,
+      level: 2,
+      summary: t.summary,
+      text: `${t.summary}\n\n${t.detail}`,
+      embedText: `${t.title}. ${t.summary} Also known as: ${[...t.keywords, ...(t.phrases || [])].join(', ')}.`,
+    })
+  ),
+  ...Object.entries(CONCEPTS)
+    .filter(([id]) => !TOPICS.some(t => t.id === id))
+    .map(
+      ([id, c]): RawSectionConfig => ({
+        id: `concept:${id}`,
+        slug: 'concepts',
+        url: '/',
+        pageTitle: c.label,
+        heading: c.label,
+        level: 2,
+        summary: c.definition.slice(0, 160),
+        text: c.definition,
+      })
+    ),
+].map((raw) => {
   const titleTokens = tokenize(raw.pageTitle);
   const headingTokens = tokenize(raw.heading);
   const summaryTokens = tokenize(raw.summary || '');

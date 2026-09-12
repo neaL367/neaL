@@ -90,14 +90,25 @@ export const QUIZZES: QuizQuestion[] = [
 ];
 
 export class QuizManager {
-  static startQuiz(preferredTopic?: string, preferredDifficulty?: ExpertiseLevel): QuizState {
+  static startQuiz(preferredTopic?: string | string[], preferredDifficulty?: ExpertiseLevel): QuizState {
     let pool = QUIZZES;
 
-    if (preferredTopic) {
+    // Try each preferred topic in specificity order; first one with matches wins.
+    // (Entity ids like "react-19" rarely equal quiz topic names like "React",
+    // so fall through the ranked concept list instead of all-or-nothing.)
+    const prefs = Array.isArray(preferredTopic)
+      ? preferredTopic
+      : preferredTopic
+        ? [preferredTopic]
+        : [];
+    for (const pref of prefs) {
       const topicMatches = pool.filter(q =>
-        q.topic.toLowerCase().includes(preferredTopic.toLowerCase())
+        q.topic.toLowerCase().includes(pref.toLowerCase())
       );
-      if (topicMatches.length > 0) pool = topicMatches;
+      if (topicMatches.length > 0) {
+        pool = topicMatches;
+        break;
+      }
     }
 
     if (preferredDifficulty) {
@@ -115,6 +126,14 @@ export class QuizManager {
 
   static parseUserSelection(input: string, options: string[]): number | null {
     const clean = input.trim().toLowerCase();
+
+    // 0. Natural answer phrasing anywhere: "my answer is B", "answer: c", "I choose A"
+    const answerMatch = clean.match(/(?:\banswer\s*(?:is|:)?|\bchoice|\boption|\bletter|\bi\s*(?:choose|pick|select|think))\s*\(?([a-d1-4])\)?(?![a-z0-9])/);
+    if (answerMatch) {
+      const token = answerMatch[1];
+      const idx = /[a-d]/.test(token) ? token.charCodeAt(0) - 97 : parseInt(token, 10) - 1;
+      if (idx >= 0 && idx < options.length) return idx;
+    }
 
     // 1. Single letter match: 'A', 'b', 'c)', 'd.'
     const letterMatch = clean.match(/^([a-d])[\s.):-]?/);
@@ -195,7 +214,9 @@ export class QuizManager {
               if (d < bestD) bestD = d;
               if (bestD === 0) break;
             }
-            const allowed = cw.length >= 4 ? 2 : 1;
+            // Strict for short words: dist-2 on ≤6 chars collides
+            // ("reset"≈"test" hijacked /reset mid-quiz). Longer words keep 2.
+            const allowed = cw.length >= 7 ? 2 : 1;
             if (bestD > allowed) {
               allMatch = false;
               break;

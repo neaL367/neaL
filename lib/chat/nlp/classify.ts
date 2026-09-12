@@ -24,14 +24,19 @@ export function classifyIntent(
   const tokens = tokenize(clean);
 
   // 1. Active Quiz Answer Check (Highest priority when a quiz is waiting for an answer)
-  if (state?.activeQuiz && !state.activeQuiz.answered) {
+  // Slash input is always an explicit command (/reset, /quiz) — never a quiz answer.
+  if (state?.activeQuiz && !state.activeQuiz.answered && !clean.startsWith('/')) {
     // Check if the user is trying to abandon or decline the quiz
     const isAbandon =
       /^(help|stop|cancel|exit|quit|nevermind|no|nah|nope|no thanks|skip|skip this|something else|different topic|not now)\b/i.test(clean);
 
     if (!isAbandon) {
       const selected = QuizManager.parseUserSelection(clean, state.activeQuiz.question.options);
-      const isExplicitOption = /^[a-d1-4]\b/i.test(clean) || /^(option|choice)\s+[a-d1-4]\b/i.test(clean);
+      const isExplicitOption =
+        /^[a-d1-4]\b/i.test(clean) ||
+        /^(option|choice)\s+[a-d1-4]\b/i.test(clean) ||
+        /\banswer\s*(is|:)?\s*[a-d1-4]\b/i.test(clean) ||
+        /\bi\s*(choose|pick|select)\s+[a-d]\b/i.test(clean);
       if (selected !== null || isExplicitOption) {
         return { intent: 'quiz_answer', confidence: 1.0 };
       }
@@ -295,7 +300,9 @@ function scoreLocalKnowledge(clean: string, push: Push): void {
     push('personal', 'contact', 0.95, 111);
   }
   if (clean.includes('vibe code') || clean.includes('vibe coding')) {
-    push('personal', 'vibe-coding', 0.9, 112);
+    // Explicit essay route outranks the generic ai_philosophy KG triple (0.95):
+    // the dedicated handler carries the full take plus the article source link.
+    push('personal', 'vibe-coding', 0.96, 112);
   }
   const techConcept = conceptGraph.findConcept(clean);
   if (techConcept && techConcept.category !== 'personal') {

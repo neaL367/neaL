@@ -11,6 +11,9 @@ export interface DocumentSection {
   publishedAt?: string;
   text: string;
   sentences: string[];
+  /** Focused embedding input (title + summary + aliases). Defaults to full text.
+   * Long code-heavy bodies wash out mean-pooled vectors; BM25 keeps full text. */
+  embedText?: string;
   fieldTokens: Record<FieldType, string[]>;
   fieldLengths: Record<FieldType, number>;
 }

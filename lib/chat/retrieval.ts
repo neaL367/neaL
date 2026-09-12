@@ -217,17 +217,24 @@ export async function orchestrateRetrieval(
     (!isLocalConfidenceHigh && !isConversationalOrLocalIntent && isFactualEntityQuery(reformulated.cleaned));
 
   if (shouldSearchWeb) {
+    // Sharp keyword variant first: leading interrogatives poison keyword
+    // backends ("when Grand Theft Auto VI release" → wrong Wiki top hit),
+    // then the full cleaned query as backup.
+    const webQueries = Array.from(
+      new Set([reformulated.webQuery, reformulated.cleaned].map(q => (q || '').trim()).filter(Boolean))
+    ).slice(0, 2);
+    for (const webQuery of webQueries) {
     try {
-      const web = await fetchWebAnswer(reformulated.cleaned);
+      const web = await fetchWebAnswer(webQuery);
       if (web && web.found && web.answer) {
         const cleanTopic =
           web.sourceTitle
             .replace(/\s*[-–—|]\s*(?:Wikipedia|Britannica|YouTube|Official).*$/i, '')
             .replace(/\s*\(.*?\)$/i, '')
-            .trim() || formatSearchTitle(reformulated.cleaned);
+            .trim() || formatSearchTitle(webQuery);
 
         const webHit: RetrievalHit = {
-          id: `web:${reformulated.cleaned.slice(0, 30)}`,
+          id: `web:${webQuery.slice(0, 30)}`,
           title: cleanTopic,
           heading: cleanTopic,
           excerpt: web.answer,
@@ -255,7 +262,8 @@ export async function orchestrateRetrieval(
         };
       }
     } catch {
-      // Ignore web search errors, continue with local hits
+      // Try next query variant; ignore web search errors, continue with local hits
+    }
     }
   }
 
