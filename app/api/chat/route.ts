@@ -2,6 +2,7 @@ import type { ConversationState } from '@/lib/chat/types';
 import { sanitizeConversationState } from '@/lib/chat/state';
 import { ENGLISH_ONLY_ERROR, isEnglishText } from '@/lib/chat/english';
 import { tokenize, extractEntities, classifyIntent, detectExpertise, normalizeMessage, ensureIntentVectorsLoaded } from '@/lib/chat/nlp';
+import { isExplicitWebRequest } from '@/lib/search/query-reformulator';
 import { semanticIndex } from '@/lib/search/semantic-index';
 import { checkRateLimit } from '@/lib/chat/rate-limit';
 import { orchestrateRetrieval } from '@/lib/chat/retrieval';
@@ -62,6 +63,10 @@ export async function POST(req: Request) {
       );
     }
 
+    // Web fires from the UI toggle or explicit phrases ("search the web for
+    // X", "google it"). Plain questions stay local — see retrieval policy.
+    const webSearchRequested = useWebSearch || isExplicitWebRequest(cleanMessage);
+
     // 2. Bound incoming state to prevent memory abuse (single factory)
     const state: ConversationState = sanitizeConversationState(body?.state);
 
@@ -92,7 +97,7 @@ export async function POST(req: Request) {
       intent: intentResult.intent,
       conceptId: intentResult.conceptId,
       detectedConcepts: entities.concepts,
-      webSearch: useWebSearch,
+      webSearch: webSearchRequested,
       activeTopic: lastActiveTopic,
       previousQuery: previousUserTurn?.text,
     });
