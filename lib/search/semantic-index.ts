@@ -88,6 +88,41 @@ export class SemanticIndex {
     return this.initPromise;
   }
 
+  /**
+   * Public embedding primitive (unit-normalized). Shared by retrieval search
+   * and the few-shot intent scorer so one cached forward pass serves both.
+   * Returns null when the model is unavailable — callers fall back gracefully.
+   */
+  async embedText(text: string): Promise<Float32Array | null> {
+    try {
+      if (!this.extractor) {
+        await this.initialize();
+      }
+      if (!this.extractor) return null;
+
+      const key = text.trim().toLowerCase();
+      const cached = this.queryCache.get(key);
+      if (cached) return cached;
+
+      const output = await this.extractor(text, {
+        pooling: 'mean',
+        normalize: true,
+      });
+      const vector = new Float32Array(output.data as Float32Array);
+
+      // LRU eviction if cache exceeds threshold
+      if (this.queryCache.size >= this.MAX_CACHE_SIZE) {
+        const oldestKey = this.queryCache.keys().next().value;
+        if (oldestKey) this.queryCache.delete(oldestKey);
+      }
+      this.queryCache.set(key, vector);
+      return vector;
+    } catch (err) {
+      console.warn('[SemanticIndex] Embed fallback:', err);
+      return null;
+    }
+  }
+
   async search(query: string, limit: number = 3): Promise<RetrievalHit[]> {
     if (this.embeddings.length === 0) {
       this.loadPrecomputedEmbeddings();
@@ -98,33 +133,8 @@ export class SemanticIndex {
     }
 
     try {
-      if (!this.extractor) {
-        await this.initialize();
-      }
-
-      if (!this.extractor) {
-        return [];
-      }
-
-      const normalizedQuery = query.trim().toLowerCase();
-      let queryVector = this.queryCache.get(normalizedQuery);
-
-      if (!queryVector) {
-        // Generate query embedding via ONNX
-        const output = await this.extractor(query, {
-          pooling: 'mean',
-          normalize: true,
-        });
-
-        queryVector = new Float32Array(output.data as Float32Array);
-
-        // LRU eviction if cache exceeds threshold
-        if (this.queryCache.size >= this.MAX_CACHE_SIZE) {
-          const oldestKey = this.queryCache.keys().next().value;
-          if (oldestKey) this.queryCache.delete(oldestKey);
-        }
-        this.queryCache.set(normalizedQuery, queryVector);
-      }
+      const queryVector = await this.embedText(query);
+      if (!queryVector) return [];
 
       // Fast contiguous memory dot product (cosine similarity)
       const count = this.embeddings.length;

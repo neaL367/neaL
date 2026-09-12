@@ -67,11 +67,13 @@ export function queryKnowledgeGraph(
   if (exact) return exact;
 
   // 2. Substring or phrase containment match
+  // Reverse rule (short query inside a long alias) needs a substantial query:
+  // bare "why"/"how"/"you" must never match "why do you use nextjs".
   for (const item of PREPROCESSED_ALIASES) {
     const a = item.normalizedAlias;
     if (
       (a.length >= 4 && q.length >= 4 && q.includes(a)) ||
-      (q.length >= 3 && a.length >= 8 && a.includes(q))
+      (q.length >= 5 && a.length >= 8 && a.includes(q))
     ) {
       return item.triple;
     }
@@ -100,6 +102,14 @@ export function queryKnowledgeGraph(
       const ratio = matchCount / aTokenSet.size;
       // Avoid single generic words matching long queries
       if (aTokenSet.size === 1 && qTokenSet.size > 3 && ratio < 1.0) continue;
+      // A lone short token is not evidence once the query carries its own
+      // topic ("What did Neal learn about standups?" is not a bio question;
+      // "neal" must not win via the "neal367" alias). Long content words
+      // ("university") still count; short pure-name queries are unaffected.
+      if (aTokenSet.size === 1 && qTokenSet.size > 2) {
+        const onlyToken = [...aTokenSet][0];
+        if (onlyToken.length < 8) continue;
+      }
 
       // Ratio first, then absolute evidence: 2-token overlap beats 1-token
       // ("co-op" query → company_role over name_identity on ratio ties).

@@ -3,6 +3,12 @@ import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
 import { QuizManager } from '@/lib/chat/knowledge/quizzes';
 import { queryKnowledgeGraph } from '@/lib/search/knowledge-graph';
 import { tokenize } from '../tokenizer';
+import { normalizeMessage } from './normalize';
+import {
+  getEmbeddingSignals,
+  pushEmbeddingSignal,
+  ensureIntentVectorsLoaded,
+} from './intent-vectors';
 import { detectFuzzyCommand, fuzzyStartsWithPhrase } from './fuzzy';
 import { isGibberish, tryEvaluateMath } from './text-utils';
 
@@ -10,6 +16,8 @@ export interface IntentClassification {
   intent: IntentType;
   conceptId?: string;
   confidence: number;
+  /** Runner-up candidates (confidence ≥ 0.55) for ambiguity detection. */
+  alternatives?: Array<{ intent: IntentType; conceptId?: string; confidence: number }>;
 }
 
 interface Candidate extends IntentClassification {
@@ -18,9 +26,10 @@ interface Candidate extends IntentClassification {
 
 export function classifyIntent(
   message: string,
-  state?: ConversationState
+  state?: ConversationState,
+  queryVector?: Float32Array | null
 ): IntentClassification {
-  const clean = message.toLowerCase().trim();
+  const clean = normalizeMessage(message).trim();
   const tokens = tokenize(clean);
 
   // 1. Active Quiz Answer Check (Highest priority when a quiz is waiting for an answer)
@@ -28,7 +37,7 @@ export function classifyIntent(
   if (state?.activeQuiz && !state.activeQuiz.answered && !clean.startsWith('/')) {
     // Check if the user is trying to abandon or decline the quiz
     const isAbandon =
-      /^(help|stop|cancel|exit|quit|nevermind|no|nah|nope|no thanks|skip|skip this|something else|different topic|not now)\b/i.test(clean);
+      /^(help|stop|cancel|exit|quit|nevermind|never mind|no|nah|nope|no thanks|skip|skip this|something else|different topic|not now|dont|don't|do not|meh|pass)\b/i.test(clean);
 
     if (!isAbandon) {
       const selected = QuizManager.parseUserSelection(clean, state.activeQuiz.question.options);
@@ -72,6 +81,7 @@ export function classifyIntent(
 
   scoreCommands(clean, push);
   scoreAffirmations(clean, state, lastTopic, push);
+  scoreWhy(clean, tokens, state, lastTopic, push);
   scoreRejections(clean, tokens, state, lastTopic, push);
   scoreSocial(clean, tokens, push);
   scoreSafety(clean, push);
@@ -81,6 +91,18 @@ export function classifyIntent(
   scoreFilms(clean, push);
   scoreRecommendations(clean, tokens, push);
   scoreLocalKnowledge(clean, push);
+
+  // Few-shot meaning vote (MiniLM over intent examples): paraphrases with no
+  // rule overlap land here. Capped below exact regexes; ties lose by design.
+  // Needs the caller's query vector — warms up in background until then.
+  const signals = queryVector ? getEmbeddingSignals(queryVector) : null;
+  if (signals) {
+    for (const s of signals) {
+      pushEmbeddingSignal(s.key, s.score, state, lastTopic, push);
+    }
+  } else {
+    ensureIntentVectorsLoaded().catch(() => {});
+  }
 
   if (candidates.length === 0) {
     return { intent: 'fallback', confidence: 0.5 };
@@ -94,7 +116,14 @@ export function classifyIntent(
   }
   const { priority, ...result } = best;
   void priority;
-  return result;
+  const alternatives = candidates
+    .slice(1, 4)
+    .filter(c => c.confidence >= 0.55)
+    .map(({ priority: _p, ...r }) => {
+      void _p;
+      return r;
+    });
+  return alternatives.length > 0 ? { ...result, alternatives } : result;
 }
 
 type Push = (intent: IntentType, conceptId: string | undefined, confidence: number, priority: number) => void;
@@ -125,9 +154,9 @@ function scoreAffirmations(
   push: Push
 ): void {
   const ANCHORED =
-    /^(yes|yeah|yep|yup|sure|ok|okay|please|plz|of course|definitely|absolutely|certainly|i would|yes please|show me|go ahead|tell me more|more|code example|example|deeper look|deeper|deep dive|explain more)\b/i;
+    /^(yes|yeah|yep|yup|yea|sure|ok|okay|please|plz|of course|definitely|absolutely|certainly|i would|yes please|show me|go ahead|tell me more|more|code example|example|deeper look|deeper|deep dive|explain more|sure thing|sounds good|go for it|why not|say less)\b/i;
   const ANY =
-    /\b(yes|yeah|yep|yup|sure|ok|okay|please|plz|of course|definitely|absolutely|certainly|i would|yes please|show me|go ahead|tell me more|more|code example|example|deeper look|deeper|deep dive|explain more)\b/i;
+    /\b(yes|yeah|yep|yup|yea|sure|ok|okay|please|plz|of course|definitely|absolutely|certainly|i would|yes please|show me|go ahead|tell me more|more|code example|example|deeper look|deeper|deep dive|explain more|sure thing|sounds good|go for it|why not|say less)\b/i;
   if (ANCHORED.test(clean)) {
     if (state?.pendingOffer) push('continuation', state.pendingOffer.subjectId, 1.0, 20);
     else if (lastTopic) push('continuation', lastTopic, 0.95, 21);
@@ -139,6 +168,24 @@ function scoreAffirmations(
   }
 }
 
+/**
+ * Bare "why?" follow-ups resolve against the active topic ("why?" after
+ * closures asks for reasons, not a new search). Content-bearing "why X?"
+ * skips this — concept/technical scoring outranks it anyway.
+ */
+function scoreWhy(
+  clean: string,
+  tokens: string[],
+  state: ConversationState | undefined,
+  lastTopic: string | undefined,
+  push: Push
+): void {
+  if (!/^(why|why so|how come|why is that|why do you say (that|so)|explain why)\??$/i.test(clean)) return;
+  if (tokens.length > 4) return;
+  if (state?.pendingOffer) push('continuation', state.pendingOffer.subjectId, 0.95, 26);
+  else if (lastTopic) push('continuation', lastTopic, 0.85, 27);
+}
+
 function scoreRejections(
   clean: string,
   tokens: string[],
@@ -147,9 +194,9 @@ function scoreRejections(
   push: Push
 ): void {
   const ANCHORED =
-    /^(no|nah|nope|not now|no thanks|skip|something else|different topic|nevermind)\b/i;
+    /^(no|nah|nope|not now|no thanks|skip|something else|different topic|nevermind|don't|dont|do not|no way|not really|rather not|meh|pass)\b/i;
   const ANY =
-    /\b(no|nah|nope|not now|no thanks|skip|something else|different topic|nevermind)\b/i;
+    /\b(no|nah|nope|not now|no thanks|skip|something else|different topic|nevermind|don't|dont|do not|no way|not really|rather not|meh|pass)\b/i;
   const shortReject = tokens.length <= 4 && /^(no|nah|nope)\b/i.test(clean);
   if (ANCHORED.test(clean) && (state?.pendingOffer || shortReject)) {
     push('rejection', state?.pendingOffer?.subjectId || lastTopic, 0.95, 30);
@@ -170,12 +217,17 @@ function scoreSocial(clean: string, tokens: string[], push: Push): void {
   else if (THANKS_ANY.test(clean) && tokens.length <= 6)
     push('conversational', 'thanks', 0.7, 41);
 
-  const BYE_ANCHORED = /^(bye|goodbye|cya|see you|farewell|night|goodnight|good night)\b/i;
-  const BYE_ANY = /\b(bye|goodbye|cya|see you|farewell|night|goodnight|good night)\b/i;
+  const BYE_ANCHORED = /^(bye|goodbye|cya|see you|farewell|night|goodnight|good night|got to go|be right back|later|laters|peace out|deuces|catch you)\b/i;
+  const BYE_ANY = /\b(bye|goodbye|cya|see you|farewell|night|goodnight|good night|got to go|be right back|later|laters|peace out|deuces)\b/i;
+  // Long farewell idioms earn a bigger length budget — but still below exact
+  // hits, so "good night mode in CSS" never becomes a goodbye.
+  const BYE_IDIOM = /\bcatch you (later|on the flip side)\b/i;
   if (BYE_ANCHORED.test(clean) && tokens.length <= 5)
     push('conversational', 'bye', 0.9, 42);
   else if (BYE_ANY.test(clean) && tokens.length <= 5)
     push('conversational', 'bye', 0.7, 43);
+  if (BYE_IDIOM.test(clean) && tokens.length <= 8)
+    push('conversational', 'bye', 0.9, 46);
 
   const GREET_ANCHORED =
     /^(hi|hello|hey|howdy|sup|yo|greetings|morning|evening|afternoon|good morning|good evening|good afternoon)\b/i;

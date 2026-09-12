@@ -1,6 +1,7 @@
 'use client';
 
 import React, { type RefObject } from 'react';
+import { stripNonEnglish } from '@/lib/chat/english';
 import {
   InputGroup,
   InputGroupTextarea,
@@ -73,9 +74,9 @@ export function ChatInputBar({
           <InputGroupTextarea
             ref={textareaRef}
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={e => setInput(stripNonEnglish(e.target.value))}
             onKeyDownSubmit={() => onSend(input)}
-            placeholder="Ask Nara anything, or /quiz..."
+            placeholder="English only — ask Nara anything, or /quiz..."
             rows={1}
             className="min-h-[38px] max-h-28 text-xs sm:text-sm py-2"
           />

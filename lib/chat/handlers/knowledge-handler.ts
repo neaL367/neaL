@@ -9,6 +9,7 @@ import {
   CODE_INTRO_HOOKS,
   HIT_FRAMES,
   REVISIT_PREFIXES,
+  WHY_EXPLAINERS,
 } from '@/lib/chat/knowledge/personas';
 
 export function handleKnowledge(ctx: HandlerContext): HandlerResult {
@@ -69,9 +70,17 @@ export function handleKnowledge(ctx: HandlerContext): HandlerResult {
     const topic = TOPICS.find(t => t.id === conceptId);
     const conceptDef = CONCEPTS[conceptId];
     const graphNode = conceptGraph.getNode(conceptId);
-    const codePick = getRoundRobinItem('code_intro', CODE_INTRO_HOOKS, cursors);
-    cursors = codePick.updatedCursors;
-    const codeHook = codePick.text;
+    const isWhy = /^(why|how come|explain why)/i.test(userMessage.trim());
+    let codeHook: string;
+    if (isWhy) {
+      const whyPick = getRoundRobinItem('why_explainer', WHY_EXPLAINERS, cursors);
+      cursors = whyPick.updatedCursors;
+      codeHook = `*${whyPick.text}*`;
+    } else {
+      const codePick = getRoundRobinItem('code_intro', CODE_INTRO_HOOKS, cursors);
+      cursors = codePick.updatedCursors;
+      codeHook = codePick.text;
+    }
     const nextCovered = markCovered(conceptId);
 
     if (topic) {

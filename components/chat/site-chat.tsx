@@ -144,7 +144,12 @@ function SiteChatInner({ className = '' }: { className?: string }) {
       });
 
       if (!res.ok || !res.body) {
-        throw new Error(`HTTP ${res.status}`);
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(
+          typeof errBody?.error === 'string' && errBody.error
+            ? errBody.error
+            : `HTTP ${res.status}`
+        );
       }
 
       const reader = res.body.getReader();
@@ -227,12 +232,22 @@ function SiteChatInner({ className = '' }: { className?: string }) {
         return;
       }
 
+      const errMessage =
+        typeof (err as Error)?.message === 'string' &&
+        (err as Error).message &&
+        !(err as Error).message.startsWith('HTTP ')
+          ? (err as Error).message
+          : null;
+
       setMessages(prev =>
         prev.map(m =>
           m.id === assistantMsgId
             ? {
                 ...m,
-                text: m.text || "Something went wrong — please try again in a moment!",
+                text:
+                  m.text ||
+                  errMessage ||
+                  "Something went wrong — please try again in a moment!",
                 isStreaming: false,
               }
             : m

@@ -1,6 +1,9 @@
 import type { ConversationState } from '@/lib/chat/types';
 import { sanitizeConversationState } from '@/lib/chat/state';
-import { tokenize, extractEntities, classifyIntent, detectExpertise } from '@/lib/chat/nlp';
+import { ENGLISH_ONLY_ERROR, isEnglishText } from '@/lib/chat/english';
+import { tokenize, extractEntities, classifyIntent, detectExpertise, normalizeMessage, ensureIntentVectorsLoaded } from '@/lib/chat/nlp';
+import { semanticIndex } from '@/lib/search/semantic-index';
+import { checkRateLimit } from '@/lib/chat/rate-limit';
 import { orchestrateRetrieval } from '@/lib/chat/retrieval';
 import { buildResponse } from '@/lib/chat/response-builder';
 
@@ -11,6 +14,25 @@ export async function POST(req: Request) {
   const signal = req.signal;
 
   try {
+    // 0. Abuse guard first: sliding window per IP, 429 with Retry-After.
+    const ip =
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const limit = checkRateLimit(ip);
+    if (!limit.allowed) {
+      return new Response(
+        JSON.stringify({ error: 'Too many messages — please slow down and try again in a moment.' }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': String(Math.ceil(limit.resetMs / 1000)),
+            'X-RateLimit-Limit': '30',
+            'X-RateLimit-Remaining': '0',
+          },
+        }
+      );
+    }
+
     const body = await req.json().catch(() => ({}));
 
     // 1. Robust input extraction & validation
@@ -22,11 +44,20 @@ export async function POST(req: Request) {
           : '';
 
     const useWebSearch = Boolean(body?.webSearch);
-    const cleanMessage = rawMessage.trim().slice(0, 500);
+    // Normalize typing style first (slang, elongations, typos) so every
+    // downstream lane sees canonical English; then validate + bound.
+    const cleanMessage = normalizeMessage(rawMessage.trim()).slice(0, 500);
 
     if (!cleanMessage) {
       return new Response(
         JSON.stringify({ error: 'Please provide a valid non-empty message.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!isEnglishText(cleanMessage)) {
+      return new Response(
+        JSON.stringify({ error: ENGLISH_ONLY_ERROR }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -40,9 +71,13 @@ export async function POST(req: Request) {
       .map(t => t.text)
       .slice(-2);
     state.expertiseLevel = detectExpertise(cleanMessage, state.expertiseLevel, recentUserTexts);
+    // One cached forward pass serves both the few-shot intent vote and the
+    // semantic retrieval lane below; warms intent examples in background.
+    ensureIntentVectorsLoaded().catch(() => {});
+    const queryVector = await semanticIndex.embedText(cleanMessage);
     const tokens = tokenize(cleanMessage);
     const entities = extractEntities(cleanMessage, tokens, state);
-    const intentResult = classifyIntent(cleanMessage, state);
+    const intentResult = classifyIntent(cleanMessage, state, queryVector);
 
     // 4. Multi-lane retrieval
     const lastActiveTopic = state.topicThread && state.topicThread.length > 0
@@ -188,6 +223,8 @@ export async function POST(req: Request) {
         'Cache-Control': 'no-cache, no-transform',
         'Connection': 'keep-alive',
         'X-Accel-Buffering': 'no',
+        'X-RateLimit-Limit': '30',
+        'X-RateLimit-Remaining': String(limit.remaining),
       },
     });
   } catch (error) {

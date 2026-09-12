@@ -284,4 +284,18 @@ React 19 brings foundational improvements to frontend development:
     relatedConcepts: ['rsc', 'usestate', 'virtual-dom'],
     category: 'react',
   },
+  {
+    id: 'angular',
+    keywords: ['angular', 'angularjs', 'angular framework', 'dependency injection', 'opinionated framework'],
+    title: 'Angular Framework',
+    summary: 'Angular suits projects needing strict architectural discipline across large teams: opinionated structure, built-in dependency injection, and comprehensive tooling.',
+    detail: `### Angular Framework
+
+When a project requires strict architectural discipline across large distributed teams, Angular is a strong contender. Its opinionated structure, built-in dependency injection, and comprehensive tooling provide consistency right out of the box.
+
+Reach for Angular when many teams must ship consistently against shared conventions; reach for React when you want a smaller core with a pick-your-own ecosystem.`,
+    level: 'beginner',
+    relatedConcepts: ['react', 'typescript'],
+    category: 'web',
+  },
 ];

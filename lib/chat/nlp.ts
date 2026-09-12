@@ -15,3 +15,5 @@ export {
   strippedWords,
 } from './nlp/fuzzy';
 export type { FuzzyCommand } from './nlp/fuzzy';
+export { normalizeMessage } from './nlp/normalize';
+export { ensureIntentVectorsLoaded, isIntentVectorReady } from './nlp/intent-vectors';
