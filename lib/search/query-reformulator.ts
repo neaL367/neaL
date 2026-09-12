@@ -26,6 +26,13 @@ const LEADING_QUESTION_WORDS = new Set([
   'is', 'are', 'was', 'were', 'will', 'would', 'can', 'could', 'do', 'does', 'did',
 ]);
 
+// Trailing interrogatives/fillers poison keyword backends just as badly
+// ("gta6 release date when" → wrong Wiki top hit).
+const TRAILING_QUESTION_WORDS = new Set([
+  ...LEADING_QUESTION_WORDS,
+  'please', 'thanks', 'thankyou', 'now', 'today', 'yet', 'already',
+]);
+
 /** Drop fillers + duplicate tokens (keep first order). Repairs re-anchored queries. */
 function tidyTokens(cleaned: string): string {
   const seen = new Set<string>();
@@ -40,11 +47,13 @@ function tidyTokens(cleaned: string): string {
 }
 
 /** Sharp keyword query for the live-web lane ("when gta6 release date" → "gta6 release date"). */
-function toWebQuery(cleaned: string): string {
+export function toWebQuery(cleaned: string): string {
   const toks = cleaned.split(/\s+/).filter(Boolean);
   let i = 0;
   while (i < toks.length - 1 && LEADING_QUESTION_WORDS.has(toks[i].toLowerCase())) i++;
-  const sharp = toks.slice(i).join(' ').trim();
+  let j = toks.length;
+  while (j > i + 1 && TRAILING_QUESTION_WORDS.has(toks[j - 1].toLowerCase())) j--;
+  const sharp = toks.slice(i, j).join(' ').trim();
   return sharp || cleaned;
 }
 

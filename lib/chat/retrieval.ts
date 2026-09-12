@@ -31,28 +31,6 @@ export interface UnifiedRetrievalResult {
   usedFallback: boolean;
 }
 
-function isFactualEntityQuery(query: string): boolean {
-  const clean = query.toLowerCase().trim();
-
-  // 1. Never search web if query addresses user/assistant, Neal, or conversational keywords
-  if (/\b(you|your|yourself|i|me|my|myself|we|our|us|neal|nara)\b/i.test(clean)) {
-    return false;
-  }
-
-  // 2. Conversational greetings or casual remarks
-  if (/^(hi|hello|hey|thanks|bye|cool|awesome|joke|quiz|help|reset|clear)\b/i.test(clean)) {
-    return false;
-  }
-
-  // 3. Factual questions, release dates, or standalone entity lookups
-  const isFactualPattern =
-    /\b(who directed|director of|runtime of|running time of|duration of|when was .* released|release date of|release date|when was .* born|who wrote|author of|who created|who invented|creator of|what is the capital of|what is the distance to|tell me about the film|tell me about the movie|who is|what is|what are|when is|when will)\b/i.test(clean) ||
-    /^(who|what|when|where|why|how)\b/i.test(clean) ||
-    /^[a-z0-9\s-]{2,40}$/i.test(clean);
-
-  return isFactualPattern;
-}
-
 export async function orchestrateRetrieval(
   query: string,
   limit: number = 3,
@@ -210,11 +188,12 @@ export async function orchestrateRetrieval(
     context?.conceptId?.startsWith('film:') ||
     context?.intent === 'personal';
 
-  // 4. Web Search: Triggered if user explicitly activated Web Search Mode (via browser icon)
-  // OR as automatic fallback for verified factual encyclopedic queries
+  // 4. Web Search: explicit Web Search Mode, or by default for anything the
+  // local index can't answer confidently (smalltalk, quizzes, commands, films,
+  // and portfolio-personal stay local — everything else deserves a live try).
   const shouldSearchWeb =
     context?.webSearch === true ||
-    (!isLocalConfidenceHigh && !isConversationalOrLocalIntent && isFactualEntityQuery(reformulated.cleaned));
+    (!isLocalConfidenceHigh && !isConversationalOrLocalIntent);
 
   if (shouldSearchWeb) {
     // Sharp keyword variant first: leading interrogatives poison keyword

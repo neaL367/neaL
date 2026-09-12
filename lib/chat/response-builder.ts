@@ -89,10 +89,12 @@ export function buildResponse(
   // 0. One-shot clarification resolution: a pending question is answered,
   // matched, or dropped exactly once — never re-asked.
   const hadPending = !!state.pendingClarification;
+  let resolvedThisTurn = false;
   if (state.pendingClarification) {
     const resolved = resolveClarification(userMessage, state.pendingClarification);
     state = { ...state, pendingClarification: null };
     if (resolved) {
+      resolvedThisTurn = true;
       intentResult = { intent: resolved.intent, conceptId: resolved.conceptId, confidence: 1.0 };
       // A resolved quiz without its own topic inherits the discussed concept.
       if (resolved.subjectId && entities.concepts.length === 0) {
@@ -123,8 +125,10 @@ export function buildResponse(
     }
   }
 
-  // Explicit Web Search priority: if web search was performed and found live findings, prioritize it
-  if (retrievalResult.bestHit?.lane === 'web') {
+  // Explicit Web Search priority — skipped on resolution turns: the retrieval
+  // ran for the pre-resolution intent, so a stale web hit must not override
+  // the user's explicit choice.
+  if (!resolvedThisTurn && retrievalResult.bestHit?.lane === 'web') {
     const webRes = handleRetrieval(ctx);
     if (webRes.handled && webRes.response) {
       return webRes.response;

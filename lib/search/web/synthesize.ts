@@ -61,6 +61,9 @@ export function synthesizeTruthOverview(query: string, sources: WebSourceItem[])
     for (const raw of rawSentences) {
       let s = cleanSnippet(raw);
       if (s.length < 25 || s.length > 280) continue;
+      // Questions restated as bullets ("How many Oscars does X have?") look
+      // like answers but resolve nothing — drop them.
+      if (s.includes('?')) continue;
       if (META_SENTENCE_REGEX.test(s) || HYPE_SENTENCE_REGEX.test(s)) continue;
       if (/cookies|privacy policy|terms of use|subscribe|all rights reserved|click here|sign up/i.test(s)) continue;
 
