@@ -49,3 +49,25 @@ app/writing/generated/
 .agent/
 .agents/
 skills-lock.json
+
+# onnx model cache & runtime downloads
+/.cache/
+.cache/
+onnx-models/
+*.onnx
+*.onnx_data
+
+# test and scratch files
+scripts/test-*.ts
+test-*.ts
+test-*.js
+scratch/
+*.scratch.*
+
+# ide & os
+.vscode/
+.idea/
+Thumbs.db
+*.swp
+*.swo
+

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from '@/components/link';
 import { CopyButton } from '@/components/copy-button';
+import { NaraTrigger } from '@/components/chat/nara-trigger';
 import Image, { ImageProps } from 'next/image';
 import type { MDXComponents } from 'mdx/types';
 
@@ -279,14 +280,18 @@ const components: MDXComponents = {
   h5: (props) => <Heading level={5} {...props} />,
   h6: (props) => <Heading level={6} {...props} />,
   p: ({ children }) => <p className="mb-4 text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">{children}</p>,
-  a: ({ children, href, ...props }) =>
-    href ? (
+  a: ({ children, href, ...props }) => {
+    if (href === '/chat' || href === '#chat') {
+      return <NaraTrigger {...props}>{children}</NaraTrigger>;
+    }
+    return href ? (
       <Link href={href} {...props}>
         {children}
       </Link>
     ) : (
       <>{children}</>
-    ),
+    );
+  },
   ul: ({ children }) => (
     <ul className="mb-4 ml-4 list-outside list-disc text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">
       {children}
@@ -319,7 +324,14 @@ const components: MDXComponents = {
       alt={props.alt ?? ''}
     />
   ),
-  Link: (props: React.ComponentProps<typeof Link>) => <Link {...props} />,
+  Link: (props: React.ComponentProps<typeof Link>) => {
+    const hrefStr = String(props.href);
+    if (hrefStr === '/chat' || hrefStr === '#chat') {
+      return <NaraTrigger {...props}>{props.children}</NaraTrigger>;
+    }
+    return <Link {...props} />;
+  },
+  NaraTrigger,
   Callout,
   TableOfContents,
   MDXImage,
@@ -329,4 +341,4 @@ export function useMDXComponents(): MDXComponents {
   return components;
 }
 
-export { CodeBlock, HighlightedCode, Callout, components as mdxComponents };
+export { CodeBlock, HighlightedCode, Callout, NaraTrigger, components as mdxComponents };

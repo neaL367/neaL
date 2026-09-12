@@ -5,12 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "bun run build:embeddings",
+    "build:embeddings": "bun run scripts/build-embeddings.ts",
     "start": "next start",
-    "test:e2e": "playwright test",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
     "@next/mdx": "^16.3.0",
     "@types/mdx": "^2.0.14",
     "geist": "^1.7.2",
@@ -21,8 +23,6 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@next/playwright": "16.3.0",
-    "@playwright/test": "1.61.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20.19.43",
     "@types/react": "^19.3.0",

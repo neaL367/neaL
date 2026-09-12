@@ -26,6 +26,7 @@ export interface TermEntry {
   df: number; // Document (section) frequency
   idf: number; // Inverse document frequency
   postings: InvertedIndexPosting[];
+  sectionPostings?: Map<string, InvertedIndexPosting[]>;
 }
 
 export interface KnowledgeTriple {
@@ -38,34 +39,7 @@ export interface KnowledgeTriple {
   contextSentence: string;
 }
 
-export type QuestionIntentType =
-  | 'wh_who'
-  | 'wh_what'
-  | 'wh_when'
-  | 'wh_where'
-  | 'wh_why'
-  | 'wh_how'
-  | 'boolean'
-  | 'list'
-  | 'factoid'
-  | 'general'
-  | 'quiz'
-  | 'quiz_eval'
-  | 'teaching'
-  | 'correctness'
-  | 'talking'
-  | 'opinion';
 
-export interface ParsedQuery {
-  raw: string;
-  normalized: string;
-  correctedNormalized: string;
-  intent: QuestionIntentType;
-  primaryTokens: string[];
-  stemmedTokens: string[];
-  expandedTerms: string[];
-  expectedAnswerType: 'person' | 'date' | 'location' | 'tool_list' | 'explanation' | 'any';
-}
 
 export interface ScoredSection {
   section: DocumentSection;
@@ -75,21 +49,4 @@ export interface ScoredSection {
   proximityBonus: number;
   phraseBonus: number;
   totalScore: number;
-}
-
-export interface ExtractedAnswer {
-  found: boolean;
-  directAnswer: string;
-  confidence: number; // 0.0 to 1.0
-  intent: QuestionIntentType;
-  matchedKeywords: string[];
-  bestSentence: string;
-  sources: Array<{
-    title: string;
-    heading: string;
-    url: string;
-    excerpt: string;
-  }>;
-  relatedSuggestions?: string[];
-  explanation?: string;
 }

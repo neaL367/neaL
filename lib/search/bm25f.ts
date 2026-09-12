@@ -5,26 +5,8 @@ import type {
   ScoredSection,
   TermEntry,
 } from './types';
-/**
- * Lightweight English stemmer (suffix stripping)
- */
-export function stemWord(word: string): string {
-  const w = word.toLowerCase().trim();
-  if (w.length <= 3) return w;
-  if (w.endsWith('ies') && w.length > 4) return w.slice(0, -3) + 'y';
-  if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3);
-  if (w.endsWith('tion') && w.length > 5) return w.slice(0, -4);
-  if (w.endsWith('ment') && w.length > 5) return w.slice(0, -4);
-  if (w.endsWith('ness') && w.length > 5) return w.slice(0, -4);
-  if (w.endsWith('ers') && w.length > 4) return w.slice(0, -2);
-  if (w.endsWith('er') && w.length > 4) return w.slice(0, -2);
-  if (w.endsWith('est') && w.length > 4) return w.slice(0, -3);
-  if (w.endsWith('ed') && w.length > 4) return w.slice(0, -2);
-  if (w.endsWith('ly') && w.length > 4) return w.slice(0, -2);
-  if (w.endsWith('es') && w.length > 4) return w.slice(0, -2);
-  if (w.endsWith('s') && !w.endsWith('ss') && w.length > 3) return w.slice(0, -1);
-  return w;
-}
+import { stemWord } from '@/lib/chat/tokenizer';
+export { stemWord };
 
 const FIELD_WEIGHTS: Record<FieldType, number> = {
   title: 4.0,
@@ -140,6 +122,7 @@ export class BM25FEngine {
         df,
         idf: Math.max(0.1, idf),
         postings: allPostings,
+        sectionPostings: termDocs,
       });
     }
   }
@@ -175,14 +158,9 @@ export class BM25FEngine {
       const entry = this.invertedIndex.get(term);
       if (!entry) continue;
 
-      // Group postings by section
-      const sectionPostings: Map<string, InvertedIndexPosting[]> = new Map();
-      for (const p of entry.postings) {
-        if (!sectionPostings.has(p.sectionId)) {
-          sectionPostings.set(p.sectionId, []);
-        }
-        sectionPostings.get(p.sectionId)!.push(p);
-      }
+      // Use pre-computed section groupings to eliminate per-search heap allocations
+      const sectionPostings =
+        entry.sectionPostings || new Map<string, InvertedIndexPosting[]>();
 
       for (const [secId, postings] of sectionPostings.entries()) {
         const sec = this.sections.get(secId);

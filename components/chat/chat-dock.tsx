@@ -34,8 +34,16 @@ export function ChatDock() {
       }
     };
 
+    const handleOpenCustomEvent = () => {
+      toggleOpen(true);
+    };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('open-nara-chat', handleOpenCustomEvent);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('open-nara-chat', handleOpenCustomEvent);
+    };
   }, [isOpen, toggleOpen]);
 
   return (
