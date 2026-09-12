@@ -1,5 +1,6 @@
 import type { ConversationState } from '@/lib/chat/types';
 import { conceptGraph } from '@/lib/chat/knowledge/concept-graph';
+import { normalizeMessage } from './normalize';
 
 export interface ExtractedEntities {
   concepts: string[];
@@ -12,7 +13,7 @@ export function extractEntities(
   tokens: string[],
   state?: ConversationState
 ): ExtractedEntities {
-  const clean = rawText.toLowerCase().trim();
+  const clean = normalizeMessage(rawText).trim();
   const detectedConcepts: string[] = [];
 
   // 1. Specificity-ranked concept matching
