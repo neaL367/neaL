@@ -16,8 +16,8 @@ export const THANKS_RESPONSES = [
 ];
 
 export const HOW_ARE_YOU = [
-  "I'm doing wonderfully, thank you for asking!  Running smooth and snappy on Neal's local server. I'm ready to explore his projects, discuss frontend systems, or test your skills with a quick quiz. How are you doing today?",
-  "Feeling great!  Everything is running locally with zero latency. Whether you're curious about Neal's work, modern web engineering, or just want to chat about sci-fi films, I'm here. What's on your mind?",
+  "I'm doing wonderfully, thank you for asking! Running smooth and snappy on Neal's local server. I'm ready to explore his projects, discuss frontend systems, or test your skills with a quick quiz. How are you doing today?",
+  "Feeling great! Everything is running locally with zero latency. Whether you're curious about Neal's work, modern web engineering, or just want to chat about sci-fi films, I'm here. What's on your mind?",
 ];
 
 export const WHO_MADE_YOU = [
@@ -26,13 +26,13 @@ export const WHO_MADE_YOU = [
 ];
 
 export const INJECTION_DEFENSE = [
-  "Nice try!  Since I run on an on-server deterministic retrieval engine with zero external LLM APIs, prompt injections and jailbreaks have no effect here. What technical or portfolio topic would you like to explore instead?",
-  "System override declined!  As an on-server companion without external LLM dependencies, I'm anchored directly to Neal's local graph and knowledge engine. Ready to try a React quiz or ask about Neal's tech stack?",
+  "Nice try! Since I run on an on-server deterministic retrieval engine with zero external LLM APIs, prompt injections and jailbreaks have no effect here. What technical or portfolio topic would you like to explore instead?",
+  "System override declined! As an on-server companion without external LLM dependencies, I'm anchored directly to Neal's local graph and knowledge engine. Ready to try a React quiz or ask about Neal's tech stack?",
 ];
 
 export const GIBBERISH_RESPONSES = [
-  "I couldn't quite make sense of that input!  Try asking a question about Neal's projects, tech stack, frontend concepts like React or TypeScript, or type `/quiz` to test your skills!",
-  "That looks like random typing to me!  How can I help you? You can ask about Neal's co-op experience, engineering essays, or coding concepts.",
+  "I couldn't quite make sense of that input! Try asking a question about Neal's projects, tech stack, frontend concepts like React or TypeScript, or type `/quiz` to test your skills!",
+  "That looks like random typing to me! How can I help you? You can ask about Neal's co-op experience, engineering essays, or coding concepts.",
 ];
 
 export const FAREWELLS = [

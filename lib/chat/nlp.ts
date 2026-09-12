@@ -205,15 +205,15 @@ export function classifyIntent(
   }
 
   // 5. Gratitude & Farewells
-  if (/^(thank|thanks|appreciate|thx|awesome|great job|perfect)\b/i.test(clean) && tokens.length <= 6) {
+  if (/^(thank|thanks|appreciate|thx|ty|awesome|great job|perfect)\b/i.test(clean) && tokens.length <= 6) {
     return { intent: 'conversational', conceptId: 'thanks', confidence: 0.9 };
   }
-  if (/^(bye|goodbye|cya|see you|farewell|night)\b/i.test(clean) && tokens.length <= 5) {
+  if (/^(bye|goodbye|cya|see you|farewell|night|goodnight|good night)\b/i.test(clean) && tokens.length <= 5) {
     return { intent: 'conversational', conceptId: 'bye', confidence: 0.9 };
   }
 
   // 5. Greetings
-  if (/^(hi|hello|hey|howdy|sup|yo|greetings|morning|evening|afternoon)\b/i.test(clean) && tokens.length <= 4) {
+  if (/^(hi|hello|hey|howdy|sup|yo|greetings|morning|evening|afternoon|good morning|good evening|good afternoon)\b/i.test(clean) && tokens.length <= 5) {
     return { intent: 'conversational', conceptId: 'greeting', confidence: 0.9 };
   }
 
@@ -260,7 +260,7 @@ export function classifyIntent(
   if (/\b(who (?:created|made|built|coded|designed) you|who is your (?:creator|author|developer)|who are you made by)\b/i.test(clean)) {
     return { intent: 'conversational', conceptId: 'who_made_you', confidence: 0.95 };
   }
-  if (/\b(how are you|how'?s it going|how are you doing|how do you feel|how is your day|what are you doing)\b/i.test(clean)) {
+  if (/\b(how (?:are|is|re) (?:you|things|everything|it going|your day)|how (?:you|u) doing|how'?re you|how'?s (?:it going|everything|your day)|how are you doing|how do you feel|what are you doing|how have you been|what'?s up|whats up)\b/i.test(clean)) {
     return { intent: 'conversational', conceptId: 'how_are_you', confidence: 0.95 };
   }
   if (/\b(what can you do|what are your capabilities|what do you do|how can you help me|can you help me|help me)\b/i.test(clean)) {
