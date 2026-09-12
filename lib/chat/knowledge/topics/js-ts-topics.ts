@@ -92,7 +92,7 @@ console.log(dog.makeSound()); // "Woof!" (delegated up the prototype chain)
   },
   {
     id: 'async-await',
-    keywords: ['async-await', 'async/await', 'async await', 'async', 'await', 'promise', 'promises', 'then', 'catch', 'finally', 'asynchronous'],
+    keywords: ['async-await', 'async/await', 'async await', 'async', 'await', 'promise', 'promises', 'catch', 'finally', 'asynchronous'],
     title: 'Promises & Async/Await',
     summary: 'Promises represent eventual completion or failure of asynchronous operations. Async/await provides sequential, synchronous-looking syntax over Promise chains without blocking the thread.',
     detail: `### Promises and Async / Await
@@ -189,7 +189,7 @@ person.name = 'Sam'; //  Valid mutation
   },
   {
     id: 'arrow',
-    keywords: ['arrow', 'function', 'this', 'bind', 'lexical', 'arguments'],
+    keywords: ['arrow', 'arrow function', 'function', 'bind', 'lexical', 'arguments'],
     title: 'Arrow Functions & Lexical This',
     summary: 'Arrow functions do not bind their own this, arguments, super, or new.target. They lexically capture this from the surrounding outer scope.',
     detail: `### Arrow Functions

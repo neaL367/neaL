@@ -56,7 +56,7 @@ export const CONCEPT_NODES: ConceptNode[] = [
   {
     id: 'hooks',
     label: 'React Hooks',
-    aliases: ['usestate', 'useeffect', 'usememo', 'usecallback', 'usecontext', 'custom hooks'],
+    aliases: ['hooks', 'react hooks', 'usestate', 'useeffect', 'usememo', 'usecallback', 'usecontext', 'custom hooks'],
     description: 'Functions letting function components tap into state and lifecycles.',
     category: 'frameworks',
   },
@@ -225,6 +225,9 @@ export const CONCEPT_EDGES: ConceptEdge[] = [
   { from: 'css', to: 'flexbox', relation: 'enables', annotation: '1D layout alignment' },
   { from: 'css', to: 'grid', relation: 'enables', annotation: '2D row and column layout' },
   { from: 'flexbox', to: 'grid', relation: 'relates-to', annotation: 'Complementary layout primitives' },
+
+  // Framework comparisons
+  { from: 'react', to: 'angular', relation: 'contrasts-with', annotation: 'Unopinionated library vs opinionated framework' },
 
   // Security & Web
   { from: 'jwt', to: 'cors', relation: 'relates-to', annotation: 'Cross-origin authenticated communication' },
