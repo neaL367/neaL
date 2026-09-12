@@ -36,6 +36,7 @@ const INITIAL_STATE: ConversationState = {
   roundRobinCursors: {},
   lastRetrievalHits: [],
   pendingOffer: null,
+  coveredConcepts: [],
 };
 
 function SiteChatInner({ className = '' }: { className?: string }) {
