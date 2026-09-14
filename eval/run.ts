@@ -46,6 +46,14 @@ const writeBaseline = args.includes('--write-baseline') || args.includes('--base
 const jsonOut = args.includes('--json');
 const engine = 'v2' as const;
 
+/**
+ * p95 latency budget in ms — see the warning at the report site. Discipline:
+ * `eval/baseline.json` is a committed snapshot refreshed with --write-baseline
+ * on every green run that changes scores or timing methodology, never
+ * hand-edited, so a stale baseline is always obvious from git log.
+ */
+const P95_BUDGET_MS = 200;
+
 interface Source {
   title: string;
   heading?: string;
@@ -246,6 +254,13 @@ async function main() {
   console.log(`${'='.repeat(72)}\n`);
   console.log(`  score          ${passed}/${results.length}  (${((passed / results.length) * 100).toFixed(1)}%)`);
   console.log(`  latency        p50 ${report.ms.p50}ms   p95 ${report.ms.p95}ms   total ${report.ms.total}ms`);
+  // Non-failing budget: knowledge growth must not silently 10x retrieval cost.
+  // p95 here is ~35ms on 126 cases; warn at 5x headroom so the drift is visible
+  // long before answers feel slow. Deliberately a warning, not a failure —
+  // CI-less runs should not go red over a slow laptop.
+  if (report.ms.p95 > P95_BUDGET_MS) {
+    console.log(`  ⚠ p95 ${report.ms.p95}ms exceeds the ${P95_BUDGET_MS}ms budget — retrieval got slower`);
+  }
   console.log(`  diversity      ${report.diversification} distinct-4gram ratio (higher = less repetitive)`);
   console.log(`  chips 400ing   ${chips400.length}${chips400.length ? ' -> ' + chips400.slice(0, 5).join(' | ') : ''}`);
 

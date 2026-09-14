@@ -68,12 +68,17 @@ const DOC_TOKENS: Map<string, Set<string>> = (() => {
  * expansion terms so a document matching many weak associations does not
  * outrank one matching a single strong association.
  */
-export function expandQuery(analysis: QueryAnalysis): Candidate[] {
+export function expandQuery(analysis: QueryAnalysis, opts?: { fallback?: boolean }): Candidate[] {
   const literal = new Set(analysis.contentTokens.map(t => stem(t)));
 
   // Do not expand a query that already carries a linked concept: lexical and
   // graph lanes handle it precisely, and expansion would only add noise.
-  if (analysis.concepts.length > 0) return [];
+  // Exception: fallback mode, used by `retrieve()` for a second pass when the
+  // first fusion landed below the answer threshold. A WEAK or WRONG concept
+  // link is exactly when associative evidence is most valuable, and the
+  // honesty marking below (low coverage, zero phrase strength, uncurated)
+  // keeps expansion from masquerading as an exact match in the gate.
+  if (analysis.concepts.length > 0 && !opts?.fallback) return [];
   if (analysis.contentTokens.length === 0) return [];
 
   const wanted = new Map<string, number>();

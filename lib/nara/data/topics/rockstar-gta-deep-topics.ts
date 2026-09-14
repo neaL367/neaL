@@ -217,7 +217,7 @@ The 2022 leak\u2019s Vice City locations were the first confirmation the series 
     category: 'games',
     verifiedAt: '2026-09-14',
     timeSensitive:
-      'Unreleased-game geography: Rockstar can rename, recut or expand regions before launch.',
+      'Unreleased-game geography: Rockstar can rename, recut or expand regions before launch. Scheduled re-verification in GTA VI launch week (19 November 2026).',
     sources: [
       'https://vice-hq.com/people-places',
       'https://www.shacknews.com/article/144160/gta-6-trailer-2',
@@ -245,7 +245,7 @@ Named supporting cast from Trailer 2 and Rockstar\u2019s site: hacker **Cal Hamp
     category: 'games',
     verifiedAt: '2026-09-14',
     timeSensitive:
-      'Unreleased-game cast: Rockstar can rename roles and has not confirmed voices; re-check before repeating casting.',
+      'Unreleased-game cast: Rockstar can rename roles and has not confirmed voices; re-check before repeating casting. Scheduled re-verification in GTA VI launch week (19 November 2026).',
     sources: [
       'https://viceleonida.com/characters',
       'https://www.shacknews.com/article/144160/gta-6-trailer-2',

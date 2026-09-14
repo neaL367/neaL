@@ -215,7 +215,7 @@ Symbolically it closes a loop: GTA left Dundee for Edinburgh in 2000; twenty yea
       'Team Bondi was Brendan McNamara\u2019s Sydney studio behind L.A. Noire — acclaimed, crunch-plagued, in liquidation by October 2011.',
     detail: `### Team Bondi
 
-Founded 2003 in Sydney by **Brendan McNamara** (ex–Team Soho, *The Getaway*), single-game studio behind ***L.A. Noire*** (2011). Funded first by Sony Australia, published finally by Rockstar after a 2006 switch; seven years in development with Rockstar producers increasingly overruling Bondi management in the last two.
+Founded 2003 in Sydney by **Brendan McNamara** (ex–Team Soho, *The Getaway*), a single-game studio whose one release was the 2011 detective game ***L.A. Noire***. Funded first by Sony Australia, published finally by Rockstar after a 2006 switch; seven years in development with Rockstar producers increasingly overruling Bondi management in the last two.
 
 The after-story is the cautionary part: 100+ developers initially uncredited, 10–12 hour days alleged, IGDA investigation, Rockstar refusing future partnership ("badly damaged" relationship), administration 31 August 2011, liquidation 5 October 2011, A$1.4m in owed wages. Assets scattered to KMM and later Video Games Deluxe — now **Rockstar Australia** (March 2025).`,
     level: 'expert',
@@ -240,6 +240,106 @@ The after-story is the cautionary part: 100+ developers initially uncredited, 10
 He left Rockstar in 2020 after nearly two decades. His departure, with Dan Houser\u2019s the same year, marks the end of the writing room that defined HD-era Rockstar comedy.`,
     level: 'expert',
     relatedConcepts: ['radio-stations', 'gta-series', 'dan-houser', 'crunch'],
+    category: 'company',
+  },
+  {
+    id: 'rockstar-london',
+    keywords: ['rockstar london', 'london studio'],
+    phrases: ['rockstar london', 'the london studio'],
+    title: 'Rockstar London',
+    summary:
+      'Rockstar London was formed in 2005 and led Manhunt 2 after Rockstar Vienna closed — since then a co-development studio.',
+    detail: `### Rockstar London
+
+Established in **2005**, the London studio\u2019s defining credit is ***Manhunt 2*** (2007): development began at Rockstar Vienna, and when Vienna closed in 2006, London took the lead with support from Leeds and others — straight into the AO rating, suspension and BBFC refusal covered in that game\u2019s entry.
+
+Since surviving that baptism, London has worked as a co-development studio across Rockstar titles rather than leading its own. It is one of the five studios covered by the Rockstar Games Workers Union formed in May 2026.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-studios', 'manhunt-2', 'manhunt'],
+    category: 'company',
+    sources: ['https://en.wikipedia.org/wiki/Rockstar_London'],
+  },
+  {
+    id: 'rockstar-india',
+    keywords: ['rockstar india', 'bangalore studio'],
+    phrases: ['rockstar india', 'the india studio'],
+    title: 'Rockstar India',
+    summary:
+      'Rockstar India opened in Bangalore in 2016 as a support and co-development studio for Rockstar\u2019s largest titles.',
+    detail: `### Rockstar India
+
+Opened in **2016** in **Bangalore**, Rockstar India is a support and co-development studio — art, engineering and QA capacity for the group\u2019s largest productions across the *Red Dead Redemption 2* and *GTA Online* era.
+
+It represents the geographic shift in how Rockstar builds games: flagship creative direction still sits in Edinburgh, New York and San Diego, but thousands of developer-hours per title now come from India alongside Lincoln\u2019s QA and Dundee\u2019s support work.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-studios', 'rockstar-games'],
+    category: 'company',
+    sources: ['https://en.wikipedia.org/wiki/Rockstar_India'],
+  },
+  {
+    id: 'rockstar-new-england',
+    keywords: ['rockstar new england', 'mad doc software', 'andover studio'],
+    phrases: ['rockstar new england', 'the new england studio'],
+    title: 'Rockstar New England',
+    summary:
+      'Rockstar New England (formerly Mad Doc Software, acquired 2008) led the Bully Scholarship Edition\u2019s Xbox 360 port.',
+    detail: `### Rockstar New England
+
+**Mad Doc Software** of Andover, Massachusetts — strategy veterans of the *Empire Earth* series, ending with *Empire Earth III* (2007) — was acquired in **April 2008** and renamed **Rockstar New England**.
+
+Its signature Rockstar credit came immediately: leading the Xbox 360 version of ***Bully: Scholarship Edition*** (2008) while Toronto handled the Wii port. Since then it has worked in support across the group\u2019s titles — the classic acquisition-to-support pipeline, same as Leeds before it.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-studios', 'bully'],
+    category: 'company',
+    sources: ['https://en.wikipedia.org/wiki/Rockstar_New_England'],
+  },
+  {
+    id: 'woody-jackson',
+    keywords: ['woody jackson', 'red dead composer', 'rdr score'],
+    phrases: ['woody jackson'],
+    title: 'Woody Jackson',
+    summary:
+      'Woody Jackson composed the Red Dead Redemption scores and co-composed GTA V\u2019s original score.',
+    detail: `### Woody Jackson
+
+**Woody Jackson** is the composer most associated with Rockstar\u2019s Western sound: co-composer (with Bill Elm) of ***Red Dead Redemption*** (2010), solo composer of ***Red Dead Redemption 2*** (2018) — recorded live with a large ensemble for the game\u2019s dynamic score — and one of the four composers of ***GTA V***\u2019s original score alongside Tangerine Dream, The Alchemist and Oh No.
+
+His through-line across the company\u2019s two flagship franchises makes him the answer to "who writes Rockstar\u2019s music" more than any single radio DJ or licensed track.`,
+    level: 'intermediate',
+    relatedConcepts: ['red-dead-series', 'gta-v', 'radio-stations'],
+    category: 'company',
+    sources: ['https://en.wikipedia.org/wiki/Woody_Jackson'],
+  },
+  {
+    id: 'rob-nelson',
+    keywords: ['rob nelson', 'rockstar north nelson'],
+    phrases: ['rob nelson'],
+    title: 'Rob Nelson',
+    summary:
+      'Rob Nelson is a Rockstar North design lead across Red Dead Redemption 2 and GTA VI, risen from the studio\u2019s art leadership.',
+    detail: `### Rob Nelson
+
+**Rob Nelson** rose through **Rockstar North**\u2019s art department across the HD era into design leadership — a production and design lead on ***Red Dead Redemption 2*** and a design lead on ***GTA VI***, and part of North\u2019s studio leadership alongside Aaron Garbut.
+
+He represents the post-Benzies, post-Dan-Houser generation of Rockstar leadership: people who shipped the record-breaking games as department heads and now run the studios making the next ones.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-north', 'red-dead-redemption-2', 'gta-vi'],
+    category: 'company',
+  },
+  {
+    id: 'aaron-garbut',
+    keywords: ['aaron garbut', 'garbut'],
+    phrases: ['aaron garbut', 'garbut'],
+    title: 'Aaron Garbut',
+    summary:
+      'Aaron Garbut is Rockstar North\u2019s longtime art director — the look of GTA from the 3D era on.',
+    detail: `### Aaron Garbut
+
+**Aaron Garbut** joined DMA Design in the 1990s and has art-directed Grand Theft Auto from ***GTA III*** through the HD era — the dense, satirical, instantly readable look of Liberty City, Vice City, San Andreas and HD Los Santos runs through him. He is listed as co-studio head of Rockstar North.
+
+Where the Housers wrote Rockstar and Benzies produced it, Garbut drew it: the rare individual credit that survives the company\u2019s "it was always the team" ethos intact.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-north', 'gta-series'],
     category: 'company',
   },
 ];

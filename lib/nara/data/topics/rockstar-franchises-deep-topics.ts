@@ -94,7 +94,7 @@ As of 14 September 2026 the contrast with GTA Online is the point. Rockstar conf
     phrases: ['max payne 1', 'the first max payne'],
     title: 'Max Payne (2001)',
     summary:
-      'Max Payne (2001) is Remedy\u2019s noir shooter that introduced bullet time, graphic-novel panels and theNYPD detective hunting his family\u2019s killers.',
+      'Max Payne (2001) is Remedy\u2019s noir shooter that introduced bullet time, graphic-novel panels and the NYPD detective hunting his family\u2019s killers.',
     detail: `### Max Payne (2001)
 
 Developed by **Remedy Entertainment** and published by Rockstar (PC July 2001, consoles later), the original follows NYPD detective **Max Payne** through three days of snow, Valkyr drug cases and the murder of his wife and child.
@@ -142,10 +142,10 @@ The design shifts from Remedy\u2019s darting gunfu to weightier **cover shooting
     id: 'max-payne-remake',
     keywords: ['max payne remake', 'max payne 1 2 remake', 'remedy remake', 'northlight'],
     phrases: ['max payne remake', 'max payne 1 and 2 remake'],
-    title: 'Max Payne 1 & 2 remake',
+    title: 'Max Payne remake',
     summary:
       'The announced Remedy remake rebuilds Max Payne 1 and 2 as one Northlight title for PC, PS5 and Xbox Series — in full production, published by Rockstar, no date.',
-    detail: `### Max Payne 1 & 2 remake
+    detail: `### Max Payne remake
 
 Announced April 2022 under a Rockstar–Remedy development agreement: both originals rebuilt as a **single title** on Remedy\u2019s **Northlight** engine (Control, Alan Wake 2) for **PC, PS5 and Xbox Series X/S**. Rockstar finances and publishes; Remedy develops and earns royalties after recoupment. Rockstar still owns the IP, sold by Remedy to Take-Two in 2002.
 
@@ -230,5 +230,93 @@ It is technically notable as RAGE\u2019s first open-world racer after *Table Ten
     level: 'expert',
     relatedConcepts: ['midnight-club-series', 'rockstar-san-diego', 'rage-engine'],
     category: 'games',
+  },
+  {
+    id: 'manhunt-2',
+    keywords: ['manhunt 2', 'manhunt sequel', 'daniel lamb', 'leo kasper'],
+    phrases: ['manhunt 2'],
+    title: 'Manhunt 2',
+    summary:
+      'Manhunt 2 (2007) is the asylum-escape sequel led by Rockstar London — initially rated AO, edited down to M, and refused classification in the UK.',
+    detail: `### Manhunt 2 (2007)
+
+*Manhunt 2* follows escaped subjects **Daniel Lamb** (an amnesiac scientist) and **Leo Kasper** (a psychotic killer) on a killing spree from the Dixmor Asylum. Development began at Rockstar Vienna; after Vienna closed in 2006, **Rockstar London** — formed in 2005 — took the lead with support across the group, for PS2, Wii (with motion-controlled executions) and PSP.
+
+Its ratings history is the case study. The ESRB gave the original submission an **AO** in June 2007; Take-Two suspended the July release, Rockstar applied blurring and filter effects over the executions, and the edited version received an **M** that August for a Halloween release. The BBFC still refused the UK version outright, starting the appeal saga covered in its own entry. In November 2007 hackers un-blurred the PSP version on modified hardware; the ESRB investigated and kept the **M**, ruling the hack did not restore the AO build. Senator Leland Yee demanded the AO be reinstated and the FTC investigate — neither happened.`,
+    level: 'expert',
+    relatedConcepts: ['manhunt', 'rockstar-london', 'esrb', 'bbfc', 'rockstar-controversies'],
+    category: 'games',
+    sources: [
+      'https://www.cbsnews.com/news/manhunt-2-pulled-from-production/',
+      'https://arstechnica.com/gaming/2007/08/manhunt-2-will-see-halloween-release-date-after-getting-m-rating/',
+    ],
+  },
+  {
+    id: 'smugglers-run',
+    keywords: ['smugglers run', "smuggler's run", 'angel studios smugglers', 'ps2 launch'],
+    phrases: ["smuggler's run", 'smugglers run'],
+    title: "Smuggler's Run",
+    summary:
+      'Smuggler\u2019s Run (2000) is Angel Studios\u2019 off-road smuggling game — a PS2 launch title whose success started the Rockstar partnership.',
+    detail: `### Smuggler's Run (2000)
+
+Developed by **Angel Studios** and published by Rockstar for the PlayStation 2 launch window, *Smuggler\u2019s Run* has the player driving contraband across open off-road terrain while dodging border patrol, rivals and the military — mission-based smuggling rather than racing lines.
+
+It matters as the beginning of a relationship: Angel\u2019s PS2 launch work (*Smuggler\u2019s Run*, then *Midnight Club*) impressed Rockstar enough to make the studio a long-term partner, and Take-Two acquired Angel outright in November 2002, renaming it **Rockstar San Diego**. The sequel *Smuggler\u2019s Run 2: Hostile Territory* (2001) and the *Warzones* expansion followed on the same formula.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-san-diego', 'midnight-club-series', 'rockstar-games'],
+    category: 'games',
+    sources: ['https://en.wikipedia.org/wiki/Smuggler%27s_Run'],
+  },
+  {
+    id: 'oni',
+    keywords: ['oni', 'bungie oni', 'konoko', 'oni ps2'],
+    phrases: ['oni', 'the oni game'],
+    title: 'Oni',
+    summary:
+      'Oni (2001) is Bungie West\u2019s anime-styled action game about agent Konoko — Rockstar published the PS2 version.',
+    detail: `### Oni (2001)
+
+Developed by **Bungie West** and released for Mac and Windows in January 2001, with the PlayStation 2 version published by **Rockstar** later that year. The player is **Konoko**, a Technology Crimes Task Force agent uncovering a conspiracy in a *Ghost in the Shell*-inflected future — third-person shooting fused with hand-to-hand combos, with one of the earliest mainstream blends of gunplay and melee systems.
+
+Its backstory is pure turn-of-the-millennium industry: Microsoft bought Bungie in 2000, but the PS2 *Oni* commitment survived long enough for Rockstar\u2019s version to ship, making it a Bungie game on a Sony console published by the GTA label.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-games'],
+    category: 'games',
+    sources: ['https://en.wikipedia.org/wiki/Oni_(video_game)'],
+  },
+  {
+    id: 'state-of-emergency',
+    keywords: ['state of emergency', 'vis entertainment', 'riot game'],
+    phrases: ['state of emergency'],
+    title: 'State of Emergency',
+    summary:
+      'State of Emergency (2002) is VIS Entertainment\u2019s riot-themed action game — chaos-for-score in Capitol City, published by Rockstar.',
+    detail: `### State of Emergency (2002)
+
+Developed by Edinburgh\u2019s **VIS Entertainment** and published by Rockstar for PS2 in 2002 (Xbox and PC followed), *State of Emergency* drops the player into riots across Capitol City as a member of the Freedom movement — smashing, looting and surviving against the Corporation\u2019s forces, with the score-attack **Kaos** mode as the purest expression of the idea.
+
+It is Rockstar-as-publisher in the early 2000s: an external studio\u2019s transgressive concept, shipped under the label that could sell it. The 2006 sequel *State of Emergency 2* came without Rockstar and sank without trace.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-games'],
+    category: 'games',
+    sources: ['https://en.wikipedia.org/wiki/State_of_Emergency_(video_game)'],
+  },
+  {
+    id: 'beaterator',
+    keywords: ['beaterator', 'timbaland', 'music creation psp'],
+    phrases: ['beaterator'],
+    title: 'Beaterator',
+    summary:
+      'Beaterator (2009) is the Timbaland music-creation tool for PSP and iOS, built with Rockstar Leeds.',
+    detail: `### Beaterator (2009)
+
+A music-creation tool rather than a game: loop-based beat-making with **Timbaland**-produced sounds, developed with **Rockstar Leeds** — PSP in September 2009, iOS that December. It grew out of a web music mixer into a full release where players sequence loops, add live instrumentation and export mixes.
+
+It belongs in the catalogue as Rockstar\u2019s furthest reach outside action games: no story, no city, just an instrument with the label\u2019s presentation standards. Timbaland\u2019s involvement also foreshadows Rockstar\u2019s later deep music collaborations, from GTA V\u2019s original score to GTA Online\u2019s artist updates.`,
+    level: 'expert',
+    relatedConcepts: ['rockstar-leeds', 'rockstar-games'],
+    category: 'games',
+    sources: ['https://en.wikipedia.org/wiki/Beaterator'],
   },
 ];

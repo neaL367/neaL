@@ -258,7 +258,7 @@ export const CONCEPTS_DICT: Record<string, { label: string; definition: string }
       'Max Payne 3 (2012) moved to Rockstar Studios for a heavier cover shooter in São Paulo.',
   },
   'max-payne-remake': {
-    label: 'Max Payne 1 & 2 remake',
+    label: 'Max Payne remake',
     definition:
       'The announced Remedy remake rebuilds the first two Max Payne games on Northlight, published by Rockstar.',
   },
@@ -390,5 +390,62 @@ export const CONCEPTS_DICT: Record<string, { label: string; definition: string }
     label: 'Expanded & Enhanced upgrade',
     definition:
       'The 2022 Expanded & Enhanced release brought GTA V to PS5 and Series X/S with 60fps and raytracing.',
+  },
+
+  // ─── Catalogue gaps: sequels, studios, people, minor titles ───────────────
+  'manhunt-2': {
+    label: 'Manhunt 2',
+    definition:
+      'Manhunt 2 (2007) is the asylum-escape sequel, initially rated AO and refused classification in the UK before an edited M release.',
+  },
+  'rockstar-london': {
+    label: 'Rockstar London',
+    definition:
+      'Rockstar London was formed in 2005 and led Manhunt 2 after Rockstar Vienna closed.',
+  },
+  'rockstar-india': {
+    label: 'Rockstar India',
+    definition:
+      'Rockstar India opened in Bangalore in 2016 as a support and co-development studio.',
+  },
+  'rockstar-new-england': {
+    label: 'Rockstar New England',
+    definition:
+      'Rockstar New England, formerly Mad Doc Software and acquired in 2008, led the Bully 360 port.',
+  },
+  'woody-jackson': {
+    label: 'Woody Jackson',
+    definition:
+      'Woody Jackson composed the Red Dead Redemption scores and co-composed GTA V\u2019s original score.',
+  },
+  'rob-nelson': {
+    label: 'Rob Nelson',
+    definition:
+      'Rob Nelson is a Rockstar North design lead across Red Dead Redemption 2 and GTA VI.',
+  },
+  'aaron-garbut': {
+    label: 'Aaron Garbut',
+    definition:
+      'Aaron Garbut is Rockstar North\u2019s longtime art director, defining the look of GTA since the 3D era.',
+  },
+  'smugglers-run': {
+    label: "Smuggler's Run",
+    definition:
+      'Smuggler\u2019s Run (2000) is Angel Studios\u2019 off-road smuggling game, a PS2 launch title.',
+  },
+  oni: {
+    label: 'Oni',
+    definition:
+      'Oni (2001) is Bungie West\u2019s anime-styled action game; Rockstar published the PS2 version.',
+  },
+  'state-of-emergency': {
+    label: 'State of Emergency',
+    definition:
+      'State of Emergency (2002) is VIS Entertainment\u2019s riot-themed action game, published by Rockstar.',
+  },
+  beaterator: {
+    label: 'Beaterator',
+    definition:
+      'Beaterator (2009) is the Timbaland music-creation tool for PSP and iOS, built with Rockstar Leeds.',
   },
 };

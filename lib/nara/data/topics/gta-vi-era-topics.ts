@@ -71,7 +71,7 @@ Sources: [Wikipedia: Grand Theft Auto VI](https://en.wikipedia.org/wiki/Grand_Th
     category: 'games',
     verifiedAt: '2026-09-14',
     timeSensitive:
-      'EVERYTHING here. The game is unreleased: release date, price, editions, pre-order split, PC plans and cast details all change, and the delay history will gain entries.',
+      'EVERYTHING here. The game is unreleased: release date, price, editions, pre-order split, PC plans and cast details all change, and the delay history will gain entries. Scheduled re-verification: GTA VI launches 19 November 2026 — rewrite this entry plus the release_date/price_editions facts in launch week instead of waiting for the yearly check.',
     sources: [
       'https://en.wikipedia.org/wiki/Grand_Theft_Auto_VI',
       'https://www.reuters.com/technology/take-two-prices-grand-theft-auto-vi-7999-2026-06-24/',

@@ -150,7 +150,7 @@ The commercial argument around GTA Online is that it changed Rockstar\u2019s bus
     category: 'games',
     verifiedAt: '2026-09-14',
     timeSensitive:
-      'Live-service content: new GTA Online updates, GTA+ changes and heist releases move this entry.',
+      'Live-service content: new GTA Online updates, GTA+ changes and heist releases move this entry. GTA VI launches 19 November 2026 and may replace or rename this Online — re-verify in launch week.',
     sources: [
       'https://en.wikipedia.org/wiki/Grand_Theft_Auto_Online',
       'https://www.ign.com/wikis/gta-5/GTA_Online',
@@ -215,8 +215,8 @@ Its reputation rests on two things: the scale and density of its open world, and
   },
   {
     id: 'max-payne-series',
-    keywords: ['max payne', 'noir', 'bullet time', 'remedy', 'max payne remake'],
-    phrases: ['the max payne games', 'max payne franchise', 'max payne remake'],
+    keywords: ['max payne', 'noir', 'bullet time', 'remedy'],
+    phrases: ['the max payne games', 'max payne franchise'],
     title: 'Max Payne',
     summary:
       'Max Payne is a noir third-person shooter series built around "bullet time"; the first two were developed by Remedy and published by Rockstar, Max Payne 3 was made by Rockstar Studios, and a Remedy remake is in full production.',

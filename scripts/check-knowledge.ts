@@ -25,7 +25,7 @@
  *
  * Run with `bun run check:knowledge`.
  */
-import { TOPICS, CONCEPTS, GRAPH_NODES, GRAPH_EDGES, TOPIC_BY_ID, CONCEPT_INDEX } from '../lib/nara/knowledge/index';
+import { TOPICS, CONCEPTS, GRAPH_NODES, GRAPH_EDGES, TOPIC_BY_ID, CONCEPT_INDEX, ALIAS_LOOKUP } from '../lib/nara/knowledge/index';
 
 /** Days after which a verified entry is considered due for re-checking. */
 const STALE_WARN_DAYS = 180;
@@ -105,7 +105,98 @@ for (const [id, c] of Object.entries(CONCEPTS)) {
   if (!c.definition?.trim()) errors.push(`concept "${id}" has no definition`);
 }
 
-// ─── 4. Staleness ────────────────────────────────────────────────────────────
+// ─── 4. Alias collisions (hijack risk) ───────────────────────────────────────
+//
+// The analyzer matches aliases longest-first, so two entries sharing one alias
+// means one subject silently steals the other's questions. This has happened:
+// wiring the deep tech topics changed the RAGE title and broke the
+// RAGE-vs-Euphoria comparison header (`compare.engine-vs-physics`), because two
+// records described one name. ALIAS_LOOKUP already encodes the intended rule —
+// a bare graph node yields a name claimed by a real entry (topic/concept) — so
+// this check enforces exactly that: an alias owned by two REAL entries is an
+// error, while node-only overlap is a warning (neither entry can win the name).
+//
+// Intentional overlaps go in ALIAS_ALLOWLIST with the reason. An allowlist
+// entry without a reason is rejected by the check itself, so the exception
+// cannot go unexplained.
+
+const ALIAS_ALLOWLIST: Record<string, string> = {
+  // No intentional overlaps at present. Example shape:
+  // 'los santos': 'claimed by the place node and both era games by design',
+};
+
+for (const [alias, reason] of Object.entries(ALIAS_ALLOWLIST)) {
+  if (!reason.trim()) errors.push(`allowlisted alias "${alias}" has no reason`);
+}
+
+{
+  const owners = new Map<string, Map<string, string>>(); // alias -> entryId -> kind
+  for (const { alias, entry } of ALIAS_LOOKUP) {
+    let m = owners.get(alias);
+    if (!m) {
+      m = new Map();
+      owners.set(alias, m);
+    }
+    m.set(entry.id, entry.kind);
+  }
+  for (const [alias, m] of owners) {
+    if (m.size < 2 || ALIAS_ALLOWLIST[alias]) continue;
+    const real = [...m.entries()].filter(([, kind]) => kind !== 'node');
+    if (real.length >= 2) {
+      errors.push(
+        `alias "${alias}" is claimed by ${real.length} real entries (${real.map(([id]) => id).join(', ')}) — one will hijack the other; remove it from all but the owner or allowlist it`,
+      );
+    } else if (real.length === 0) {
+      warnings.push(
+        `alias "${alias}" is claimed only by bare nodes (${[...m.keys()].join(', ')}) — no entry can win that name`,
+      );
+    }
+  }
+}
+
+// ─── 5. Sentence audit (quotability of dated claims) ─────────────────────────
+//
+// The composer (`compose/index.ts`) is extractive and only quotes sentences
+// between 25 and 400 chars. A date or figure trapped in a shorter fragment —
+// a list item, a caption, a "Sources:" line — can never be quoted, so the
+// entry looks covered but its load-bearing facts are unreachable. This mirrors
+// the composer's splitter (same cleaning, same boundary regex) WITHOUT the
+// length filter, then flags dropped sentences carrying fact markers.
+//
+// Mirroring rather than importing: the composer exports its splitter for
+// tests, but this script must keep running even if composition is refactored —
+// a check that imports the thing it audits can go blind silently. If the
+// splitter regex changes in `compose/index.ts`, update the copy below.
+
+const FACT_MARKER = /\b(19|20)\d{2}\b|\$|%|\bmillion\b|\bbillion\b|\b\d[\d,]*(?:\.\d+)?\s?(?:copies|units|fps|gb|mb|hz)\b/i;
+
+function rawSentences(text: string): string[] {
+  const cleaned = text
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!cleaned) return [];
+  return cleaned
+    .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(\u2018\u201C])/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+}
+
+for (const t of TOPICS) {
+  // Citation lines are not claims — "Sources: [Bloomberg ...]" carries years
+  // and URLs but is never quoted, so it is stripped before the audit.
+  const claimText = `${t.summary}\n\n${t.detail}`.replace(/^Sources:.*$/gm, '');
+  for (const s of rawSentences(claimText)) {
+    if (s.length >= 25 && s.length <= 400) continue;
+    if (!FACT_MARKER.test(s)) continue;
+    warnings.push(
+      `topic "${t.id}" has an unquotable dated sentence (${s.length} chars): ${JSON.stringify(s.slice(0, 120))}`,
+    );
+  }
+}
+
+// ─── 6. Staleness ────────────────────────────────────────────────────────────
 
 let datedCount = 0;
 for (const t of TOPICS) {

@@ -204,7 +204,7 @@ export const CONCEPT_NODES: ConceptNode[] = [
   },
   {
     id: 'max-payne-remake',
-    label: 'Max Payne 1 & 2 remake',
+    label: 'Max Payne remake',
     aliases: ['max payne remake', 'max payne remakes'],
     description: 'The announced Remedy remake of the first two Max Payne games, funded by Rockstar.',
     category: 'games',
@@ -922,6 +922,12 @@ export const CONCEPT_EDGES: ConceptEdge[] = [
   { from: 'rdr2-production-scale', to: 'red-dead-redemption-2', relation: 'built-on', annotation: 'The production behind the game' },
   { from: 'rstar-2022-ee-upgrade', to: 'gta-v', relation: 'built-on', annotation: 'The ninth-generation upgrade' },
   { from: 'rstar-2022-ee-upgrade', to: 'gta-online', relation: 'uses', annotation: 'Carries GTA Online forward' },
+
+  // ─── Catalogue gaps ───────────────────────────────────────────────────────
+  { from: 'beaterator', to: 'rockstar-leeds', relation: 'built-on', annotation: 'Built with Rockstar Leeds' },
+  { from: 'rockstar-new-england', to: 'bully', relation: 'built-on', annotation: 'Led the 360 Scholarship port' },
+  { from: 'rob-nelson', to: 'gta-vi', relation: 'relates-to', annotation: 'Design lead on GTA VI' },
+  { from: 'aaron-garbut', to: 'gta-series', relation: 'relates-to', annotation: 'Art director across the series' },
 
   // ─── This site's author ───────────────────────────────────────────────────
   { from: 'neal', to: 'tqm', relation: 'uses', annotation: 'Co-op engineering placement' },

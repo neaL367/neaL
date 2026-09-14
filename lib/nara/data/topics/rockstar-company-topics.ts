@@ -313,7 +313,7 @@ Its cultural presence is broad enough that references to Los Santos, Trevor or "
     category: 'impact',
     verifiedAt: '2026-09-14',
     timeSensitive:
-      'Sales totals move every quarter with Take-Two earnings; re-check against the latest 10-Q/earnings call.',
+      'Sales totals move every quarter with Take-Two earnings; re-check against the latest 10-Q/earnings call. GTA VI launches 19 November 2026 and will reset every record here — re-verify in launch week.',
     sources: [
       'https://www.gamedeveloper.com/business/gta-v-surpasses-230-million-sales-months-before-gta-vi-touches-down',
       'https://ir.take2games.com/static-files/31b9a69d-016e-4d72-9d91-b911f1313bed',

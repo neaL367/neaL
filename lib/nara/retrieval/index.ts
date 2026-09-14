@@ -213,8 +213,19 @@ function graphLane(analysis: QueryAnalysis): LaneResult {
 /**
  * Confidence thresholds. Named rather than inline so the policy is auditable.
  */
-const ANSWER_CONFIDENCE = 0.5;
-const CLARIFY_CONFIDENCE = 0.22;
+const envNum = (key: string, fallback: number): number => {
+  const v = Number(process.env[key]);
+  return Number.isFinite(v) && v >= 0 && v <= 1 ? v : fallback;
+};
+
+// Env-overridable ONLY so `eval/sweep.ts` can grid-search the operating point;
+// production always uses the pinned defaults below. Sweep 2026-09-14: answer in
+// [0.40, 0.55] all score 126/126, 0.60 drops deep.agent — so 0.50 is kept as the
+// middle of the plateau (max margin to both false-answer and false-decline
+// failure). The plateau also means the golden set lacks near-threshold
+// adversarial cases; do not read it as "the threshold doesn't matter".
+const ANSWER_CONFIDENCE = envNum('NARA_ANSWER_CONF', 0.5);
+const CLARIFY_CONFIDENCE = envNum('NARA_CLARIFY_CONF', 0.22);
 
 /**
  * Compute confidence from EVIDENCE, never from "a concept was mentioned".
@@ -365,13 +376,37 @@ export function retrieve(analysis: QueryAnalysis): RetrievalResult {
     }
   }
 
-  const candidates = rrfFuse(lanes, analysis);
+  const scoreAll = (candidates: Candidate[]) =>
+    candidates
+      .map(c => ({ c, confidence: computeConfidence(analysis, c) }))
+      .sort((a, b) => b.confidence - a.confidence || b.c.score - a.c.score);
+
+  let candidates = rrfFuse(lanes, analysis);
   if (candidates.length === 0) {
     return { candidates: [], best: null, confidence: 0 };
   }
 
-  const scored = candidates.map(c => ({ c, confidence: computeConfidence(analysis, c) }));
-  scored.sort((a, b) => b.confidence - a.confidence || b.c.score - a.c.score);
+  let scored = scoreAll(candidates);
+
+  // Second pass: the first fusion linked something but not confidently enough
+  // to answer (clarify band or below). The initial expansion was skipped
+  // because a concept was linked — possibly the WRONG concept, which is
+  // precisely when associative evidence helps. Re-fuse with expansion as a
+  // fallback lane; its honesty marking (low coverage, zero phrase strength)
+  // means it can only rescue genuinely associated documents, not invent
+  // confidence. Single extra pass only — no loop.
+  if (
+    scored[0].confidence < ANSWER_CONFIDENCE &&
+    analysis.concepts.length > 0 &&
+    expanded.length === 0
+  ) {
+    const fallback = expandQuery(analysis, { fallback: true });
+    if (fallback.length > 0) {
+      lanes.push({ lane: 'corpus', candidates: fallback });
+      candidates = rrfFuse(lanes, analysis);
+      scored = scoreAll(candidates);
+    }
+  }
 
   const top = scored[0];
   const runnerUp = scored[1];
