@@ -146,13 +146,13 @@ term frequency before associating anything.
 ### Testing
 
 ```bash
-bun run eval              # 138 golden cases
+bun run eval              # 165 golden cases (incl. adversarial + human-variety)
 bun run eval:sweep        # threshold operating-point sweep (report only)
 bun run test:language     # 72 language/stemmer invariants
 ```
 
-Current state: **138/138** golden cases, **72/72** language invariants, p50
-latency ~7.5 ms, p95 budget 200 ms, and **0** starter chips rejected. The
+Current state: **165/165** golden cases, **72/72** language invariants, p50
+latency ~9 ms, p95 budget 200 ms, and **0** starter chips rejected. The
 knowledge base holds **93 topics** (26 date-stamped) over **97 graph nodes**;
 `bun run check:knowledge` additionally enforces alias-ownership (no two real
 entries may claim one alias) and flags date-bearing sentences the extractive

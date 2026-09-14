@@ -138,11 +138,28 @@ function factLane(analysis: QueryAnalysis): LaneResult {
 
 function lexicalLanes(analysis: QueryAnalysis): LaneResult[] {
   const hits = search(analysis.normalized, analysis.contentTokens);
+  const linked = new Map(analysis.concepts.map(c => [c.id, c.confidence]));
   const topics: Candidate[] = [];
   const corpus: Candidate[] = [];
 
   for (const h of hits) {
     const d = h.doc;
+    const evidence = h.evidence;
+    // The user NAMED this subject in their own words (curated alias match).
+    // That is direct evidence and must survive into scoring — otherwise a
+    // document with full incidental token overlap ("called" matching an Asobo
+    // aside, "yet" matching "nothing yet") outranks the named subject, because
+    // rare-word IDF beats the subject term and the RRF lane boost cannot close
+    // the gap. Measured: "whats the new gta called" answered RAGE, "is gta 6
+    // out yet" answered Absurd Ventures. Curated topic/concept records only —
+    // corpus prose keeps purely lexical evidence, where it corroborates via
+    // lane votes rather than claiming the subject.
+    if (d.kind === 'topic' || d.kind === 'concept') {
+      const linkConf = linked.get(d.concepts[0] ?? '');
+      if (linkConf !== undefined) {
+        evidence.phraseStrength = Math.max(evidence.phraseStrength, linkConf);
+      }
+    }
     const base: Candidate = {
       id: d.id,
       lane: d.kind === 'topic' ? 'topic' : d.kind === 'fact' ? 'fact' : 'corpus',
@@ -151,7 +168,7 @@ function lexicalLanes(analysis: QueryAnalysis): LaneResult[] {
       url: d.url,
       text: d.text,
       score: h.score,
-      evidence: h.evidence,
+      evidence,
       topic: d.kind === 'topic' ? TOPIC_BY_ID.get(d.concepts[0] ?? '') : undefined,
     };
     if (d.kind === 'topic' || d.kind === 'concept') topics.push(base);
@@ -177,6 +194,38 @@ function graphLane(analysis: QueryAnalysis): LaneResult {
 
   for (const c of analysis.concepts.slice(0, 3)) {
     if (analysis.negation.concepts.includes(c.id)) continue;
+    // The linked concept's OWN record, by construction. Without this, a named
+    // subject whose prose shares no vocabulary with the question ("whats the
+    // new gta called" shares only "gta" with the VI records) is buried by
+    // rare-word IDF elsewhere and cut by the fusion cap before confidence ever
+    // judges it — measured: RAGE won on "called", Absurd Ventures on "yet".
+    // Coverage stays 0 (honest: no lexical overlap measured); the alias link
+    // itself is the evidence, carried at its own confidence.
+    if (!seen.has(c.id)) {
+      seen.add(c.id);
+      const topic: Topic | undefined = TOPIC_BY_ID.get(c.id);
+      const entry = CONCEPT_INDEX.get(c.id);
+      if (topic || entry) {
+        out.push({
+          id: `topic:${c.id}`,
+          lane: 'graph',
+          title: topic?.title ?? entry?.label ?? labelFor(c.id),
+          heading: topic?.title ?? entry?.label ?? labelFor(c.id),
+          url: '/',
+          text: topic ? `${topic.summary}\n\n${topic.detail}` : (entry?.description ?? ''),
+          score: 2,
+          topic,
+          evidence: {
+            matchedTokenWeight: 0,
+            coverage: 0,
+            phraseStrength: c.confidence,
+            curated: true,
+            matchKind: c.kind,
+            laneVotes: 1,
+          },
+        });
+      }
+    }
     const related = neighbors(c.id, 1);
     related.forEach((id, i) => {
       if (seen.has(id)) return;
@@ -220,9 +269,9 @@ const envNum = (key: string, fallback: number): number => {
 
 // Env-overridable ONLY so `eval/sweep.ts` can grid-search the operating point;
 // production always uses the pinned defaults below. Sweep 2026-09-14: answer in
-// [0.40, 0.50] scores 138/138; 0.55 drops adv.ping-pong (0.513) and 0.60 drops
-// deep.agent (0.570) — so 0.50 is kept as the top of the plateau, the highest
-// gate that still answers every covered subject. New adversarial cases should
+// [0.40, 0.55] scores 165/165; 0.60 drops human.glued-vicecity (0.570) — so
+// 0.50 is kept as the middle of the plateau (max margin to both the
+// false-answer and false-decline failures). New human/adversarial cases should
 // aim near the gate to keep the sweep discriminating.
 const ANSWER_CONFIDENCE = envNum('NARA_ANSWER_CONF', 0.5);
 const CLARIFY_CONFIDENCE = envNum('NARA_CLARIFY_CONF', 0.22);

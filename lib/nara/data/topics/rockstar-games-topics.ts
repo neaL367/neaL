@@ -117,7 +117,7 @@ Two standalone expansions followed, *The Lost and Damned* and *The Ballad of Gay
     phrases: ['gta 5', 'grand theft auto 5', 'the fifth gta'],
     title: 'Grand Theft Auto V',
     summary:
-      'Grand Theft Auto V (2013) is Rockstar\u2019s best-selling game, set in Los Santos with three switchable protagonists, and the base for the long-running GTA Online.',
+      'Grand Theft Auto V (2013) is Rockstar\u2019s best-selling game, set in Los Santos with three switchable protagonists, and the base for the long-running GTA Online. GTA Online later confirmed its Option C ending as canon.',
     detail: `### Grand Theft Auto V (2013)
 
 *GTA V* returns to **Los Santos** and the surrounding Blaine County, and is the first in the series to use **three switchable protagonists** — Michael, Franklin and Trevor — whose stories interlock. Missions frequently let you switch between them mid-heist.

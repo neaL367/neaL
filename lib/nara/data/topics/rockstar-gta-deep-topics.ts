@@ -226,7 +226,7 @@ The 2022 leak\u2019s Vice City locations were the first confirmation the series 
   {
     id: 'gta-vi-characters',
     keywords: ['jason duval', 'lucia caminos', 'jason and lucia', 'gta vi protagonists', 'cal hampton', 'boobie ike'],
-    phrases: ['jason and lucia', 'lucia caminos', 'jason duval', 'gta vi characters', 'lucia', 'jason'],
+    phrases: ['jason and lucia', 'lucia caminos', 'jason duval', 'gta vi characters', 'lucia', 'jason', 'main characters'],
     title: 'GTA VI characters: Jason and Lucia',
     summary:
       'GTA VI has dual protagonists Jason Duval and Lucia Caminos — a Bonnie-and-Clyde couple — with Rockstar also naming Cal, Boobie, Dre\u2019Quan, Real Dimez, Raul and Brian. Voice cast is unconfirmed as of September 2026.',

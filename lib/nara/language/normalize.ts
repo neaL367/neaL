@@ -61,6 +61,11 @@ const TYPOS = new Map<string, string>([
   ['perfomance', 'performance'],
   ['accesibility', 'accessibility'],
   ['acessibility', 'accessibility'],
+  // Neither is a real English word; both are common human misspellings on
+  // exactly the queries ("euphorea physics") that declined for lack of them.
+  ['euphorea', 'euphoria'],
+  ['euphora', 'euphoria'],
+  ['phsyics', 'physics'],
 ]);
 
 /** Emoji, pictographs, dingbats, and other symbol blocks. */
