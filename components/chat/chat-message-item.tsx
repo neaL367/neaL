@@ -23,7 +23,8 @@ export interface ChatMessage {
     title: string;
     heading?: string;
     url?: string;
-    excerpt: string;
+    /** Verbatim snippet for the hover tooltip. May be absent — guard it. */
+    excerpt?: string;
   }>;
   timestamp: string;
   isStreaming?: boolean;
@@ -156,7 +157,11 @@ export function ChatMessageItem({ msg }: { msg: ChatMessage }) {
                     href={href as Route}
                     target={isExt ? '_blank' : undefined}
                     rel={isExt ? 'noopener noreferrer' : undefined}
-                    title={`${src.title}\n\n"${src.excerpt.replace(/\*\*/g, '').slice(0, 140)}..."`}
+                    title={
+                      src.excerpt
+                        ? `${src.title}\n\n"${src.excerpt.replace(/\*\*/g, '').slice(0, 140)}..."`
+                        : src.title
+                    }
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/90 dark:bg-zinc-900/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] transition-all cursor-pointer max-w-[210px] shadow-2xs group"
                   >
                     <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 group-hover:bg-blue-500 transition-colors shrink-0" />

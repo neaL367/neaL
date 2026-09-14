@@ -1,7 +1,7 @@
 'use client';
 
 import React, { type RefObject } from 'react';
-import { stripNonEnglish } from '@/lib/chat/english';
+import { stripUnusableInput } from '@/lib/nara/client';
 import {
   InputGroup,
   InputGroupTextarea,
@@ -16,8 +16,6 @@ export interface ChatInputBarProps {
   isStreaming: boolean;
   suggestions: string[];
   textareaRef: RefObject<HTMLTextAreaElement | null>;
-  useWebSearch: boolean;
-  setUseWebSearch: (value: boolean | ((prev: boolean) => boolean)) => void;
   onSend: (text: string) => void;
   onStop: () => void;
   onReset: () => void;
@@ -29,8 +27,6 @@ export function ChatInputBar({
   isStreaming,
   suggestions,
   textareaRef,
-  useWebSearch,
-  setUseWebSearch,
   onSend,
   onStop,
   onReset,
@@ -74,44 +70,16 @@ export function ChatInputBar({
           <InputGroupTextarea
             ref={textareaRef}
             value={input}
-            onChange={e => setInput(stripNonEnglish(e.target.value))}
+            onChange={e => setInput(stripUnusableInput(e.target.value))}
             onKeyDownSubmit={() => onSend(input)}
-            placeholder="English only — ask Nara anything, or /quiz..."
+            placeholder="Ask about a Rockstar game, or type /help..."
             rows={1}
             className="min-h-[38px] max-h-28 text-xs sm:text-sm py-2"
           />
           <InputGroupAddon align="block-end">
-            <button
-              type="button"
-              onClick={() => setUseWebSearch(prev => !prev)}
-              disabled={isStreaming}
-              aria-label="Toggle web search"
-              aria-pressed={useWebSearch}
-              className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium transition cursor-pointer disabled:opacity-50 select-none ${
-                useWebSearch
-                  ? 'bg-blue-600 text-white shadow-xs hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600'
-                  : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/60'
-              }`}
-              title={useWebSearch ? 'Web search enabled (click to turn off)' : 'Search the web (click to turn on)'}
-            >
-              <svg
-                className="w-3.5 h-3.5 shrink-0"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
-                />
-              </svg>
-              <span className="text-[10px] hidden sm:inline">
-                {useWebSearch ? 'Web ON' : 'Web'}
-              </span>
-            </button>
+            {/* There is no web-search control. The engine answers only from this
+                site and makes no outbound requests, so offering a toggle would
+                promise a capability that does not exist. */}
 
             <InputGroupText className="text-[10px] hidden sm:inline ml-auto">
               {isStreaming ? 'Streaming...' : 'Enter to send'}

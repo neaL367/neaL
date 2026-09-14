@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:embeddings": "bun run scripts/build-embeddings.ts",
-    "build:site-index": "bun run scripts/build-site-index.ts",
     "start": "next start",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "eval": "bun run eval/run.ts",
+    "test:language": "bun run eval/language.test.ts",
+    "check:knowledge": "bun run scripts/check-knowledge.ts",
+    "build:corpus": "bun run scripts/build-corpus.ts",
+    "build:semantic": "bun run scripts/build-semantic.ts",
+    "build:knowledge": "bun run scripts/build-corpus.ts && bun run scripts/build-semantic.ts"
   },
   "dependencies": {
-    "@huggingface/transformers": "^4.2.0",
     "@next/mdx": "^16.3.0",
     "@types/mdx": "^2.0.14",
     "geist": "^1.7.2",

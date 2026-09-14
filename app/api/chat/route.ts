@@ -1,126 +1,69 @@
-import type { ConversationState } from '@/lib/chat/types';
-import { sanitizeConversationState } from '@/lib/chat/state';
-import { ENGLISH_ONLY_ERROR, isEnglishText } from '@/lib/chat/english';
-import { tokenize, extractEntities, classifyIntent, detectExpertise, normalizeMessage, ensureIntentVectorsLoaded } from '@/lib/chat/nlp';
-import { isExplicitWebRequest } from '@/lib/search/query-reformulator';
-import { semanticIndex } from '@/lib/search/semantic-index';
-import { checkRateLimit } from '@/lib/chat/rate-limit';
-import { orchestrateRetrieval } from '@/lib/chat/retrieval';
-import { buildResponse } from '@/lib/chat/response-builder';
+/**
+ * Nara chat API — V2 engine.
+ *
+ * Architecture:
+ *   respond()  ->  SSE stream
+ *
+ * Everything substantive happens synchronously inside `respond()`, which is a
+ * pure local function: analysis, retrieval, evidence gating and extractive
+ * composition. There is no model call, no embedding call and no outbound
+ * request, so there is nothing to await before the first token. The legacy route
+ * awaited an embedding for every message (a lane that was in fact dead, because
+ * the model package was never installed) and paid that latency for nothing.
+ *
+ * Streaming cadence is preserved from the legacy route because it is a real
+ * part of the product: the answer is revealed at a readable pace rather than
+ * appearing all at once.
+ */
+import { respond } from '@/lib/nara/respond';
+import { checkRateLimit } from '@/lib/nara/rate-limit';
 
-// Delay helper for natural streaming cadence
+/** Maximum accepted message length. Bounds work per request. */
+const MAX_MESSAGE_LENGTH = 500;
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function POST(req: Request) {
   const signal = req.signal;
 
   try {
-    // 0. Abuse guard first: sliding window per IP, 429 with Retry-After.
-    const ip =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    // Abuse guard first: sliding window per IP, 429 with Retry-After.
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     const limit = checkRateLimit(ip);
     if (!limit.allowed) {
-      return new Response(
-        JSON.stringify({ error: 'Too many messages — please slow down and try again in a moment.' }),
-        {
-          status: 429,
-          headers: {
-            'Content-Type': 'application/json',
-            'Retry-After': String(Math.ceil(limit.resetMs / 1000)),
-            'X-RateLimit-Limit': '30',
-            'X-RateLimit-Remaining': '0',
-          },
-        }
+      return json(
+        { error: 'Too many messages — please slow down and try again in a moment.' },
+        429,
+        { 'Retry-After': String(Math.ceil(limit.resetMs / 1000)) },
       );
     }
 
     const body = await req.json().catch(() => ({}));
+    const raw = typeof body?.message === 'string' ? body.message : '';
 
-    // 1. Robust input extraction & validation
-    const rawMessage =
-      typeof body?.message === 'string'
-        ? body.message
-        : typeof body?.query === 'string'
-          ? body.query
-          : '';
-
-    const useWebSearch = Boolean(body?.webSearch);
-    // Normalize typing style first (slang, elongations, typos) so every
-    // downstream lane sees canonical English; then validate + bound.
-    const cleanMessage = normalizeMessage(rawMessage.trim()).slice(0, 500);
-
-    if (!cleanMessage) {
-      return new Response(
-        JSON.stringify({ error: 'Please provide a valid non-empty message.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
+    if (!raw.trim()) {
+      return json({ error: 'Please provide a valid non-empty message.' }, 400);
     }
 
-    if (!isEnglishText(cleanMessage)) {
-      return new Response(
-        JSON.stringify({ error: ENGLISH_ONLY_ERROR }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+    const message = raw.trim().slice(0, MAX_MESSAGE_LENGTH);
 
-    // Web fires from the UI toggle or explicit phrases ("search the web for
-    // X", "google it"). Plain questions stay local — see retrieval policy.
-    const webSearchRequested = useWebSearch || isExplicitWebRequest(cleanMessage);
+    // State from the client is UNTRUSTED. `respond` runs it through
+    // `sanitizeState`, which validates every field and rebuilds anything
+    // structured (a quiz is restored from the server bank by id only), so a
+    // crafted payload cannot inject content into an answer.
+    const result = respond({ message, state: body?.state });
 
-    // 2. Bound incoming state to prevent memory abuse (single factory)
-    const state: ConversationState = sanitizeConversationState(body?.state);
-
-    // 3. NLP Analysis & Classification (rolling expertise window from recent user turns)
-    const recentUserTexts = state.turns
-      .filter(t => t.role === 'user')
-      .map(t => t.text)
-      .slice(-2);
-    state.expertiseLevel = detectExpertise(cleanMessage, state.expertiseLevel, recentUserTexts);
-    // One cached forward pass serves both the few-shot intent vote and the
-    // semantic retrieval lane below; warms intent examples in background.
-    ensureIntentVectorsLoaded().catch(() => {});
-    const queryVector = await semanticIndex.embedText(cleanMessage);
-    const tokens = tokenize(cleanMessage);
-    const entities = extractEntities(cleanMessage, tokens, state);
-    const intentResult = classifyIntent(cleanMessage, state, queryVector);
-
-    // 4. Multi-lane retrieval
-    const lastActiveTopic = state.topicThread && state.topicThread.length > 0
-      ? state.topicThread[state.topicThread.length - 1]
-      : undefined;
-
-    const previousUserTurn = state.turns
-      ? [...state.turns].reverse().find(t => t.role === 'user' && t.text.trim().toLowerCase() !== cleanMessage.toLowerCase())
-      : undefined;
-
-    const retrievalResult = await orchestrateRetrieval(cleanMessage, 3, {
-      intent: intentResult.intent,
-      conceptId: intentResult.conceptId,
-      detectedConcepts: entities.concepts,
-      webSearch: webSearchRequested,
-      activeTopic: lastActiveTopic,
-      previousQuery: previousUserTurn?.text,
-    });
-
-    // 5. Assemble response
-    const built = buildResponse(cleanMessage, state, intentResult, entities, retrievalResult);
-
-    if (!built.text || built.text.trim().length === 0) {
-      built.text = "I'm not sure how to answer that right now. Try rephrasing, or ask me about Neal's projects, tech concepts, or type `/quiz`!";
-    }
-
-    // 6. ReadableStream with SSE formatting
     const encoder = new TextEncoder();
-    let isStreamCancelled = false;
+    let cancelled = false;
 
     const stream = new ReadableStream({
       async start(controller) {
         const onAbort = () => {
-          isStreamCancelled = true;
+          cancelled = true;
           try {
             controller.close();
           } catch {
-            // Already closed
+            // Already closed.
           }
         };
 
@@ -131,94 +74,61 @@ export async function POST(req: Request) {
         signal.addEventListener('abort', onAbort, { once: true });
 
         try {
-          // Tokenize into words with preserved whitespace (zero dropped spaces)
-          const wordTokens = built.text.match(/\S+\s*/g) || [built.text];
-          let currentChunk = '';
-          let inCodeBlock = false;
-          let didEmitAnyText = false;
+          const emit = (event: string, data: unknown) => {
+            controller.enqueue(
+              encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`),
+            );
+          };
 
-          for (let i = 0; i < wordTokens.length; i++) {
-            if (signal.aborted || isStreamCancelled) break;
+          const words = result.answer.text.match(/\S+\s*/g) ?? [result.answer.text];
+          let chunk = '';
 
-            const token = wordTokens[i];
-            currentChunk += token;
+          for (let i = 0; i < words.length; i++) {
+            if (signal.aborted || cancelled) break;
 
-            // Track markdown code block boundaries
-            if (token.includes('```')) {
-              inCodeBlock = !inCodeBlock;
-            }
+            const token = words[i];
+            chunk += token;
 
-            // In code blocks: stream line-by-line with minimal delay (flicker-free)
-            // In prose: batch every ~3 words or sentence endings for natural conversational pace
-            const isEndOfSentence = /[.!?]\s*$/.test(token) && !inCodeBlock;
-            const isBatchReady = inCodeBlock ? currentChunk.includes('\n') : (i % 3 === 2);
-            const isLast = i === wordTokens.length - 1;
+            const endOfSentence = /[.!?]\s*$/.test(token);
+            const last = i === words.length - 1;
 
-            if (isEndOfSentence || isBatchReady || isLast) {
-              if (currentChunk.length > 0) {
-                const sseEvent = `event: text\ndata: ${JSON.stringify(currentChunk)}\n\n`;
-                controller.enqueue(encoder.encode(sseEvent));
-                didEmitAnyText = true;
-                // Longer pause after headings / list items sells the "typing" illusion
-                const isStructuralBoundary =
-                  !inCodeBlock &&
-                  (/(^|\n)\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s)/.test(currentChunk) ||
-                    /\n\s*$/.test(currentChunk));
-                const baseDelay = inCodeBlock
-                  ? 5
-                  : isEndOfSentence
-                    ? 40
-                    : isStructuralBoundary
-                      ? 70
-                      : 20;
-                // Small randomized jitter (±12ms prose, ±3ms code) breaks mechanical regularity
-                const spread = inCodeBlock ? 3 : 12;
-                const jittered = Math.max(
-                  0,
-                  baseDelay + Math.random() * 2 * spread - spread
-                );
-                currentChunk = '';
-                await sleep(jittered);
+            if (endOfSentence || i % 3 === 2 || last) {
+              if (chunk.length > 0) {
+                emit('text', chunk);
+                // A pause after a structural line (heading or list item) reads
+                // as deliberate; jitter keeps the rhythm from sounding robotic.
+                const structural = /(^|\n)\s*(#{1,6}\s|[-*+•]\s|\d+[.)]\s)/.test(chunk);
+                const base = endOfSentence ? 40 : structural ? 70 : 20;
+                const jitter = Math.random() * 24 - 12;
+                chunk = '';
+                if (!last) await sleep(Math.max(0, base + jitter));
                 continue;
               }
-
-              const delay = inCodeBlock ? 5 : isEndOfSentence ? 40 : 20;
-              await sleep(delay);
+              if (!last) await sleep(endOfSentence ? 40 : 20);
             }
           }
 
-          if (!didEmitAnyText && !signal.aborted && !isStreamCancelled) {
-            const fallback = "I don't have a specific answer for that. Try asking about Neal's projects, tech stack, or type `/quiz`!";
-            controller.enqueue(encoder.encode(`event: text\ndata: ${JSON.stringify(fallback)}\n\n`));
-          }
+          if (signal.aborted || cancelled) return;
 
-          if (signal.aborted || isStreamCancelled) return;
+          if (result.answer.sources.length > 0) emit('sources', result.answer.sources);
+          if (result.answer.suggestions.length > 0) emit('suggestions', result.answer.suggestions);
 
-          // Emit auxiliary events
-          if (built.sources && built.sources.length > 0) {
-            controller.enqueue(encoder.encode(`event: sources\ndata: ${JSON.stringify(built.sources)}\n\n`));
-          }
-          if (built.suggestions && built.suggestions.length > 0) {
-            controller.enqueue(encoder.encode(`event: suggestions\ndata: ${JSON.stringify(built.suggestions)}\n\n`));
-          }
-
-          // Emit synchronized state & finish
-          controller.enqueue(encoder.encode(`event: state\ndata: ${JSON.stringify(built.updatedState)}\n\n`));
-          controller.enqueue(encoder.encode(`event: done\ndata: {}\n\n`));
+          emit('state', result.state);
+          emit('done', {});
           controller.close();
         } catch (err) {
           console.error('[API/chat] Streaming error:', err);
           try {
             controller.close();
           } catch {
-            // Already closed
+            // Already closed.
           }
         } finally {
           signal.removeEventListener('abort', onAbort);
         }
       },
       cancel() {
-        isStreamCancelled = true;
+        cancelled = true;
       },
     });
 
@@ -226,7 +136,7 @@ export async function POST(req: Request) {
       headers: {
         'Content-Type': 'text/event-stream; charset=utf-8',
         'Cache-Control': 'no-cache, no-transform',
-        'Connection': 'keep-alive',
+        Connection: 'keep-alive',
         'X-Accel-Buffering': 'no',
         'X-RateLimit-Limit': '30',
         'X-RateLimit-Remaining': String(limit.remaining),
@@ -234,9 +144,13 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error('[API/chat] Handler error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal assistant error. Please try again.' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
-    );
+    return json({ error: 'Internal assistant error. Please try again.' }, 500);
   }
+}
+
+function json(payload: unknown, status: number, extra: Record<string, string> = {}) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...extra },
+  });
 }

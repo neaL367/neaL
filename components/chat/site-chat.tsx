@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { ConversationState } from '@/lib/chat/types';
-import { createInitialConversationState, sanitizeConversationState } from '@/lib/chat/state';
+import type { DialogueState } from '@/lib/nara/client';
+import { createInitialState, parseStoredState } from '@/lib/nara/client';
 import {
   MessageGroup,
 } from '@/components/ui/message';
@@ -21,12 +21,12 @@ import { ChatInputBar } from './chat-input-bar';
 export type { ChatMessage };
 
 const DEFAULT_STARTERS = [
-  'Quiz me on React',
-  'Explain closures',
-  'What is Neal’s tech stack?',
-  'How does the event loop work?',
-  'Why time dilation in Interstellar?',
-  'Tell me a joke',
+  'Tell me about GTA V',
+  'What is the RAGE engine?',
+  'Explain Hot Coffee',
+  'Tell me about Rockstar North',
+  'Why is GTA V so successful?',
+  'Who is Neal?',
 ];
 
 function SiteChatInner({ className = '' }: { className?: string }) {
@@ -34,24 +34,22 @@ function SiteChatInner({ className = '' }: { className?: string }) {
     {
       id: 'welcome',
       sender: 'assistant',
-      text: "Hi! I'm **Nara** — Neal's personal AI companion running directly on-server (zero external LLM APIs). Ask me about Neal's stack, co-op experience, engineering essays, coding concepts, or type `/quiz` to test your knowledge!",
+      text: "Hi! I'm **Nara** — Neal's personal AI companion running directly on-server (zero external LLM APIs). Ask me about Rockstar Games — GTA, Red Dead, the studios behind them — or about Neal's own work.",
       timestamp: 'Online',
     },
   ]);
   const [input, setInput] = useState('');
-  const [useWebSearch, setUseWebSearch] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_STARTERS);
-  const [conversationState, setConversationState] = useState<ConversationState>(() => {
+  const [DialogueState, setDialogueState] = useState<DialogueState>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const saved = sessionStorage.getItem('nara_session_state');
-        if (saved) return sanitizeConversationState(JSON.parse(saved));
+        return parseStoredState(sessionStorage.getItem('nara_session_state'));
       } catch {
         // Storage unavailable or disabled
       }
     }
-    return createInitialConversationState();
+    return createInitialState();
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -60,8 +58,8 @@ function SiteChatInner({ className = '' }: { className?: string }) {
   const { scrollToBottom } = useMessageScroller();
 
   // Save session state to sessionStorage
-  const updateSessionState = useCallback((nextState: ConversationState) => {
-    setConversationState(nextState);
+  const updateSessionState = useCallback((nextState: DialogueState) => {
+    setDialogueState(nextState);
     try {
       sessionStorage.setItem('nara_session_state', JSON.stringify(nextState));
     } catch {
@@ -137,8 +135,7 @@ function SiteChatInner({ className = '' }: { className?: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: query,
-          state: conversationState,
-          webSearch: useWebSearch,
+          state: DialogueState,
         }),
         signal: abortController.signal,
       });
@@ -194,11 +191,22 @@ function SiteChatInner({ className = '' }: { className?: string }) {
           } else if (eventType === 'sources') {
             try {
               const parsedSources = JSON.parse(eventData);
-              setMessages(prev =>
-                prev.map(m =>
-                  m.id === assistantMsgId ? { ...m, sources: parsedSources } : m
-                )
-              );
+              // Validate at the boundary. The renderer dereferences `title`
+              // unconditionally, so a malformed payload must not reach it —
+              // one bad entry previously took down the whole transcript.
+              const safeSources = Array.isArray(parsedSources)
+                ? parsedSources.filter(
+                    (s): s is { title: string; heading?: string; url?: string; excerpt?: string } =>
+                      !!s && typeof s === 'object' && typeof s.title === 'string',
+                  )
+                : [];
+              if (safeSources.length > 0) {
+                setMessages(prev =>
+                  prev.map(m =>
+                    m.id === assistantMsgId ? { ...m, sources: safeSources } : m
+                  )
+                );
+              }
             } catch {
               // Ignore source parse errors
             }
@@ -260,13 +268,13 @@ function SiteChatInner({ className = '' }: { className?: string }) {
   };
 
   const handleResetSession = () => {
-    updateSessionState(createInitialConversationState());
+    updateSessionState(createInitialState());
     setSuggestions(DEFAULT_STARTERS);
     setMessages([
       {
         id: 'welcome',
         sender: 'assistant',
-        text: "Session refreshed! Ask me anything about Neal's work, tech stack, or type `/quiz` to begin.",
+        text: "Session refreshed! Ask me anything about Rockstar Games or Neal's own work.",
         timestamp: 'Online',
       },
     ]);
@@ -300,8 +308,6 @@ function SiteChatInner({ className = '' }: { className?: string }) {
         isStreaming={isStreaming}
         suggestions={suggestions}
         textareaRef={textareaRef}
-        useWebSearch={useWebSearch}
-        setUseWebSearch={setUseWebSearch}
         onSend={handleSend}
         onStop={handleStop}
         onReset={handleResetSession}
