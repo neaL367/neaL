@@ -19,7 +19,7 @@
  * it becomes a clarifying question or an honest decline instead of an answer.
  */
 import type { Candidate, Evidence, Fact } from '../types';
-import { DOCS, FACTS, TOPIC_BY_ID, type IndexedDoc } from '../knowledge/index';
+import { CONCEPT_INDEX, DOCS, FACTS, TOPIC_BY_ID, type IndexedDoc } from '../knowledge/index';
 import { indexVariants, stem, tokenize } from '../language/text';
 
 // ─── Document preparation ────────────────────────────────────────────────────
@@ -356,6 +356,33 @@ function isMeaningful(t: string): boolean {
  */
 const MIN_ALIAS_COVERAGE = 0.6;
 
+/** Stem exactly the way `normFactKey` stems, so both sides of a comparison match. */
+function normTok(t: string): string {
+  return /^\d+$/.test(t) ? t : stem(t);
+}
+
+/**
+ * Subject tokens per fact: the subject's own meaningful tokens plus the alias
+ * vocabulary of the concept it names, when it names one ("GTA VI" -> the
+ * gta-vi entry's aliases). Used ONLY to gate fuzzy matches — exact alias hits
+ * skip it (see `lookupFact`).
+ */
+const SUBJECT_TOKENS: Map<Fact, Set<string>> = new Map(
+  FACTS.map(f => {
+    const out = new Set<string>();
+    for (const t of normFactKey(f.subject).split(' ').filter(isMeaningful)) out.add(t);
+    const key = canonicalizeFactTokens(normFactKey(f.subject));
+    for (const e of CONCEPT_INDEX.values()) {
+      if (!e.aliases.includes(key)) continue;
+      for (const a of e.aliases) {
+        for (const t of a.split(/[^a-z0-9]+/).filter(isMeaningful)) out.add(normTok(t));
+      }
+      break;
+    }
+    return [f, out] as [Fact, Set<string>];
+  }),
+);
+
 export function lookupFact(query: string): { fact: Fact; confidence: number; exact: boolean } | null {
   // Canonicalize the QUERY the same way the alias index was built, or the fold
   // is one-sided: "what is his stack" would never equal the stored form
@@ -416,6 +443,27 @@ export function lookupFact(query: string): { fact: Fact; confidence: number; exa
   }
 
   if (!best) return null;
+
+  // Subject gate, fuzzy path only. Alias coverage alone cannot tell subjects
+  // apart when the distinguishing token is invisible to the matcher: "when is
+  // RDR3 coming out" covered 2/3 of "when is GTA 6 coming out" (the "6" is a
+  // single char and never scores) and answered a Red Dead question with GTA
+  // VI's release date at 0.92. A fuzzy hit must therefore share at least one
+  // subject token with the query — the row's own subject words, or the alias
+  // vocabulary of the concept it names. Exact hits skip this: a word-for-word
+  // alias match is the strongest possible statement of intent.
+  const sub = SUBJECT_TOKENS.get(best);
+  let sharesSubject = false;
+  if (sub) {
+    for (const t of qSet) {
+      if (sub.has(t)) {
+        sharesSubject = true;
+        break;
+      }
+    }
+  }
+  if (!sharesSubject) return null;
+
   return { fact: best, confidence: 0.75 + 0.25 * Math.min(1, bestScore), exact: false };
 }
 

@@ -26,7 +26,7 @@ export const GTA_VI_ERA_TOPICS: DetailedTopic[] = [
     phrases: ['grand theft auto vi', 'the next gta', 'gta 6', 'the new gta'],
     title: 'Grand Theft Auto VI',
     summary:
-      'Grand Theft Auto VI is Rockstar\u2019s next mainline entry, set in the state of Leonida and its Vice City, following the criminal couple Jason Duval and Lucia Caminos. It is scheduled for PlayStation 5 and Xbox Series X/S on 19 November 2026, priced at $79.99.',
+      'Grand Theft Auto VI is Rockstar\u2019s next mainline entry, set in the state of Leonida and its Vice City, following the criminal couple Jason Duval and Lucia Caminos. It is scheduled for PlayStation 5 and Xbox Series X/S on 19 November 2026, priced at $79.99. No Online mode has been announced.',
     detail: `### Grand Theft Auto VI
 
 **Grand Theft Auto VI** is the next mainline *Grand Theft Auto* game, developed and published by Rockstar Games. It is the first mainline entry since **Dan Houser** left Rockstar in March 2020.

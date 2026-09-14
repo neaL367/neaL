@@ -135,7 +135,7 @@ Commercially it is the outlier: it shipped across three console generations, and
     phrases: ['gta online', 'gta v online', 'the kortz center heist', 'gta plus'],
     title: 'GTA Online',
     summary:
-      'GTA Online is the persistent multiplayer mode launched 1 October 2013 alongside GTA V, built around co-operative heists, businesses and free content updates funded by Shark Cards.',
+      'GTA Online is the persistent multiplayer mode launched 1 October 2013 alongside GTA V, built around co-operative heists, businesses and free content updates funded by Shark Cards. Its December 2025 update confirmed GTA V\u2019s Option C ending as canon.',
     detail: `### GTA Online
 
 GTA Online launched on **1 October 2013**, two weeks after *GTA V*, and became a live-service world of its own: a shared version of Los Santos where players run businesses, heists and races together.
@@ -302,7 +302,7 @@ These two games sit at the centre of most arguments about Rockstar and violence 
     // `phrases` (not `keywords`) become matchable aliases. The title's bare form
     // is the full "Rockstar Games Presents Table Tennis", so without these the
     // obvious question "What is Table Tennis?" linked nothing at all.
-    phrases: ['table tennis', 'rockstar table tennis', 'the table tennis game'],
+    phrases: ['table tennis', 'rockstar table tennis', 'the table tennis game', 'ping pong', 'the ping pong game'],
     title: 'Rockstar Games Presents Table Tennis',
     summary:
       'Rockstar Games Presents Table Tennis (2006) is a focused sports game, notable as the first title built on the Rockstar Advanced Game Engine.',

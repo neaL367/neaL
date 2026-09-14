@@ -167,6 +167,15 @@ export interface QueryAnalysis {
   isBare: boolean;
   /** Second, independent request found in one message ("X and also Y"). */
   secondary?: string;
+  /**
+   * A sequel number attached to a linked concept that owns no such number
+   * ("Bully 2", "GTA 7"): the user named something adjacent to a real subject
+   * that is not itself documented. The composer turns this into a clarify
+   * toward the base subject instead of answering the base AS the sequel.
+   * Numbers that ARE part of a known alias ("GTA 2", "Max Payne 3") never
+   * produce this — the alias match covers the number's span.
+   */
+  sequelMismatch?: { baseId: string; number: string; surface: string };
   isNonEnglish: boolean;
   /**
    * The message was ONLY greeting/thanks/farewell words. Decided before concept

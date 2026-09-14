@@ -164,7 +164,7 @@ As of 14 September 2026: in **full production** (Remedy half-year report, 11 Aug
   {
     id: 'la-noire',
     keywords: ['la noire', 'l.a. noire', 'team bondi', 'cole phelps', 'motionscan', '1947 los angeles'],
-    phrases: ['l a noire', 'la noire game', 'the detective game'],
+    phrases: ['l a noire', 'la noire game', 'the detective game', 'noir detective', '1947 detective'],
     title: 'L.A. Noire',
     summary:
       'L.A. Noire (2011) is the 1947 LAPD detective game by Team Bondi and Rockstar — MotionScan faces, five desks of cases, then studio collapse.',
@@ -201,7 +201,7 @@ It is the studio\u2019s signature before it absorbed Vancouver: a brawler with G
   {
     id: 'agent',
     keywords: ['agent', 'rockstar agent', 'spy game rockstar', 'cancelled rockstar game'],
-    phrases: ['agent game', 'rockstar agent', 'the spy game'],
+    phrases: ['agent game', 'rockstar agent', 'the spy game', 'spy game'],
     title: 'Agent (cancelled)',
     summary:
       'Agent was Rockstar North\u2019s announced PS3-exclusive Cold War spy game (2009), never released and quietly cancelled.',

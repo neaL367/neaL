@@ -220,10 +220,10 @@ const envNum = (key: string, fallback: number): number => {
 
 // Env-overridable ONLY so `eval/sweep.ts` can grid-search the operating point;
 // production always uses the pinned defaults below. Sweep 2026-09-14: answer in
-// [0.40, 0.55] all score 126/126, 0.60 drops deep.agent — so 0.50 is kept as the
-// middle of the plateau (max margin to both false-answer and false-decline
-// failure). The plateau also means the golden set lacks near-threshold
-// adversarial cases; do not read it as "the threshold doesn't matter".
+// [0.40, 0.50] scores 138/138; 0.55 drops adv.ping-pong (0.513) and 0.60 drops
+// deep.agent (0.570) — so 0.50 is kept as the top of the plateau, the highest
+// gate that still answers every covered subject. New adversarial cases should
+// aim near the gate to keep the sweep discriminating.
 const ANSWER_CONFIDENCE = envNum('NARA_ANSWER_CONF', 0.5);
 const CLARIFY_CONFIDENCE = envNum('NARA_CLARIFY_CONF', 0.22);
 

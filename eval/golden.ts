@@ -972,6 +972,97 @@ export const GOLDEN: GoldenCase[] = [
     class: 'topic',
     why: 'The art director must keep his title and studio.',
   },
+
+  // ─── R. Adversarial: inventions, paraphrases, thin margins ────────────────
+  //
+  // Each of these once produced a confident wrong answer (or a wrong-subject
+  // answer) and now pins the corrected behaviour. Several sit just above the
+  // answer gate by design, so they also discriminate future threshold moves —
+  // see `eval/sweep.ts`.
+  {
+    id: 'adv.sequel-clarify',
+    q: 'Tell me about Bully 2',
+    expect: { terms: ['Bully 2', 'did you mean Bully'] },
+    class: 'adversarial',
+    why: 'REGRESSION: answered the 2006 game AS the sequel (0.74). An unowned sequel number must clarify, not impersonate.',
+  },
+  {
+    id: 'adv.engine-sequel',
+    q: 'What engine does Bully 2 use',
+    expect: { terms: ['Bully 2', 'did you mean Bully'] },
+    class: 'adversarial',
+    why: 'REGRESSION: same impersonation through a mechanism-shaped question (0.57).',
+  },
+  {
+    id: 'adv.rdr3-decline',
+    q: 'When is RDR3 coming out',
+    expect: { graceful: true, notTerms: ['19 November|November 19|PlayStation|79\\.99'] },
+    class: 'adversarial',
+    why: 'REGRESSION: the "6"-is-invisible matcher covered 2/3 of a GTA VI fact alias and answered a Red Dead question with GTA VI\u2019s date at 0.92. Must decline, never cross-subject.',
+  },
+  {
+    id: 'adv.vi-map',
+    q: 'How big is the GTA VI map',
+    expect: { terms: ['Leonida|Vice City|Keys', 'unannounced|speculation|no map size'], notTerms: ['three times larger|larger than RDR2|times bigger'] },
+    class: 'adversarial',
+    why: 'No official map size exists: must list the regions AND refuse the rumor, in the same answer.',
+  },
+  {
+    id: 'adv.lucia-voice',
+    q: 'Who voices Lucia',
+    expect: { terms: ['Lucia Caminos', 'unconfirmed'] },
+    class: 'adversarial',
+    why: 'Unconfirmed cast must be stated as unconfirmed — community consensus is not an announcement.',
+  },
+  {
+    id: 'adv.vi-online',
+    q: 'Is there a GTA VI Online',
+    expect: { terms: ['No Online mode|not.*announced', '19 November 2026|Leonida'] },
+    class: 'adversarial',
+    why: 'Unannounced mode must be denied explicitly inside a correct VI answer.',
+  },
+  {
+    id: 'adv.ping-pong',
+    q: 'the ping pong game',
+    expect: { terms: ['Table Tennis|2006', 'RAGE|engine'] },
+    class: 'adversarial',
+    why: 'THRESHOLD SENTINEL: no shared vocabulary with the answer (0.513). Fails if the gate moves to 0.55.',
+  },
+  {
+    id: 'adv.spy-game',
+    q: "Rockstar's spy game",
+    expect: { terms: ['Agent', 'spy|PS3|cancelled|never released'] },
+    class: 'adversarial',
+    why: 'Company-plus-game query must still surface the cancelled Agent, not just the publisher.',
+  },
+  {
+    id: 'adv.noir-paraphrase',
+    q: 'noir detective 1947',
+    expect: { terms: ['Noire|1947|Team Bondi', 'MotionScan'] },
+    class: 'adversarial',
+    why: 'Genre-period paraphrase with no title words must still reach L.A. Noire.',
+  },
+  {
+    id: 'adv.typo',
+    q: 'Red Dead Redemtion',
+    expect: { terms: ['Red Dead|Western', 'Revolver|2010|2018'] },
+    class: 'adversarial',
+    why: 'A one-letter typo must not collapse to a single game or decline.',
+  },
+  {
+    id: 'adv.bare-vice-city',
+    q: 'Vice City',
+    expect: { terms: ['1980|Miami', 'Tommy Vercetti'] },
+    class: 'adversarial',
+    why: 'Bare place-name resolves to the 2002 game by design (the place node deliberately claims no bare alias) — pin that.',
+  },
+  {
+    id: 'adv.canon-ending',
+    q: 'Which GTA V ending is canon',
+    expect: { terms: ['Option C|Deathwish|canon'] },
+    class: 'adversarial',
+    why: 'Fact-shaped questions only quote summaries — the canon answer had to move into the Online summary to be reachable.',
+  },
 ];
 
 /**
@@ -1056,6 +1147,13 @@ export const MUST_NOT_400 = [
   'Who is Woody Jackson?',
   'Who is Rob Nelson?',
   'Who is Aaron Garbut?',
+  'Tell me about Bully 2',
+  'When is RDR3 coming out',
+  'How big is the GTA VI map',
+  'Who voices Lucia',
+  'Is there a GTA VI Online',
+  'the ping pong game',
+  'Which GTA V ending is canon',
   'Tell me a joke',
   'Another fact!',
   'Tell me more',

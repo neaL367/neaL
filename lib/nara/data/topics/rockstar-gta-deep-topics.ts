@@ -199,7 +199,7 @@ The attacker was **Arion Kurtaj**, then 17, of the **Lapsus$** group — already
     phrases: ['leonida', 'the state of leonida', 'gta vi map'],
     title: 'Leonida (GTA VI setting)',
     summary:
-      'Leonida is GTA VI\u2019s Florida-like state, returning to Vice City with the Keys, Grassrivers wetlands, Port Gellhorn, Ambrosia and Mount Kalaga.',
+      'Leonida is GTA VI\u2019s Florida-like state, returning to Vice City with the Keys, Grassrivers wetlands, Port Gellhorn, Ambrosia and Mount Kalaga. No map size has been officially announced.',
     detail: `### Leonida
 
 **Leonida** is the fictional state *GTA VI* is set in — Rockstar\u2019s Florida, home to a new **Vice City**. As listed by Rockstar ahead of the 19 November 2026 release:
@@ -226,10 +226,10 @@ The 2022 leak\u2019s Vice City locations were the first confirmation the series 
   {
     id: 'gta-vi-characters',
     keywords: ['jason duval', 'lucia caminos', 'jason and lucia', 'gta vi protagonists', 'cal hampton', 'boobie ike'],
-    phrases: ['jason and lucia', 'lucia caminos', 'jason duval', 'gta vi characters'],
+    phrases: ['jason and lucia', 'lucia caminos', 'jason duval', 'gta vi characters', 'lucia', 'jason'],
     title: 'GTA VI characters: Jason and Lucia',
     summary:
-      'GTA VI has dual protagonists Jason Duval and Lucia Caminos — a Bonnie-and-Clyde couple — with Rockstar also naming Cal, Boobie, Dre\u2019Quan, Real Dimez, Raul and Brian.',
+      'GTA VI has dual protagonists Jason Duval and Lucia Caminos — a Bonnie-and-Clyde couple — with Rockstar also naming Cal, Boobie, Dre\u2019Quan, Real Dimez, Raul and Brian. Voice cast is unconfirmed as of September 2026.',
     detail: `### GTA VI characters
 
 *GTA VI* uses **dual protagonists**, both playable:

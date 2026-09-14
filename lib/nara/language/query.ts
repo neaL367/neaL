@@ -359,6 +359,48 @@ function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/**
+ * A sequel number the knowledge base does not own.
+ *
+ * "Tell me about Bully 2" links `bully` (alias match) and leaves "2" dangling;
+ * without this signal the engine answers the 2006 game AS IF it were the
+ * sequel. "GTA 2" or "Max Payne 3" never trigger it, because the number sits
+ * inside a longer known alias and the overlap guard gives the whole span to
+ * that match. Single "i"/"v" are excluded — they are words as often as
+ * numerals ("GTA V" is covered by its alias anyway).
+ */
+const SEQUEL_NUMBER = /\b(\d+|ii|iii|iv|vii)\b/gi;
+
+function detectSequelMismatch(
+  matchedText: string,
+  concepts: ConceptMatch[],
+): { baseId: string; number: string; surface: string } | undefined {
+  if (concepts.length === 0) return undefined;
+  const taken = concepts.map(c => c.span);
+  const covered = (s: number, e: number): boolean => taken.some(([a, b]) => s < b && e > a);
+  for (const m of matchedText.matchAll(SEQUEL_NUMBER)) {
+    const s = m.index ?? 0;
+    const e = s + m[0].length;
+    if (covered(s, e)) continue;
+    const base = concepts.find(
+      c => Math.min(Math.abs(s - c.span[1]), Math.abs(c.span[0] - e)) <= 3,
+    );
+    if (!base) continue;
+    // The base owns this number after all (checked against every surface the
+    // entry claims, not just the one that matched) — not a mismatch.
+    const num = m[1].toLowerCase();
+    const owns = ALIAS_LOOKUP.some(
+      ({ alias, entry }) =>
+        entry.id === base.id && alias.split(/[^a-z0-9]+/i).includes(num),
+    );
+    if (owns) continue;
+    const from = Math.min(base.span[0], s);
+    const to = Math.max(base.span[1], e);
+    return { baseId: base.id, number: m[0], surface: matchedText.slice(from, to) };
+  }
+  return undefined;
+}
+
 // ─── Discourse: pronoun / ellipsis resolution ────────────────────────────────
 
 const PRONOUN = /\b(?:it|that|this|those|these|them|they)\b/i;
@@ -594,6 +636,7 @@ export function analyze(rawInput: string, opts: AnalyzeOptions = {}): QueryAnaly
     }
   }
   const negation = detectNegation(normalized, concepts);
+  const sequelMismatch = detectSequelMismatch(normalizeForMatch(normalized), concepts);
   const hasSubject = concepts.length > 0;
   const isNonEnglish = looksNonEnglish(normalized);
 
@@ -622,6 +665,7 @@ export function analyze(rawInput: string, opts: AnalyzeOptions = {}): QueryAnaly
     resolvedReferent: hasSubject ? undefined : resolvedReferent,
     pronounSubject,
     secondary,
+    sequelMismatch,
     negation,
     isNonEnglish,
     corrections,
@@ -644,6 +688,7 @@ interface FinishInput {
   isBare: boolean;
   resolvedReferent?: string;
   secondary?: string;
+  sequelMismatch?: { baseId: string; number: string; surface: string };
   negation?: NegationSpan;
   isNonEnglish?: boolean;
   subKind?: string;
@@ -672,6 +717,7 @@ function finish(i: FinishInput): QueryAnalysis {
     resolvedReferent: i.resolvedReferent,
     isBare: i.isBare,
     secondary: i.secondary,
+    sequelMismatch: i.sequelMismatch,
     isNonEnglish: i.isNonEnglish ?? false,
     isPureSocial: i.isPureSocial,
     meta: i.meta,

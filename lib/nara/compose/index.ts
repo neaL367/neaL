@@ -334,6 +334,31 @@ export function compose(input: ComposeInput): ComposedAnswer {
     return comparisonFallback(analysis, result, seed, []);
   }
 
+  // ── Sequel mismatch: a number the knowledge base does not own ────────────
+  //
+  // "Tell me about Bully 2" links `bully` and would otherwise answer the 2006
+  // game AS IF it were the sequel. An exact fact-alias hit is exempt — it is
+  // the strongest statement of intent and never a number accident — but
+  // anything else answering the BASE topic becomes a clarify naming the
+  // undocumented sequel, so the user learns it does not exist here.
+  if (analysis.sequelMismatch) {
+    const mm = analysis.sequelMismatch;
+    const bestTopic = result.best?.topic?.id;
+    const exactFact =
+      result.best?.lane === 'fact' && result.best.evidence.matchKind === 'exact-id';
+    if (!exactFact && (!result.best || bestTopic === mm.baseId)) {
+      const label = labelFor(mm.baseId);
+      const surface = mm.surface.charAt(0).toUpperCase() + mm.surface.slice(1);
+      return {
+        kind: 'clarify',
+        text: `I don't have "${surface}" documented here — did you mean ${label}?`,
+        sources: collectSources(result.candidates.slice(0, 2)),
+        suggestions: [`What is ${label}?`, '/topics'],
+        trace: ['compose=sequel-mismatch', `conf=${result.confidence.toFixed(2)}`],
+      };
+    }
+  }
+
   if (!result.best) {
     return declineOrClarify(input, seed);
   }
