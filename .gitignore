@@ -50,23 +50,12 @@ app/writing/generated/
 .agents/
 skills-lock.json
 
-# onnx model cache & runtime downloads
-/.cache/
-.cache/
-onnx-models/
-*.onnx
-*.onnx_data
-
 # test and scratch files
 scripts/test-*.ts
 test-*.ts
 test-*.js
 scratch/
 *.scratch.*
-
-# local-only eval harnesses (never push to GitHub)
-scripts/eval-*.ts
-scripts/demo-*.local.ts
 
 # ide & os
 .vscode/

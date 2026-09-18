@@ -7,14 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "eval": "bun run eval/run.ts",
-    "eval:sweep": "bun run eval/sweep.ts",
-    "test:language": "bun run eval/language.test.ts",
-    "check:knowledge": "bun run scripts/check-knowledge.ts",
-    "build:corpus": "bun run scripts/build-corpus.ts",
-    "build:semantic": "bun run scripts/build-semantic.ts",
-    "build:knowledge": "bun run scripts/build-corpus.ts && bun run scripts/build-semantic.ts"
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "@next/mdx": "^16.3.0",

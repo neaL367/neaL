@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link } from '@/components/link';
 import { CopyButton } from '@/components/copy-button';
-import { NaraTrigger } from '@/components/chat/nara-trigger';
-import Image, { ImageProps } from 'next/image';
 import type { MDXComponents } from 'mdx/types';
+
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -254,21 +253,10 @@ function TableOfContents({
   );
 }
 
-function MDXImage(props: ImageProps & { caption?: string }) {
-  return (
-    <figure className="mdx-image">
-      <Image
-        sizes="100vw"
-        style={{ width: '100%', height: 'auto' }}
-        {...props}
-        alt={props.alt ?? ''}
-      />
-      {props.caption && (
-        <figcaption className="mdx-image-caption">{props.caption}</figcaption>
-      )}
-    </figure>
-  );
-}
+import { MDXImage, MDXImageGrid } from '@/components/mdx-image';
+
+
+
 
 // ─── MDX Component Map ───────────────────────────────────────────────────────
 
@@ -281,9 +269,6 @@ const components: MDXComponents = {
   h6: (props) => <Heading level={6} {...props} />,
   p: ({ children }) => <p className="mb-4 text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">{children}</p>,
   a: ({ children, href, ...props }) => {
-    if (href === '/chat' || href === '#chat') {
-      return <NaraTrigger {...props}>{children}</NaraTrigger>;
-    }
     return href ? (
       <Link href={href} {...props}>
         {children}
@@ -316,29 +301,29 @@ const components: MDXComponents = {
     <hr className="relative my-8 h-px w-full overflow-hidden border-0 bg-transparent before:absolute before:left-1/2 before:h-px before:w-[99vw] before:-translate-x-1/2 before:bg-zinc-200 dark:before:bg-zinc-800 before:content-['']" />
   ),
   strong: ({ children }) => <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{children}</strong>,
-  img: (props: ImageProps) => (
-    <Image
-      sizes="100vw"
-      style={{ width: '100%', height: 'auto' }}
+  img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt ?? ''}
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      className="my-6 max-h-[420px] w-auto max-w-full mx-auto rounded-lg border border-zinc-200 dark:border-zinc-800 object-contain shadow-sm"
       {...props}
-      alt={props.alt ?? ''}
     />
   ),
   Link: (props: React.ComponentProps<typeof Link>) => {
-    const hrefStr = String(props.href);
-    if (hrefStr === '/chat' || hrefStr === '#chat') {
-      return <NaraTrigger {...props}>{props.children}</NaraTrigger>;
-    }
     return <Link {...props} />;
   },
-  NaraTrigger,
   Callout,
   TableOfContents,
   MDXImage,
+  MDXImageGrid,
 };
 
 export function useMDXComponents(): MDXComponents {
   return components;
 }
 
-export { CodeBlock, HighlightedCode, Callout, NaraTrigger, components as mdxComponents };
+export { CodeBlock, HighlightedCode, Callout, MDXImage, MDXImageGrid, components as mdxComponents };
+

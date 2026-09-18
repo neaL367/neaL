@@ -53,11 +53,6 @@
   mix-blend-mode: normal;
 }
 
-/* Chat dock view transition morphing */
-::view-transition-group(chat-dock) {
-  animation-duration: 240ms;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
 
 .no-scrollbar::-webkit-scrollbar {
   display: none !important;
@@ -459,15 +454,18 @@ pre::-webkit-scrollbar-thumb {
 
 /* ===== MDX Image ===== */
 .mdx-image {
-  margin-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .mdx-image img {
-  border-radius: 0.5rem;
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .mdx-image-caption {
-  margin-top: 0.5rem;
+  margin-top: 0.625rem;
   font-size: 0.8125rem;
   color: var(--caption-color, #71717a);
   text-align: center;
@@ -478,3 +476,4 @@ pre::-webkit-scrollbar-thumb {
     color: var(--caption-color-dark, #a1a1aa);
   }
 }
+

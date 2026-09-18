@@ -7,7 +7,7 @@ const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''};
   style-src 'self' 'unsafe-inline';
-  img-src 'self' blob: data:;
+  img-src 'self' blob: data: https://media-rockstargames-com.akamaized.net https://*.rockstargames.com https://www.rockstargames.com https://*.akamaized.net;
   font-src 'self';
   object-src 'none';
   base-uri 'self';
