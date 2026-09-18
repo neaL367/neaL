@@ -6,6 +6,8 @@
   --background: #ffffff;
   --foreground: #171717;
 
+  --font-faculty-glyphic: 'Faculty Glyphic', sans-serif;
+
   --selection-bg: #e4e4e7;
   --selection-fg: #18181b;
 
@@ -15,12 +17,12 @@
 }
 
 .typeset-docs {
-  --typeset-font-body: var(--font-geist-sans), sans-serif;
-  --typeset-font-heading: var(--font-geist-sans), sans-serif;
-  --typeset-font-mono: var(--font-geist-mono), monospace;
-  --typeset-size: 17px;
-  --typeset-leading: 1.7;
-  --typeset-flow: 1.4em;
+  --typeset-font-body: var(--font-faculty-glyphic), sans-serif;
+  --typeset-font-heading: var(--font-faculty-glyphic), sans-serif;
+  --typeset-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --typeset-size: 17.5px;
+  --typeset-leading: 1.75;
+  --typeset-flow: 1.5em;
 }
 
 @keyframes reveal {
@@ -73,9 +75,12 @@ body {
   margin: 0 auto;
   padding: 4rem 2rem;
   scroll-behavior: smooth;
-  font-family: var(--font-geist-sans), sans-serif;
-  letter-spacing: -0.012em;
+  font-family: var(--font-faculty-glyphic), sans-serif;
+  letter-spacing: 0.005em;
+  line-height: 1.72;
   text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -83,8 +88,8 @@ body {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans), sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  --font-sans: var(--font-faculty-glyphic), sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -209,7 +214,7 @@ pre::-webkit-scrollbar-thumb {
   overflow-x: auto;
   border-radius: 0.5rem;
   background: var(--code-bg, #f5f5f4);
-  font-family: var(--font-geist-mono, ui-monospace, monospace);
+  font-family: var(--font-mono, ui-monospace, monospace);
   font-size: 0.875rem;
   line-height: 1.7;
 }

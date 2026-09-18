@@ -1,9 +1,15 @@
 import './globals.css';
-import { GeistMono } from 'geist/font/mono';
-import { GeistSans } from 'geist/font/sans';
+import { Faculty_Glyphic } from 'next/font/google';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
+
+const facultyGlyphic = Faculty_Glyphic({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-faculty-glyphic',
+  display: 'swap',
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -59,7 +65,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={facultyGlyphic.variable}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">

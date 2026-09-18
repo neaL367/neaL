@@ -71,7 +71,7 @@ export function PostItem({
 }
 
 export function PostTitle({
-  className = 'text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-zinc-50 font-medium tracking-tight transition-colors leading-snug',
+  className = 'text-zinc-800 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-zinc-50 font-medium tracking-normal transition-colors leading-snug',
 }: {
   className?: string;
 }) {

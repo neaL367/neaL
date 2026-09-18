@@ -38,7 +38,7 @@ export async function PostArticle({ slug }: { slug: string }) {
       />
       <div className="mb-10">
         <h1
-          className="text-3xl leading-snug font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
+          className="text-3xl leading-snug font-medium tracking-normal text-zinc-900 dark:text-zinc-100"
           style={
             {
               viewTransitionName: `post-title-${slug}`,

@@ -7,7 +7,7 @@ A Next.js 16 App Router personal portfolio and blog.
 - **Framework**: [Next.js](https://nextjs.org/) 16 (App Router)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4
 - **Content**: MDX via `@next/mdx`
-- **Typography & Font**: Geist (`geist/font/sans`, `geist/font/mono`)
+- **Typography & Font**: Faculty Glyphic (`next/font/google`)
 - **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/)
 
 ## Getting Started

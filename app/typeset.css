@@ -28,9 +28,11 @@
     font-size: var(--typeset-size);
     line-height: var(--typeset-leading);
     color: var(--color-foreground, currentColor);
-    letter-spacing: -0.011em;
+    letter-spacing: 0.005em;
     overflow-wrap: break-word;
     text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+    font-synthesis: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
@@ -52,57 +54,57 @@
     &:where(h1, h2, h3, h4, h5, h6) {
       color: var(--color-foreground, currentColor);
       font-family: var(--typeset-font-heading);
-      font-weight: 600;
+      font-weight: 500;
       margin-block-end: 0;
       text-wrap: balance;
       scroll-margin-block-start: 2rem;
     }
 
     &:where(h1) {
-      font-size: 1.625em;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-      font-weight: 650;
+      font-size: 1.75em;
+      line-height: 1.3;
+      letter-spacing: 0;
+      font-weight: 500;
       margin-block-start: calc(var(--typeset-flow) * 1.8);
     }
 
     &:where(h2) {
-      font-size: 1.3em;
-      line-height: 1.3;
-      letter-spacing: -0.024em;
-      font-weight: 600;
+      font-size: 1.35em;
+      line-height: 1.35;
+      letter-spacing: 0.005em;
+      font-weight: 500;
       margin-block-start: calc(var(--typeset-flow) * 1.6);
     }
 
     &:where(h3) {
-      font-size: 1.1em;
-      line-height: 1.35;
-      letter-spacing: -0.018em;
-      font-weight: 600;
+      font-size: 1.15em;
+      line-height: 1.4;
+      letter-spacing: 0.008em;
+      font-weight: 500;
       margin-block-start: calc(var(--typeset-flow) * 1.3);
     }
 
     &:where(h4) {
-      font-size: 0.95em;
-      line-height: 1.4;
-      letter-spacing: -0.012em;
-      font-weight: 600;
+      font-size: 1em;
+      line-height: 1.42;
+      letter-spacing: 0.01em;
+      font-weight: 500;
       margin-block-start: var(--typeset-flow);
     }
 
     &:where(h5) {
-      font-size: 0.85em;
+      font-size: 0.875em;
       line-height: 1.45;
-      font-weight: 550;
-      letter-spacing: -0.005em;
+      font-weight: 500;
+      letter-spacing: 0.04em;
       color: var(--typeset-muted);
       margin-block-start: var(--typeset-flow);
     }
 
     &:where(h6) {
-      font-size: 0.75em;
+      font-size: 0.78em;
       line-height: 1.45;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--typeset-muted);
@@ -358,7 +360,7 @@
       padding: 0.125em 0.35em;
       box-decoration-break: clone;
       -webkit-box-decoration-break: clone;
-      letter-spacing: -0.01em;
+      letter-spacing: 0;
     }
 
     /* ─── Preformatted Code Blocks ───────────────────────────────────── */

@@ -165,12 +165,12 @@ function Heading({
   const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
   const sizeClasses: Record<number, string> = {
-    1: 'mb-6 scroll-m-20 text-3xl font-semibold tracking-tighter text-zinc-900 dark:text-zinc-100',
-    2: 'mt-12 mb-4 scroll-m-20 text-2xl font-semibold tracking-tighter text-zinc-900 dark:text-zinc-100',
-    3: 'mt-8 mb-3 scroll-m-20 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
-    4: 'mt-6 mb-2 scroll-m-20 text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
-    5: 'mt-4 mb-2 scroll-m-20 text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
-    6: 'mt-4 mb-2 scroll-m-20 text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100',
+    1: 'mb-6 scroll-m-20 text-3xl font-medium tracking-normal text-zinc-900 dark:text-zinc-100',
+    2: 'mt-12 mb-4 scroll-m-20 text-2xl font-medium tracking-normal text-zinc-900 dark:text-zinc-100',
+    3: 'mt-8 mb-3 scroll-m-20 text-xl font-medium tracking-normal text-zinc-900 dark:text-zinc-100',
+    4: 'mt-6 mb-2 scroll-m-20 text-lg font-medium tracking-normal text-zinc-900 dark:text-zinc-100',
+    5: 'mt-4 mb-2 scroll-m-20 text-base font-medium tracking-normal text-zinc-900 dark:text-zinc-100',
+    6: 'mt-4 mb-2 scroll-m-20 text-base font-medium tracking-wide uppercase text-zinc-900 dark:text-zinc-100',
   };
 
   return (

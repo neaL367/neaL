@@ -54,7 +54,7 @@ export default function WritingPage() {
         </div>
         <h1
           data-testid="writing-shell-marker"
-          className="font-semibold text-2xl tracking-tight mb-3 text-zinc-900 dark:text-zinc-100"
+          className="font-medium text-2xl tracking-normal mb-3 text-zinc-900 dark:text-zinc-100"
           style={
             {
               viewTransitionName: 'writing-title',
