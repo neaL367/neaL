@@ -1,15 +1,8 @@
 import './globals.css';
-import { Faculty_Glyphic } from 'next/font/google';
+import { GeistSerif } from 'geist/font/serif';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
-
-const facultyGlyphic = Faculty_Glyphic({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-faculty-glyphic',
-  display: 'swap',
-});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -65,7 +58,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
   return (
     <html
       lang="en"
-      className={facultyGlyphic.variable}
+      className={GeistSerif.variable}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">

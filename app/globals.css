@@ -6,7 +6,7 @@
   --background: #ffffff;
   --foreground: #171717;
 
-  --font-faculty-glyphic: 'Faculty Glyphic', sans-serif;
+  --font-geist-serif: 'Geist Serif', 'Times New Roman', Times, serif;
 
   --selection-bg: #e4e4e7;
   --selection-fg: #18181b;
@@ -17,8 +17,8 @@
 }
 
 .typeset-docs {
-  --typeset-font-body: var(--font-faculty-glyphic), sans-serif;
-  --typeset-font-heading: var(--font-faculty-glyphic), sans-serif;
+  --typeset-font-body: var(--font-geist-serif), serif;
+  --typeset-font-heading: var(--font-geist-serif), serif;
   --typeset-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --typeset-size: 17.5px;
   --typeset-leading: 1.75;
@@ -75,7 +75,7 @@ body {
   margin: 0 auto;
   padding: 4rem 2rem;
   scroll-behavior: smooth;
-  font-family: var(--font-faculty-glyphic), sans-serif;
+  font-family: var(--font-geist-serif), serif;
   letter-spacing: 0.005em;
   line-height: 1.72;
   text-rendering: optimizeLegibility;
@@ -88,7 +88,7 @@ body {
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-faculty-glyphic), sans-serif;
+  --font-sans: var(--font-geist-serif), serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
