@@ -1,76 +1,72 @@
 export const metadata = {
   title: 'My Stack',
   publishedAt: '2024-04-07',
-  summary: 'A look at the tools, frameworks, and infrastructure I use every day to build software.',
+  summary: 'The tools and services I use to build and ship web applications.',
   author: 'Neal367',
 };
 
-Here is an overview of the tools, frameworks, and services I rely on to build web applications. Software choices evolve over time, but my criteria stay consistent: developer velocity, reliability, performance, and simplicity.
+This is what I use to build web apps. Tools change; the criteria do not: fast development, reliability, performance, and simplicity.
 
 ## Frameworks
 
 ### [Next.js](https://nextjs.org/)
 
-Next.js is my primary tool for building full-stack web applications. React Server Components changed how we architect web apps by reducing client-side JavaScript, simplifying data fetching, and giving us instant access to backend resources without writing boilerplate API layers. Combined with TypeScript, it provides the best balance of speed and reliability.
-
-If I am building a production web app today, Next.js is almost always my first choice.
+My default for full-stack React apps. Server Components cut client-side JavaScript, simplify data fetching, and let me use backend resources without an extra API layer.
 
 ### [Angular](https://angular.dev/)
 
-When a project requires strict architectural discipline across large distributed teams, Angular is a strong contender. Its opinionated structure, built-in dependency injection, and comprehensive tooling provide consistency right out of the box.
+A good fit when a large, distributed team needs strict structure. The opinionated layout, built-in dependency injection, and full tooling keep everyone consistent from day one.
 
 ### [Astro](https://astro.build/)
 
-For content-driven websites, marketing pages, and documentation where performance is paramount, Astro excels. Its zero-JavaScript by default approach and built-in content collections make managing Markdown and MDX seamless.
+For content sites, docs, and marketing pages where speed matters most. Zero JavaScript by default, with content collections that make Markdown and MDX painless.
 
-## Backend & APIs
+## Backend and APIs
 
 ### [Node.js & Express](https://expressjs.com/)
 
-When I need a lightweight, flexible REST API or microservice in JavaScript, Express remains a dependable choice. It stays out of your way and lets you compose middleware with minimal friction.
+My choice for small, flexible REST APIs in JavaScript. It stays out of the way and keeps middleware simple.
 
 ### [.NET & ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
 
-For mission-critical backend services requiring enterprise-grade throughput and strict typing, ASP.NET Core with C# is exceptional. The runtime performance, native dependency injection, and asynchronous concurrency model handle high-traffic workloads effortlessly.
+For services that need enterprise throughput and strict typing. Strong runtime performance, native dependency injection, and async handling that holds up under load.
 
-## Styling & Design
+## Styling and Design
 
 ### [Tailwind CSS](https://tailwindcss.com/)
 
-Tailwind fundamentally changed how I approach UI design. Co-locating styles directly with component markup eliminates context-switching between separate files. Thanks to the compiler, the resulting CSS bundle remains tiny and predictable.
+Styles live next to the markup, so I stop switching files. The compiler keeps the final CSS bundle small and predictable.
 
 ### [shadcn/ui](https://ui.shadcn.com/)
 
-shadcn/ui provides accessible, beautifully crafted component primitives built on Radix UI. Because the code lives directly inside your repository rather than in an opaque `node_modules` package, you maintain full control over styling and behavior.
+Accessible components built on Radix UI. The code sits in your repo instead of `node_modules`, so you own the styling and behavior.
 
 ### [Motion](https://motion.dev/)
 
-Subtle micro-interactions and smooth layout transitions make digital interfaces feel responsive and tactile. Motion provides an intuitive declarative API to build fluid animations without degrading runtime performance.
+Small interactions and smooth layout changes make an interface feel alive. The declarative API stays fast.
 
-## Artificial Intelligence
+## AI
 
-### Hermes & GLM 5.3 Flash
+### Hermes and GLM 5.3 Flash
 
-AI has become an indispensable part of my daily developer workflow. Rather than relying on oversized, sluggish models, I use Hermes paired with GLM 5.3 Flash for day-to-day coding, debugging, and ideation.
+Part of my daily workflow for coding, debugging, and ideas. Fast and low-latency enough to work as a pair programmer — good at breaking down functions, drafting types, and answering design questions.
 
-The combination delivers incredible inference speed, sharp reasoning, and low latency without sacrificing accuracy. It acts as an instant pair programmer—excelling at breaking down complex functions, drafting types, and answering architecture questions in real time.
-
-## Hosting & Infrastructure
+## Hosting
 
 ### Vercel
 
-Vercel is my default deployment target for Next.js applications. Automatic preview environments, edge routing, and zero-configuration CI/CD pipelines make deploying frictionless.
+Where my Next.js apps go by default. Preview deployments, edge routing, and CI/CD with almost no setup.
 
 ### AWS
 
-When projects require fine-grained cloud architecture, I use AWS:
+When a project needs finer control:
 
-- **CloudFront:** Low-latency content delivery and edge caching worldwide.
-- **S3:** Scalable, highly durable object storage for user uploads and media assets.
-- **EC2:** Dedicated virtual servers when custom daemon processes or specific compute workloads are necessary.
+- **CloudFront** — low-latency delivery and edge caching worldwide.
+- **S3** — durable object storage for uploads and media.
+- **EC2** — dedicated servers for custom daemons or specific workloads.
 
-## Community & Mentorship
+## Community
 
-Beyond writing code, I regularly organize IT workshops and volunteer for programs that help beginners and underprivileged students learn technology. Teaching concepts to others forces you to understand them deeply and helps grow the community.
+Outside of code, I run IT workshops and volunteer with programs that teach beginners and underprivileged students. Explaining a concept is the fastest way to learn it properly.
 
-Great software comes from choosing tools that solve real problems, stay maintainable, and let you focus on what matters most: delivering value.
+Pick tools that solve the real problem, stay maintainable, and let you focus on shipping value.
