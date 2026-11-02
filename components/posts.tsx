@@ -51,7 +51,7 @@ export function PostList({
 export function PostItem({
   post,
   children,
-  className = 'w-full flex items-baseline justify-between py-1 group [content-visibility:auto]',
+  className = 'w-full flex items-baseline justify-between py-1 group',
 }: {
   post: PostDisplayData;
   children: React.ReactNode;

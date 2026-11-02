@@ -78,11 +78,12 @@ export type PostListItem = {
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
 
-export async function getPostListItems(): Promise<PostListItem[]> {
-  'use cache';
-  cacheLife('days');
-  cacheTag('posts');
-
+/**
+ * Rendered synchronously so the list lands in the same commit as the page.
+ * That keeps the shared `post-title-*` names available to the navigation's
+ * view transition snapshot.
+ */
+export function getPostListItems(): PostListItem[] {
   const posts = getPostEntries().map(({ slug, metadata }) => ({
     slug,
     title: metadata.title,

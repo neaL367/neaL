@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Link } from '@/components/link';
 import { PostList, PostItem, PostTitle, PostDate } from '@/components/posts';
 import { baseUrl } from '@/app/sitemap';
@@ -69,15 +69,13 @@ export default function WritingPage() {
         </p>
       </div>
 
-      <Suspense fallback={<p className="text-xs text-zinc-400">Loading posts...</p>}>
-        <PostCollection />
-      </Suspense>
+      <PostCollection />
     </section>
   );
 }
 
-async function PostCollection() {
-  const posts = await getPostListItems();
+function PostCollection() {
+  const posts = getPostListItems();
 
   return (
     <PostList>
