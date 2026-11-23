@@ -18,11 +18,9 @@ export async function GET() {
       const title = escapeXml(post.metadata.title);
       const link = `${baseUrl}/writing/${post.slug}`;
       const description = escapeXml(post.metadata.summary ?? '');
-      const pubDate = new Date(
-        post.metadata.publishedAt.includes('T')
-          ? post.metadata.publishedAt
-          : `${post.metadata.publishedAt}T00:00:00`,
-      ).toUTCString();
+      // Treated as UTC so the feed does not shift by the build machine's
+      // timezone offset.
+      const pubDate = new Date(`${post.metadata.publishedAt}Z`).toUTCString();
 
       return `<item>
   <title>${title}</title>

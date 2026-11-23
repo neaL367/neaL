@@ -12,33 +12,46 @@ export type MDXModule = {
 };
 
 // ─── Turbopack Glob Imports ──────────────────────────────────────────────────
+//
+// `import.meta.glob` is Turbopack's Vite-compatible module collector. The
+// `eager` overload returns modules directly and the lazy overload returns
+// thunks, and both are generic over the module shape — so the calls below are
+// typed by `MDXModule` rather than cast with `as`.
 
-const eagerModules = import.meta.glob('./posts/*.mdx', {
-  eager: true,
-}) as Record<string, MDXModule>;
+/** Frontmatter and body of every post, imported at build time. */
+const eagerModules = import.meta.glob<MDXModule>('./posts/*.mdx', { eager: true });
 
-const lazyLoaders = import.meta.glob('./posts/*.mdx') as Record<
-  string,
-  () => Promise<MDXModule>
->;
+/** The same set as lazy thunks, so a post body is only loaded when rendered. */
+const lazyLoaders = import.meta.glob<MDXModule>('./posts/*.mdx');
+
+/**
+ * Read a date-only string as UTC.
+ *
+ * A bare `2026-04-24` fed to `new Date` is parsed as UTC midnight, but
+ * `2026-04-24T00:00:00` (no offset) is parsed as *local* midnight. Appending
+ * the offset explicitly keeps the value independent of the build machine's
+ * timezone, which is what the RSS feed and sitemap need.
+ */
+function parseDate(value: string): Date {
+  return new Date(/[zZ]|[+-]\d{2}:?\d{2}$/.test(value) ? value : `${value}Z`);
+}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatDate(date?: string): string {
   if (!date) return '';
-  const targetDate = new Date(date.includes('T') ? date : `${date}T00:00:00`);
-  return targetDate.toLocaleDateString('en-US', {
+  return parseDate(date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'UTC',
   });
 }
 
 function parseTime(publishedAt?: string): number {
   if (!publishedAt) return 0;
-  const d = new Date(publishedAt.includes('T') ? publishedAt : `${publishedAt}T00:00:00`);
-  const t = d.getTime();
-  return Number.isFinite(t) ? t : 0;
+  const time = parseDate(publishedAt).getTime();
+  return Number.isFinite(time) ? time : 0;
 }
 
 function extractSlug(filePath: string): string {
