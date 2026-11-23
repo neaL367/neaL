@@ -482,3 +482,20 @@ pre::-webkit-scrollbar-thumb {
   }
 }
 
+/* ===== Isometric cube ===== */
+.iso-cube-figure {
+  display: flex;
+  justify-content: center;
+  /* Pushed down toward the foot of the page: the cube sits low rather than
+     trailing the last paragraph. */
+  margin: clamp(4rem, 22vh, 12rem) 0 0;
+}
+
+/* The canvas paints its own transparent background; `color` is what the
+   renderer samples to keep the cube grayscale and theme-aware. */
+.iso-cube-canvas {
+  display: block;
+  width: 200px;
+  height: 240px;
+  color: var(--foreground);
+}
