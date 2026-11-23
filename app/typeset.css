@@ -232,24 +232,30 @@
       list-style-type: upper-roman;
     }
 
+    /* Lists carry no extra lead-in of their own. The preceding block already
+       ends with a paragraph's worth of space, so adding --typeset-flow on top
+       made every list stand off from the text more than a paragraph would. */
     &:where(ul, ol) {
-      margin-block-start: var(--typeset-flow);
+      margin-block-start: 0;
       margin-block-end: 0;
       padding-inline-start: 1.35em;
     }
 
+    /* No leading gap on items: the list's own paragraph rhythm plus
+       line-height already separates them, and a per-item top margin stacked
+       on top of it read as a blank line before every entry. */
     &:where(li) {
-      margin-block-start: 0.35em;
+      margin-block-start: 0;
       padding-inline-start: 0.2em;
       line-height: var(--typeset-leading);
     }
 
     &:where(li > p) {
-      margin-block-start: 0.35em;
+      margin-block-start: 0;
     }
 
     &:where(li > ul, li > ol) {
-      margin-block-start: 0.25em;
+      margin-block-start: 0.15em;
     }
 
     &:where(ul > li)::marker {

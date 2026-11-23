@@ -277,15 +277,23 @@ const components: MDXComponents = {
       <>{children}</>
     );
   },
+  // Lists: typeset.css already supplies the indent (`padding-inline-start`)
+  // and the item rhythm. Adding Tailwind margins here indented everything a
+  // second time, and `list-inside` on the item fought the list's own
+  // `list-outside`, pushing the marker inside the text box — which is where
+  // the stray gap before each bullet came from. Position is inherited from the
+  // list, so the item only carries colour.
   ul: ({ children }) => (
-    <ul className="mb-4 ml-4 list-outside list-disc text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">
+    <ul className="mb-4 list-outside list-disc text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">
       {children}
     </ul>
   ),
   ol: ({ children }) => (
-    <ol className="mb-4 ml-6 list-decimal text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">{children}</ol>
+    <ol className="mb-4 list-outside list-decimal text-[1rem] text-zinc-800 dark:text-zinc-300 leading-[1.75]">
+      {children}
+    </ol>
   ),
-  li: ({ children }) => <li className="mb-1 list-inside">{children}</li>,
+  li: ({ children }) => <li>{children}</li>,
   blockquote: ({ children }) => (
     <blockquote className="mb-4 border-l-2 border-zinc-200 dark:border-zinc-700 pl-4 text-[1rem] text-zinc-500 dark:text-zinc-400 italic">
       {children}
