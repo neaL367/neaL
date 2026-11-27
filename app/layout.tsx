@@ -3,6 +3,7 @@ import { GeistSerif } from 'geist/font/serif';
 import { baseUrl } from '@/app/sitemap';
 import type { Metadata, Viewport } from 'next';
 import LenisProvider from '@/components/lenis-provider';
+import { FaviconCube } from '@/components/favicon-cube';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -62,6 +63,7 @@ export default function RootLayout(props: LayoutProps<'/'>) {
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
+        <FaviconCube />
         <LenisProvider>
           <main className="w-full">{props.children}</main>
         </LenisProvider>

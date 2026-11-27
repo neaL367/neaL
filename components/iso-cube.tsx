@@ -1,97 +1,20 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { HALF_SPAN, paintIsoCube, SPIN_RAD_PER_SEC } from '@/lib/iso-cube';
 
 /**
- * An isometric cube, turned in three dimensions and drawn to a transparent
- * canvas behind the page text.
+ * The isometric cube on the page: a canvas painted from the shared renderer in
+ * `lib/iso-cube`, spinning slowly behind the page text.
  *
- * There is no 3D library here on purpose: a cube is eight vertices, six faces
- * and one projection, so hand-rolling it costs less code than pulling in
- * three.js and keeps this page's JavaScript tiny.
- *
- * The rig is a true isometric camera — 45 degree yaw, 35.264 degree pitch
- * (atan(1 / sqrt(2))) — the angle that makes the three visible faces share
- * their foreshortening evenly. Projection is orthographic, so parallel edges
- * stay parallel and the silhouette never distorts as the cube spins.
- *
- * Everything is painted in the theme's foreground luminance, so the cube is
- * pure grayscale and flips correctly between the light and dark themes.
+ * This component owns only the browser concerns — sizing the canvas, reading
+ * the theme colour, and deciding when to animate. The geometry and shading live
+ * in the shared module so the favicon can draw the identical cube.
  */
 
 const BOX_WIDTH = 200;
 const BOX_HEIGHT = 240;
-const HALF_SPAN = 1.6;
-const SCALE = BOX_WIDTH / 2 / HALF_SPAN;
-const SPIN_RAD_PER_SEC = 0.42;
-const PITCH = Math.atan(1 / Math.SQRT2);
-const YAW = Math.PI / 4;
 const RESTING_SPIN = Math.PI / 5;
-
-type Vec3 = [number, number, number];
-
-function normalize([x, y, z]: Vec3): Vec3 {
-  const length = Math.hypot(x, y, z) || 1;
-  return [x / length, y / length, z / length];
-}
-
-/** Where the light sits, in camera space. Keeps the three faces distinct. */
-const LIGHT = normalize([-0.45, 0.7, 0.55]);
-
-const VERTICES: Vec3[] = [
-  [-1, -1, -1],
-  [1, -1, -1],
-  [1, 1, -1],
-  [-1, 1, -1],
-  [-1, -1, 1],
-  [1, -1, 1],
-  [1, 1, 1],
-  [-1, 1, 1],
-];
-
-/** Faces paired with their outward normal, so culling never guesses winding. */
-const FACES: { normal: Vec3; corners: [number, number, number, number] }[] = [
-  { normal: [0, 0, 1], corners: [4, 5, 6, 7] },
-  { normal: [0, 0, -1], corners: [1, 0, 3, 2] },
-  { normal: [1, 0, 0], corners: [5, 1, 2, 6] },
-  { normal: [-1, 0, 0], corners: [0, 4, 7, 3] },
-  { normal: [0, 1, 0], corners: [7, 6, 2, 3] },
-  { normal: [0, -1, 0], corners: [0, 1, 5, 4] },
-];
-
-/** Every one of the twelve edges, as vertex index pairs. */
-const EDGES: [number, number][] = [
-  [0, 1],
-  [1, 2],
-  [2, 3],
-  [3, 0],
-  [4, 5],
-  [5, 6],
-  [6, 7],
-  [7, 4],
-  [0, 4],
-  [1, 5],
-  [2, 6],
-  [3, 7],
-];
-
-/** Model space to camera space: spin about Y, then the isometric rig. */
-function toCamera([x, y, z]: Vec3, spin: number): Vec3 {
-  const spinCos = Math.cos(spin);
-  const spinSin = Math.sin(spin);
-  const x1 = x * spinCos + z * spinSin;
-  const z1 = z * spinCos - x * spinSin;
-
-  const yawCos = Math.cos(YAW);
-  const yawSin = Math.sin(YAW);
-  const x2 = x1 * yawCos + z1 * yawSin;
-  const z2 = z1 * yawCos - x1 * yawSin;
-
-  const pitchCos = Math.cos(PITCH);
-  const pitchSin = Math.sin(PITCH);
-
-  return [x2, y * pitchCos - z2 * pitchSin, y * pitchSin + z2 * pitchCos];
-}
 
 /** Foreground colour reduced to a single luminance value, so output is grayscale. */
 function readGray(element: HTMLElement): number {
@@ -100,199 +23,6 @@ function readGray(element: HTMLElement): number {
 
   const [r, g, b] = parts.map(Number);
   return Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b);
-}
-
-/**
- * Toon ramp: five flat tones instead of a continuous gradient.
- *
- * A Lambert term is bucketed by threshold, and each bucket gets a fixed alpha.
- * Nothing blends, so every face reads as a single flat step — cel shading
- * rather than smooth shading.
- *
- * The thresholds are spread evenly across the range this rig can actually
- * produce. Sweeping the cube through a full revolution, a visible face lands
- * anywhere between 0 and 0.891, so five equal bands sit at 0.178 intervals.
- * Even spacing keeps the tonal response linear in light, which is what stops
- * the mid and dark ends from bunching together.
- */
-const TONE_STEPS = [
-  { max: 0.178, alpha: 0.03 }, // 1 - darkest
-  { max: 0.356, alpha: 0.095 }, // 2
-  { max: 0.534, alpha: 0.16 }, // 3
-  { max: 0.712, alpha: 0.23 }, // 4
-  { max: Infinity, alpha: 0.3 }, // 5 - brightest
-] as const;
-
-function toneFor(lambert: number): number {
-  return TONE_STEPS.find((step) => lambert < step.max)?.alpha ?? 0.03;
-}
-
-/** Camera space to canvas space. Y is flipped because canvas Y grows downward. */
-function toScreen([x, y]: Vec3): [number, number] {
-  return [BOX_WIDTH / 2 + x * SCALE, BOX_HEIGHT / 2 - y * SCALE];
-}
-
-function edgeKey(a: number, b: number): string {
-  return a < b ? `${a}:${b}` : `${b}:${a}`;
-}
-
-/**
- * Strength of the finished outline once it is composited over the faces.
- * The edge ink is drawn at full opacity offscreen and multiplied by this once,
- * so the number here is the outline's true opacity — no double application.
- */
-const OUTLINE_ALPHA = 0.9;
-
-/** Every stroke goes into the buffer fully opaque — see the note in drawFrame.
- *  Hierarchy is carried by line weight alone, never by alpha, because alpha is
- *  exactly what compounds at a shared vertex. */
-const SEAM_WIDTH = 1;
-const CONTOUR_WIDTH = 1.5;
-
-/**
- * Scratch layer for the outline.
- *
- * Stroking the contour and the seams directly onto the visible canvas lets
- * their round caps overlap at each vertex, so the alpha stacks and the corners
- * come out darker than the edges running into them. Drawing the ink into this
- * buffer at full strength and compositing it once means every edge and every
- * corner resolves to exactly one colour.
- */
-let outlineCanvas: HTMLCanvasElement | null = null;
-let outlineRatio = 0;
-
-function getOutlineContext(ratio: number): CanvasRenderingContext2D | null {
-  if (typeof document === 'undefined') return null;
-
-  if (!outlineCanvas) outlineCanvas = document.createElement('canvas');
-
-  if (outlineRatio !== ratio) {
-    outlineRatio = ratio;
-    outlineCanvas.width = Math.round(BOX_WIDTH * ratio);
-    outlineCanvas.height = Math.round(BOX_HEIGHT * ratio);
-  }
-
-  const context = outlineCanvas.getContext('2d');
-  if (!context) return null;
-
-  context.setTransform(ratio, 0, 0, ratio, 0, 0);
-  return context;
-}
-
-function drawFrame(
-  context: CanvasRenderingContext2D,
-  spin: number,
-  gray: number,
-  ratio: number,
-): void {
-  context.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
-
-  const projected = VERTICES.map((vertex) => toCamera(vertex, spin));
-
-  const visible = FACES.map((face) => {
-    const corners = face.corners.map((index) => projected[index]);
-    const depth = corners.reduce((sum, [, , z]) => sum + z, 0) / corners.length;
-    return { normal: toCamera(face.normal, spin), indices: face.corners, corners, depth };
-  })
-    .filter((face) => face.normal[2] > 0)
-    .sort((a, b) => a.depth - b.depth);
-
-  // --- Faces: fill only, flat. Stroking each face separately would double-draw
-  // the seams between them, which reads as a blurry double line.
-  for (const face of visible) {
-    const lambert = Math.max(
-      0,
-      face.normal[0] * LIGHT[0] + face.normal[1] * LIGHT[1] + face.normal[2] * LIGHT[2],
-    );
-
-    context.beginPath();
-    face.corners.forEach(([x, y], index) => {
-      const [screenX, screenY] = toScreen([x, y, 0]);
-      if (index === 0) context.moveTo(screenX, screenY);
-      else context.lineTo(screenX, screenY);
-    });
-    context.closePath();
-
-    const alpha = toneFor(lambert);
-    context.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${alpha})`;
-    context.fill();
-  }
-
-  // --- Outline: work out which edges are contour and which are internal.
-  // An edge shared by one visible face is on the silhouette; an edge shared by
-  // two visible faces is one of the three seams meeting at the near corner.
-  const visibleEdgeUse = new Map<string, number>();
-  for (const face of visible) {
-    for (let i = 0; i < 4; i++) {
-      const key = edgeKey(face.indices[i], face.indices[(i + 1) % 4]);
-      visibleEdgeUse.set(key, (visibleEdgeUse.get(key) ?? 0) + 1);
-    }
-  }
-
-  const silhouette: string[] = [];
-  const seams: string[] = [];
-  for (const [a, b] of EDGES) {
-    const key = edgeKey(a, b);
-    const uses = visibleEdgeUse.get(key) ?? 0;
-    if (uses === 1) silhouette.push(key);
-    else if (uses === 2) seams.push(key);
-  }
-
-  // --- Outline, built in an isolated buffer ---------------------------------
-  //
-  // Two things used to darken the corners:
-  //
-  //   1. Round caps at a shared vertex overlap, and overlapping alpha
-  //      compounds — two 0.9 strokes crossing read as ~0.99.
-  //   2. Seams were stroked at 0.35, so the three of them converging on the
-  //      near corner stacked to ~0.58 while the edges leading in stayed at
-  //      0.35.
-  //
-  // Both are the same bug: alpha accumulating where lines meet. So the ink is
-  // drawn into this buffer fully opaque — overlaps then simply resolve to the
-  // same value instead of summing — and the whole layer is composited onto the
-  // canvas exactly once. Corners and edges therefore end up identical, and the
-  // only variation left is line weight.
-  const buffer = getOutlineContext(ratio);
-
-  if (buffer) {
-    buffer.clearRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
-
-    const ink = `rgb(${gray}, ${gray}, ${gray})`;
-
-    const stroke = (keys: string[], width: number) => {
-      buffer.beginPath();
-      for (const key of keys) {
-        const [a, b] = key.split(':').map(Number);
-        const [ax, ay] = toScreen(projected[a]);
-        const [bx, by] = toScreen(projected[b]);
-        buffer.moveTo(ax, ay);
-        buffer.lineTo(bx, by);
-      }
-      buffer.lineWidth = width;
-      buffer.lineCap = 'round';
-      buffer.lineJoin = 'round';
-      buffer.strokeStyle = ink;
-      buffer.stroke();
-    };
-
-    stroke(seams, SEAM_WIDTH);
-    stroke(silhouette, CONTOUR_WIDTH);
-
-    context.globalAlpha = OUTLINE_ALPHA;
-    context.drawImage(
-      buffer.canvas,
-      0,
-      0,
-      buffer.canvas.width,
-      buffer.canvas.height,
-      0,
-      0,
-      BOX_WIDTH,
-      BOX_HEIGHT,
-    );
-    context.globalAlpha = 1;
-  }
 }
 
 export function IsoCube() {
@@ -311,10 +41,30 @@ export function IsoCube() {
     canvas.height = Math.round(BOX_HEIGHT * ratio);
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
+    // Scratch layer for the outline, so alpha never compounds at shared corners.
+    const scratchCanvas = document.createElement('canvas');
+    scratchCanvas.width = canvas.width;
+    scratchCanvas.height = canvas.height;
+    const scratchContext = scratchCanvas.getContext('2d');
+    if (scratchContext) scratchContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+    // The cube's original fixed scale: the box's half-width divided by the
+    // model's half-span. Kept exactly as it was, so the page is unchanged by the
+    // move to a shared renderer.
+    const scale = BOX_WIDTH / 2 / HALF_SPAN;
     let gray = readGray(canvas);
     let spin = RESTING_SPIN;
 
-    const render = () => drawFrame(context, spin, gray, ratio);
+    const render = () => {
+      paintIsoCube(context, {
+        spin,
+        width: BOX_WIDTH,
+        height: BOX_HEIGHT,
+        gray,
+        scale,
+        scratch: scratchContext,
+      });
+    };
 
     const darkTheme = window.matchMedia('(prefers-color-scheme: dark)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -338,7 +88,7 @@ export function IsoCube() {
       frame = requestAnimationFrame(paint);
       if (startedAt === 0) startedAt = time;
 
-      spin = ((time - startedAt) / 1000) * SPIN_RAD_PER_SEC;
+      spin = RESTING_SPIN + ((time - startedAt) / 1000) * SPIN_RAD_PER_SEC;
       render();
     };
 
