@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   title: { default: 'Neal367', template: '%s | Neal367' },
   description: 'Lazy coding | Gamer | PixelArt | Rockstar Games fan',
   icons: {
-    icon: '/avatar.png',
-    apple: [{ url: '/avatar.png', sizes: '120x120' }, { url: '/avatar.png' }],
+    icon: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     title: 'Neal367',
