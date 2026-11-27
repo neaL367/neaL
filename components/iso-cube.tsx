@@ -103,95 +103,28 @@ function readGray(element: HTMLElement): number {
 }
 
 /**
- * Toon ramp: five steps, each rendered as a dithered screen rather than a flat
- * wash.
+ * Toon ramp: five flat tones instead of a continuous gradient.
  *
- * `coverage` is the fraction of cells in the dither tile that receive ink. A
- * solid alpha fill smooths into whatever is behind it; a stipple keeps the
- * grain visible, so the faces read like halftone print instead of grey paint.
+ * A Lambert term is bucketed by threshold, and each bucket gets a fixed alpha.
+ * Nothing blends, so every face reads as a single flat step — cel shading
+ * rather than smooth shading.
  *
  * The thresholds are spread evenly across the range this rig can actually
  * produce. Sweeping the cube through a full revolution, a visible face lands
  * anywhere between 0 and 0.891, so five equal bands sit at 0.178 intervals.
+ * Even spacing keeps the tonal response linear in light, which is what stops
+ * the mid and dark ends from bunching together.
  */
 const TONE_STEPS = [
-  { max: 0.178, coverage: 0.04 }, // 1 - darkest
-  { max: 0.356, coverage: 0.11 }, // 2
-  { max: 0.534, coverage: 0.2 }, // 3
-  { max: 0.712, coverage: 0.32 }, // 4
-  { max: Infinity, coverage: 0.48 }, // 5 - brightest
+  { max: 0.178, alpha: 0.03 }, // 1 - darkest
+  { max: 0.356, alpha: 0.095 }, // 2
+  { max: 0.534, alpha: 0.16 }, // 3
+  { max: 0.712, alpha: 0.23 }, // 4
+  { max: Infinity, alpha: 0.3 }, // 5 - brightest
 ] as const;
 
-function coverageFor(lambert: number): number {
-  return TONE_STEPS.find((step) => lambert < step.max)?.coverage ?? 0.05;
-}
-
-/**
- * Ordered dither matrix (Bayer 8x8).
- *
- * Values are the order in which cells switch on as coverage rises, so any
- * coverage produces an even, evenly-spread dot pattern that stays stable as
- * the cube turns. This is what stops the midtones from banding the way two
- * flat alpha fills next to each other do.
- */
-const BAYER_8 = [
-  0, 32, 8, 40, 2, 34, 10, 42,
-  48, 16, 56, 24, 50, 18, 58, 26,
-  12, 44, 4, 36, 14, 46, 6, 38,
-  60, 28, 52, 20, 62, 30, 54, 22,
-  3, 35, 11, 43, 1, 33, 9, 41,
-  51, 19, 59, 27, 49, 17, 57, 25,
-  15, 47, 7, 39, 13, 45, 5, 37,
-  63, 31, 55, 23, 61, 29, 53, 21,
-];
-
-/** Size of one dither cell, in CSS pixels. Two keeps the grain legible at
- *  this canvas size without turning into visible blocks. */
-const DITHER_CELL = 2;
-const DITHER_TILE = 8 * DITHER_CELL;
-
-type DitherTile = { canvas: HTMLCanvasElement; pattern: CanvasPattern | null };
-
-/**
- * Tiles are rebuilt only when the ink colour or pixel ratio changes, so the
- * per-frame cost is one `fillRect` per visible face.
- */
-const ditherCache = new Map<string, DitherTile>();
-
-function getDitherTile(
-  context: CanvasRenderingContext2D,
-  gray: number,
-  coverage: number,
-): DitherTile | null {
-  const key = `${gray}|${coverage}`;
-  const cached = ditherCache.get(key);
-  if (cached) return cached;
-
-  if (typeof document === 'undefined') return null;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = DITHER_TILE;
-  canvas.height = DITHER_TILE;
-
-  const tileContext = canvas.getContext('2d');
-  if (!tileContext) return null;
-
-  tileContext.fillStyle = `rgb(${gray}, ${gray}, ${gray})`;
-
-  const total = BAYER_8.length;
-  for (let cell = 0; cell < total; cell++) {
-    // +0.5 biases each cell to its own centre, so a coverage of exactly n/64
-    // lights n cells instead of rounding unpredictably at the boundary.
-    if (coverage <= (BAYER_8[cell] + 0.5) / total) continue;
-
-    const column = cell % 8;
-    const row = Math.floor(cell / 8);
-    tileContext.fillRect(column * DITHER_CELL, row * DITHER_CELL, DITHER_CELL, DITHER_CELL);
-  }
-
-  const tile = { canvas, pattern: context.createPattern(canvas, 'repeat') };
-  ditherCache.set(key, tile);
-  return tile;
+function toneFor(lambert: number): number {
+  return TONE_STEPS.find((step) => lambert < step.max)?.alpha ?? 0.03;
 }
 
 /** Camera space to canvas space. Y is flipped because canvas Y grows downward. */
@@ -209,10 +142,6 @@ function edgeKey(a: number, b: number): string {
  * so the number here is the outline's true opacity — no double application.
  */
 const OUTLINE_ALPHA = 0.9;
-
-/** Opacity of the dither ink itself. Kept below 1 so the stipple stays a
- *  texture rather than a hard black, matching the outline's weight. */
-const INK_OPACITY = 0.85;
 
 /** Every stroke goes into the buffer fully opaque — see the note in drawFrame.
  *  Hierarchy is carried by line weight alone, never by alpha, because alpha is
@@ -284,16 +213,9 @@ function drawFrame(
     });
     context.closePath();
 
-    // Fill through the stipple tile instead of a flat alpha. The pattern is
-    // anchored to the canvas origin, so the grain stays put while the faces
-    // turn over it rather than crawling with the geometry.
-    const tile = getDitherTile(context, gray, coverageFor(lambert));
-    if (!tile?.pattern) continue;
-
-    context.globalAlpha = INK_OPACITY;
-    context.fillStyle = tile.pattern;
+    const alpha = toneFor(lambert);
+    context.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${alpha})`;
     context.fill();
-    context.globalAlpha = 1;
   }
 
   // --- Outline: work out which edges are contour and which are internal.
