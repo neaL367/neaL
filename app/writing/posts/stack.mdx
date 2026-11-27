@@ -1,61 +1,77 @@
 export const metadata = {
   title: 'My Stack',
   publishedAt: '2024-04-07',
-  summary: 'The tools and services I use to build and ship web applications.',
+  summary: 'The tools and services I use to build and ship web applications and isometric games.',
   author: 'Neal367',
 };
 
-This is what I use to build web apps. Tools change; the criteria do not: fast development, reliability, performance, and simplicity.
+This is what I build with. Tools change; the reasons for picking them don't.
+
+**Fast to develop in, reliable enough to leave running, quick for the user, and simple enough that I still understand it in a year.**
 
 ## Frameworks
 
 ### [Next.js](https://nextjs.org/)
 
-My default for full-stack React apps. Server Components cut client-side JavaScript, simplify data fetching, and let me use backend resources without an extra API layer.
-
-### [Angular](https://angular.dev/)
-
-A good fit when a large, distributed team needs strict structure. The opinionated layout, built-in dependency injection, and full tooling keep everyone consistent from day one.
-
-### [Astro](https://astro.build/)
-
-For content sites, docs, and marketing pages where speed matters most. Zero JavaScript by default, with content collections that make Markdown and MDX painless.
+My default for anything full-stack in React. **Server Components mean I ship less JavaScript**, and I can read from a database without building an API layer just to hand data to a page.
 
 ## Backend and APIs
 
 ### [Node.js & Express](https://expressjs.com/)
 
-My choice for small, flexible REST APIs in JavaScript. It stays out of the way and keeps middleware simple.
+For small REST APIs where I don't want much structure imposed on me. **A route is a function, middleware is a function**, and there is nothing else to learn before writing the first endpoint.
 
 ### [.NET & ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
 
-For services that need enterprise throughput and strict typing. Strong runtime performance, native dependency injection, and async handling that holds up under load.
+When the service has to survive real load, or the domain is complicated enough that **I want the compiler on my side**. Good throughput out of the box, dependency injection built in, and async that doesn't misbehave under pressure.
 
 ## Styling and Design
 
 ### [Tailwind CSS](https://tailwindcss.com/)
 
-Styles live next to the markup, so I stop switching files. The compiler keeps the final CSS bundle small and predictable.
+I stopped keeping a separate stylesheet. Classes sit next to the markup, and the build **only ships the ones I actually used**, which keeps the bundle from growing quietly.
 
 ### [shadcn/ui](https://ui.shadcn.com/)
 
-Accessible components built on Radix UI. The code sits in your repo instead of `node_modules`, so you own the styling and behavior.
-
-### [Motion](https://motion.dev/)
-
-Small interactions and smooth layout changes make an interface feel alive. The declarative API stays fast.
+The components get **copied into the repo instead of installed**. It's Radix underneath, so the keyboard and screen reader behaviour is already handled, and I can change anything without arguing with a library.
 
 ## AI
 
-### Hermes and GLM 5.3 Flash
+### DeepSeek V4.1 Flash
 
-Part of my daily workflow for coding, debugging, and ideas. Fast and low-latency enough to work as a pair programmer — good at breaking down functions, drafting types, and answering design questions.
+I use it while working:
+
+- figuring out why something broke
+- drafting a type that's annoying to write by hand
+- asking whether an approach is a bad idea
+
+**Low latency matters more than raw capability here.** The value is in the fast back and forth, not in a perfect answer.
+
+---
+
+## Game Development
+
+I'm building an **isometric open-world game with a medieval setting**. It's a long-term project — *years rather than months* — and I picked the toolchain with that in mind.
+
+> The camera never moves. Everything has to read from one direction, and whatever I build once has to keep working somewhere I haven't built yet.
+
+That single constraint decides where the effort goes. Models are low-poly because detail disappears at this zoom, and lighting is tuned for **one view instead of a free camera**. An open world makes the rest harder, since I can't hand-place every corner of the map.
+
+### Unity and URP
+
+[Unity 3D](https://unity.com/) is the engine, running the **Universal Render Pipeline**. The forward renderer lets me keep shadow distance short and choose which objects cast at all. That matters at this camera angle, where a thin shadow turns into noise rather than depth. **I light the scene once**, for the view the player actually gets.
+
+### Blender
+
+Where the models come from. Built so **the outline is recognisable** at the size the game draws it; detail inside that outline mostly goes to waste.
+
+Buildings, terrain and props come out of one set of medieval materials, so I'm not inventing a new look for every region I add. Scale and pivots are set at the source, then exported as `glTF` or `FBX`, so nothing needs fixing again after it lands in Unity.
 
 ## Hosting
 
 ### Vercel
 
-Where my Next.js apps go by default. Preview deployments, edge routing, and CI/CD with almost no setup.
+Where my Next.js apps end up by default. **Preview deployments per branch**, and CI that needs almost no configuration.
 
 ### AWS
 
@@ -67,6 +83,6 @@ When a project needs finer control:
 
 ## Community
 
-Outside of code, I run IT workshops and volunteer with programs that teach beginners and underprivileged students. Explaining a concept is the fastest way to learn it properly.
+Outside of code, I run IT workshops and volunteer with programs that teach beginners and underprivileged students. **Explaining a concept to someone new is the quickest way to find the parts of it I never actually understood.**
 
-Pick tools that solve the real problem, stay maintainable, and let you focus on shipping value.
+Pick tools that solve the problem in front of you, that you can still maintain next year, and that get out of the way of shipping.
