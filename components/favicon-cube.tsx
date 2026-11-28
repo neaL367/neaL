@@ -82,50 +82,56 @@ export function FaviconCube() {
     commit();
     document.head.appendChild(link);
 
-    if (reducedMotion.matches) {
-      // A still cube is still the right icon.
-      return () => link.remove();
-    }
-
-    let frame = 0;
-    let previous = 0;
+    let timer = 0;
     const interval = 1000 / FPS;
 
-    const paint = (time: number) => {
-      frame = requestAnimationFrame(paint);
-
-      if (time - previous < interval) return;
-      previous = time;
-
-      spin = RESTING_SPIN + (time / 1000) * SPIN_RAD_PER_SEC;
-      render();
-      commit();
-    };
-
     const start = () => {
-      if (frame === 0) frame = requestAnimationFrame(paint);
+      if (timer !== 0) return;
+      timer = window.setTimeout(tick, interval);
     };
 
     const stop = () => {
-      if (frame !== 0) {
-        cancelAnimationFrame(frame);
-        frame = 0;
+      if (timer === 0) return;
+      window.clearTimeout(timer);
+      timer = 0;
+    };
+
+    /**
+     * A timeout, not rAF: rAF wakes 60 times a second just to check whether
+     * enough time has passed, which is pure overhead on a phone. Timing from
+     * `performance.now()` keeps the icon in phase with the page cube.
+     */
+    const tick = () => {
+      timer = 0;
+      if (document.hidden || reducedMotion.matches) return;
+      spin = RESTING_SPIN + (performance.now() / 1000) * SPIN_RAD_PER_SEC;
+      render();
+      commit();
+      start();
+    };
+
+    const sync = () => {
+      if (document.hidden || reducedMotion.matches) {
+        stop();
+        // Keep the resting cube as the still icon.
+        spin = RESTING_SPIN;
+        render();
+        commit();
+      } else {
+        start();
       }
     };
 
-    const onVisibilityChange = () => {
-      // A hidden tab has no visible favicon, and the browser throttles the
-      // frame loop anyway. Stopping keeps the encode cost at zero.
-      if (document.hidden) stop();
-      else start();
-    };
+    const onVisibilityChange = () => sync();
 
-    start();
     document.addEventListener('visibilitychange', onVisibilityChange);
+    reducedMotion.addEventListener('change', sync);
+    sync();
 
     return () => {
       stop();
       document.removeEventListener('visibilitychange', onVisibilityChange);
+      reducedMotion.removeEventListener('change', sync);
       link.remove();
     };
   }, []);

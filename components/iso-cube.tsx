@@ -16,6 +16,18 @@ const BOX_WIDTH = 200;
 const BOX_HEIGHT = 240;
 const RESTING_SPIN = Math.PI / 5;
 
+/**
+ * Upper bound for the page cube. rAF fires at the display's refresh rate —
+ * 60Hz, 120Hz, 144Hz — so the cube draws at the display rate up to this cap.
+ * On a 60Hz screen nothing can present more than 60 frames a second; on a
+ * 120Hz screen it renders 120. The cap stops a 144Hz display from doing 144
+ * full repaints of a cube that turns only 0.42 rad/s.
+ */
+const MAX_FPS = 120;
+
+/** Tolerate rAF timestamp jitter so a true 120Hz frame is not skipped. */
+const FRAME_TOLERANCE_MS = 1;
+
 /** Foreground colour reduced to a single luminance value, so output is grayscale. */
 function readGray(element: HTMLElement): number {
   const parts = getComputedStyle(element).color.match(/[\d.]+/g);
@@ -69,67 +81,89 @@ export function IsoCube() {
     const darkTheme = window.matchMedia('(prefers-color-scheme: dark)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    if (reducedMotion.matches) {
-      render();
-
-      const onThemeChange = () => {
-        gray = readGray(canvas);
-        render();
-      };
-
-      darkTheme.addEventListener('change', onThemeChange);
-      return () => darkTheme.removeEventListener('change', onThemeChange);
-    }
+    // Paint one frame before any loop or observer is involved. If rAF never
+    // starts — background tab, a phone that never reports an intersection —
+    // the canvas still holds a cube instead of staying blank.
+    render();
 
     let frame = 0;
     let startedAt = 0;
+    let previous = 0;
+    let onScreen = true;
+    const interval = 1000 / MAX_FPS;
 
     const paint = (time: number) => {
       frame = requestAnimationFrame(paint);
       if (startedAt === 0) startedAt = time;
 
+      const elapsed = time - previous;
+      if (elapsed < interval - FRAME_TOLERANCE_MS) return;
+      // Keep the cadence anchored to the interval rather than to each late
+      // callback, so a 144Hz display averages 120 renders instead of dropping
+      // to 72 by skipping every other one.
+      previous = time - (elapsed % interval);
+
+      // Spin comes from elapsed time, never a fixed per-frame step: the cube
+      // must turn at the same speed on 60Hz and 120Hz screens.
       spin = RESTING_SPIN + ((time - startedAt) / 1000) * SPIN_RAD_PER_SEC;
       render();
     };
 
     const start = () => {
-      if (frame === 0) {
-        startedAt = 0;
-        frame = requestAnimationFrame(paint);
-      }
+      if (frame !== 0) return;
+      startedAt = 0;
+      previous = 0;
+      frame = requestAnimationFrame(paint);
     };
 
     const stop = () => {
-      if (frame !== 0) {
-        cancelAnimationFrame(frame);
-        frame = 0;
+      if (frame === 0) return;
+      cancelAnimationFrame(frame);
+      frame = 0;
+    };
+
+    /**
+     * Single source of truth for whether the loop should run. Pausing also
+     * repaints, so a stopped cube keeps its last pose instead of a stale one.
+     */
+    const sync = () => {
+      if (reducedMotion.matches || document.hidden || !onScreen) {
+        stop();
+        render();
+      } else {
+        start();
       }
     };
 
-    const onVisibilityChange = () => {
-      if (document.hidden) stop();
-      else start();
-    };
-
+    const onVisibilityChange = () => sync();
+    const onMotionChange = () => sync();
     const onThemeChange = () => {
       gray = readGray(canvas);
-      if (frame === 0) render();
+      render();
     };
 
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) start();
-      else stop();
+      onScreen = entry.isIntersecting;
+      sync();
     });
 
     observer.observe(canvas);
     document.addEventListener('visibilitychange', onVisibilityChange);
     darkTheme.addEventListener('change', onThemeChange);
+    reducedMotion.addEventListener('change', onMotionChange);
+
+    // Start immediately rather than waiting for the observer to say the canvas
+    // is visible. The observer's first callback can pause it just as easily;
+    // relying on it to start is what left the cube frozen on phones that never
+    // delivered that first intersection.
+    start();
 
     return () => {
       stop();
       observer.disconnect();
       document.removeEventListener('visibilitychange', onVisibilityChange);
       darkTheme.removeEventListener('change', onThemeChange);
+      reducedMotion.removeEventListener('change', onMotionChange);
     };
   }, []);
 

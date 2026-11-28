@@ -23,6 +23,14 @@ export const SPIN_RAD_PER_SEC = 0.42;
 const PITCH = Math.atan(1 / Math.SQRT2);
 const YAW = Math.PI / 4;
 
+// The rig never changes. Computing these four once instead of four trig calls
+// per vertex and per face normal on every frame is a small but free saving on
+// phones, where this loop runs alongside the favicon encoder.
+const YAW_COS = Math.cos(YAW);
+const YAW_SIN = Math.sin(YAW);
+const PITCH_COS = Math.cos(PITCH);
+const PITCH_SIN = Math.sin(PITCH);
+
 function normalize([x, y, z]: Vec3): Vec3 {
   const length = Math.hypot(x, y, z) || 1;
   return [x / length, y / length, z / length];
@@ -75,15 +83,10 @@ function toCamera([x, y, z]: Vec3, spin: number): Vec3 {
   const x1 = x * spinCos + z * spinSin;
   const z1 = z * spinCos - x * spinSin;
 
-  const yawCos = Math.cos(YAW);
-  const yawSin = Math.sin(YAW);
-  const x2 = x1 * yawCos + z1 * yawSin;
-  const z2 = z1 * yawCos - x1 * yawSin;
+  const x2 = x1 * YAW_COS + z1 * YAW_SIN;
+  const z2 = z1 * YAW_COS - x1 * YAW_SIN;
 
-  const pitchCos = Math.cos(PITCH);
-  const pitchSin = Math.sin(PITCH);
-
-  return [x2, y * pitchCos - z2 * pitchSin, y * pitchSin + z2 * pitchCos];
+  return [x2, y * PITCH_COS - z2 * PITCH_SIN, y * PITCH_SIN + z2 * PITCH_COS];
 }
 
 /**
